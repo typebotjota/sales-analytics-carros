@@ -1,0 +1,36 @@
+{
+  "empresa": {
+    "nome": "AutoElite Veículos",
+    "logo_url": "",
+    "nicho": "carros",
+    "cor_primaria": "#FF6B00",
+    "cor_secundaria": "#0D1B2A"
+  },
+  "vendedores": [
+    { "id": "v1", "nome": "Carlos Silva", "cargo": "Consultor Sênior" },
+    { "id": "v2", "nome": "Rafael Santos", "cargo": "Consultor" },
+    { "id": "v3", "nome": "Amanda Costa", "cargo": "Consultora" }
+  ],
+  "metricas_nicho": {
+    "test_drive": true,
+    "proposta_enviada": true,
+    "financiamento_qualificado": true,
+    "entrada_disponivel": true,
+    "modelo_interesse": true,
+    "urgencia_compra": true
+  },
+  "dimensoes_performance": [
+    "abordagem",
+    "qualificacao",
+    "apresentacao",
+    "test_drive",
+    "objecoes",
+    "fechamento",
+    "pos_venda"
+  ],
+  "plano": {
+    "tipo": "pro",
+    "implementacao": 10000,
+    "mensalidade": 299
+  }
+}

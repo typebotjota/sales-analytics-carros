@@ -1,0 +1,516 @@
+[
+  {
+    "id": "call-001",
+    "name": "Fernando Almeida",
+    "closer": "Carlos Silva",
+    "date": "2026-03-01",
+    "duration": "18:42",
+    "score": 8.2,
+    "classification": "Boa",
+    "closing_probability": 75,
+    "veiculo_interesse": "Honda Civic 2025",
+    "test_drive": true,
+    "proposta_enviada": true,
+    "financiamento_qualificado": true,
+    "entrada_disponivel": "R$15.000",
+    "urgencia_compra": "Alta - precisa em 2 semanas",
+    "performance": {
+      "abordagem": 9.0,
+      "qualificacao": 8.5,
+      "apresentacao": 8.0,
+      "test_drive": 9.0,
+      "objecoes": 7.5,
+      "fechamento": 7.5,
+      "pos_venda": 8.0
+    },
+    "objections": [
+      { "type": "Esta caro", "handled": true, "quality": "Boa", "moment": "12:30" },
+      { "type": "Preciso falar com minha esposa", "handled": true, "quality": "Regular", "moment": "15:45" }
+    ],
+    "top_improvements": [
+      "Explorar mais o custo da inacao antes de apresentar preco",
+      "Criar mais urgencia no fechamento com escassez real",
+      "Agendar retorno com esposa presente ao inves de deixar em aberto"
+    ],
+    "next_step": "Retorno agendado para sabado com esposa",
+    "critical_moments": [
+      { "time": "03:20", "type": "positivo", "desc": "Excelente rapport - conectou com tecnologia do veiculo" },
+      { "time": "12:30", "type": "negativo", "desc": "Apresentou preco sem stack de valor completo" },
+      { "time": "16:00", "type": "positivo", "desc": "Test drive destacando conforto e economia" }
+    ],
+    "nepq_analysis": { "situacao": 9, "problema": 8, "implicacao": 7, "fechamento": 7 },
+    "hormozi_analysis": { "stack_valor": 7, "custo_inacao": 6, "reversao_risco": 8 },
+    "resumo": "Call de alta qualidade. Excelente rapport e conducao de test drive."
+  },
+  {
+    "id": "call-002",
+    "name": "Mariana Souza",
+    "closer": "Rafael Santos",
+    "date": "2026-03-01",
+    "duration": "12:15",
+    "score": 5.8,
+    "classification": "Regular",
+    "closing_probability": 30,
+    "veiculo_interesse": "Toyota Corolla Cross 2025",
+    "test_drive": false,
+    "proposta_enviada": false,
+    "financiamento_qualificado": false,
+    "entrada_disponivel": "Nao identificada",
+    "urgencia_compra": "Baixa",
+    "performance": {
+      "abordagem": 7.0,
+      "qualificacao": 5.0,
+      "apresentacao": 6.5,
+      "test_drive": 3.0,
+      "objecoes": 5.5,
+      "fechamento": 4.0,
+      "pos_venda": 6.5
+    },
+    "objections": [
+      { "type": "Vou pesquisar mais", "handled": false, "quality": "Fraca", "moment": "08:40" },
+      { "type": "Vou pensar e te ligo", "handled": false, "quality": "Fraca", "moment": "11:30" }
+    ],
+    "top_improvements": [
+      "Fazer qualificacao completa antes de mostrar veiculo",
+      "NUNCA deixar cliente sair sem test drive",
+      "Ao ouvir 'vou pesquisar mais', perguntar o que exatamente precisa pesquisar"
+    ],
+    "next_step": "Enviar WhatsApp em 48h com comparativo",
+    "critical_moments": [
+      { "time": "02:00", "type": "negativo", "desc": "Pulou qualificacao" },
+      { "time": "08:40", "type": "negativo", "desc": "Aceitou 'vou pesquisar' sem questionar" },
+      { "time": "10:00", "type": "negativo", "desc": "Nao ofereceu test drive" }
+    ],
+    "nepq_analysis": { "situacao": 5, "problema": 4, "implicacao": 3, "fechamento": 4 },
+    "hormozi_analysis": { "stack_valor": 5, "custo_inacao": 3, "reversao_risco": 4 },
+    "resumo": "Call com muitas oportunidades perdidas. Precisa melhorar qualificacao."
+  },
+  {
+    "id": "call-003",
+    "name": "Roberto Mendes",
+    "closer": "Carlos Silva",
+    "date": "2026-02-28",
+    "duration": "22:10",
+    "score": 9.1,
+    "classification": "Boa",
+    "closing_probability": 90,
+    "veiculo_interesse": "Jeep Compass 2025 Limited",
+    "test_drive": true,
+    "proposta_enviada": true,
+    "financiamento_qualificado": true,
+    "entrada_disponivel": "R$35.000 + usado",
+    "urgencia_compra": "Alta - cambio com problema",
+    "performance": {
+      "abordagem": 9.5,
+      "qualificacao": 9.0,
+      "apresentacao": 9.5,
+      "test_drive": 9.0,
+      "objecoes": 9.0,
+      "fechamento": 8.5,
+      "pos_venda": 9.0
+    },
+    "objections": [
+      { "type": "Vi mais barato em outro lugar", "handled": true, "quality": "Excelente", "moment": "14:20" },
+      { "type": "Quero vender meu carro atual primeiro", "handled": true, "quality": "Boa", "moment": "17:00" }
+    ],
+    "top_improvements": [
+      "Poderia ter fechado na hora",
+      "Mais dados no comparativo de preco",
+      "Documentar avaliacao do usado na hora"
+    ],
+    "next_step": "Cliente volta amanha para assinar",
+    "critical_moments": [
+      { "time": "05:00", "type": "positivo", "desc": "Descobriu problema no cambio - criou urgencia" },
+      { "time": "14:20", "type": "positivo", "desc": "Reverteu objecao com custo total de propriedade" },
+      { "time": "19:00", "type": "positivo", "desc": "Ofereceu avaliar usado como entrada" }
+    ],
+    "nepq_analysis": { "situacao": 9, "problema": 10, "implicacao": 9, "fechamento": 8 },
+    "hormozi_analysis": { "stack_valor": 9, "custo_inacao": 10, "reversao_risco": 8 },
+    "resumo": "Call excepcional. Dominio completo de NEPQ e Hormozi."
+  },
+  {
+    "id": "call-004",
+    "name": "Patricia Lima",
+    "closer": "Amanda Costa",
+    "date": "2026-02-28",
+    "duration": "15:30",
+    "score": 7.0,
+    "classification": "Boa",
+    "closing_probability": 55,
+    "veiculo_interesse": "Hyundai HB20 2025",
+    "test_drive": true,
+    "proposta_enviada": false,
+    "financiamento_qualificado": true,
+    "entrada_disponivel": "R$8.000",
+    "urgencia_compra": "Media - 1 mes",
+    "performance": {
+      "abordagem": 8.0,
+      "qualificacao": 7.5,
+      "apresentacao": 7.0,
+      "test_drive": 7.5,
+      "objecoes": 6.0,
+      "fechamento": 5.5,
+      "pos_venda": 7.5
+    },
+    "objections": [
+      { "type": "Nao sei se financiamento vai aprovar", "handled": true, "quality": "Boa", "moment": "09:15" },
+      { "type": "Esta caro", "handled": false, "quality": "Regular", "moment": "13:00" }
+    ],
+    "top_improvements": [
+      "Fazer pre-analise de financiamento na hora",
+      "Usar stack de valor contra objecao de preco",
+      "Enviar proposta formal sempre"
+    ],
+    "next_step": "Enviar simulacao por WhatsApp",
+    "critical_moments": [
+      { "time": "04:30", "type": "positivo", "desc": "Boa qualificacao - primeiro carro da cliente" },
+      { "time": "09:15", "type": "positivo", "desc": "Tranquilizou sobre financiamento" },
+      { "time": "13:00", "type": "negativo", "desc": "Recuou no preco quando ouviu 'esta caro'" }
+    ],
+    "nepq_analysis": { "situacao": 8, "problema": 7, "implicacao": 6, "fechamento": 5 },
+    "hormozi_analysis": { "stack_valor": 6, "custo_inacao": 5, "reversao_risco": 6 },
+    "resumo": "Amanda tem boa abordagem mas precisa fortalecer fechamento."
+  },
+  {
+    "id": "call-005",
+    "name": "Lucas Ferreira",
+    "closer": "Rafael Santos",
+    "date": "2026-02-27",
+    "duration": "08:45",
+    "score": 3.5,
+    "classification": "Fraca",
+    "closing_probability": 10,
+    "veiculo_interesse": "Volkswagen T-Cross 2025",
+    "test_drive": false,
+    "proposta_enviada": false,
+    "financiamento_qualificado": false,
+    "entrada_disponivel": "Nao identificada",
+    "urgencia_compra": "Nao identificada",
+    "performance": {
+      "abordagem": 5.0,
+      "qualificacao": 3.0,
+      "apresentacao": 4.0,
+      "test_drive": 1.0,
+      "objecoes": 3.0,
+      "fechamento": 2.5,
+      "pos_venda": 3.5
+    },
+    "objections": [
+      { "type": "Vou ver em outras lojas", "handled": false, "quality": "Fraca", "moment": "06:00" },
+      { "type": "Vou pensar e te ligo", "handled": false, "quality": "Fraca", "moment": "08:00" }
+    ],
+    "top_improvements": [
+      "URGENTE: Fazer qualificacao ANTES de falar de carro",
+      "URGENTE: Sempre oferecer test drive",
+      "Reverter 'vou ver em outras lojas' com comparativo"
+    ],
+    "next_step": "Call perdida - tentar resgatar com ligacao em 24h",
+    "critical_moments": [
+      { "time": "01:00", "type": "negativo", "desc": "Comecou falando de preco sem qualificar" },
+      { "time": "06:00", "type": "negativo", "desc": "Aceitou 'vou ver em outras lojas'" },
+      { "time": "08:00", "type": "negativo", "desc": "Encerrou sem test drive nem proximo passo" }
+    ],
+    "nepq_analysis": { "situacao": 3, "problema": 2, "implicacao": 1, "fechamento": 2 },
+    "hormozi_analysis": { "stack_valor": 3, "custo_inacao": 1, "reversao_risco": 2 },
+    "resumo": "Call muito fraca. Rafael precisa de treinamento urgente."
+  },
+  {
+    "id": "call-006",
+    "name": "Juliana Martins",
+    "closer": "Amanda Costa",
+    "date": "2026-02-27",
+    "duration": "20:05",
+    "score": 7.8,
+    "classification": "Boa",
+    "closing_probability": 65,
+    "veiculo_interesse": "Chevrolet Tracker 2025 Premier",
+    "test_drive": true,
+    "proposta_enviada": true,
+    "financiamento_qualificado": true,
+    "entrada_disponivel": "R$20.000",
+    "urgencia_compra": "Alta - novo emprego",
+    "performance": {
+      "abordagem": 8.5,
+      "qualificacao": 8.0,
+      "apresentacao": 8.0,
+      "test_drive": 8.5,
+      "objecoes": 7.0,
+      "fechamento": 6.5,
+      "pos_venda": 8.0
+    },
+    "objections": [
+      { "type": "Preciso falar com meu socio", "handled": true, "quality": "Boa", "moment": "14:00" },
+      { "type": "Vou esperar mais um pouco", "handled": true, "quality": "Regular", "moment": "17:30" }
+    ],
+    "top_improvements": [
+      "Agendar reuniao com ambos decisores",
+      "Usar urgencia do emprego como alavanca",
+      "Mais assertividade no fechamento"
+    ],
+    "next_step": "Reuniao quinta com Juliana e socio",
+    "critical_moments": [
+      { "time": "03:00", "type": "positivo", "desc": "Descobriu necessidade de carro para novo emprego" },
+      { "time": "11:00", "type": "positivo", "desc": "Test drive impecavel" },
+      { "time": "18:00", "type": "negativo", "desc": "Recuou no momento de fechar" }
+    ],
+    "nepq_analysis": { "situacao": 8, "problema": 8, "implicacao": 7, "fechamento": 6 },
+    "hormozi_analysis": { "stack_valor": 8, "custo_inacao": 7, "reversao_risco": 7 },
+    "resumo": "Amanda excelente em qualificacao mas hesita no fechamento."
+  },
+  {
+    "id": "call-007",
+    "name": "Andre Oliveira",
+    "closer": "Carlos Silva",
+    "date": "2026-02-26",
+    "duration": "25:30",
+    "score": 8.8,
+    "classification": "Boa",
+    "closing_probability": 85,
+    "veiculo_interesse": "Toyota Hilux 2025 SRX",
+    "test_drive": true,
+    "proposta_enviada": true,
+    "financiamento_qualificado": true,
+    "entrada_disponivel": "R$50.000 + Hilux 2020",
+    "urgencia_compra": "Alta - precisa para safra",
+    "performance": {
+      "abordagem": 9.0,
+      "qualificacao": 9.5,
+      "apresentacao": 9.0,
+      "test_drive": 8.5,
+      "objecoes": 8.5,
+      "fechamento": 8.5,
+      "pos_venda": 9.0
+    },
+    "objections": [
+      { "type": "Esta caro", "handled": true, "quality": "Excelente", "moment": "16:00" },
+      { "type": "Vi mais barato em outro lugar", "handled": true, "quality": "Excelente", "moment": "20:00" }
+    ],
+    "top_improvements": [
+      "Calcular ROI em planilha para o cliente",
+      "Incluir seguro agricola no stack",
+      "Fechar na visita - cliente estava pronto"
+    ],
+    "next_step": "Cliente confirma sexta - financiamento pre-aprovado",
+    "critical_moments": [
+      { "time": "06:00", "type": "positivo", "desc": "Identificou produtor rural - safra em abril" },
+      { "time": "16:00", "type": "positivo", "desc": "Reverteu 'esta caro' com economia de combustivel" },
+      { "time": "22:00", "type": "positivo", "desc": "Proposta com taxa especial produtor rural" }
+    ],
+    "nepq_analysis": { "situacao": 10, "problema": 9, "implicacao": 9, "fechamento": 8 },
+    "hormozi_analysis": { "stack_valor": 9, "custo_inacao": 9, "reversao_risco": 8 },
+    "resumo": "Call excelente. Adaptou para produtor rural com maestria."
+  },
+  {
+    "id": "call-008",
+    "name": "Camila Rodrigues",
+    "closer": "Rafael Santos",
+    "date": "2026-02-26",
+    "duration": "10:20",
+    "score": 4.2,
+    "classification": "Fraca",
+    "closing_probability": 15,
+    "veiculo_interesse": "Fiat Pulse 2025",
+    "test_drive": false,
+    "proposta_enviada": false,
+    "financiamento_qualificado": false,
+    "entrada_disponivel": "Nao identificada",
+    "urgencia_compra": "Nao identificada",
+    "performance": {
+      "abordagem": 6.0,
+      "qualificacao": 4.0,
+      "apresentacao": 5.0,
+      "test_drive": 2.0,
+      "objecoes": 3.5,
+      "fechamento": 3.0,
+      "pos_venda": 4.0
+    },
+    "objections": [
+      { "type": "Esta caro", "handled": false, "quality": "Fraca", "moment": "07:00" },
+      { "type": "Vou pensar e te ligo", "handled": false, "quality": "Fraca", "moment": "09:30" }
+    ],
+    "top_improvements": [
+      "Parar de comecar calls falando de preco",
+      "Objecao 'esta caro' precisa de stack de valor nao desconto",
+      "Oferecer test drive sempre"
+    ],
+    "next_step": "Resgate por WhatsApp com video personalizado",
+    "critical_moments": [
+      { "time": "01:30", "type": "negativo", "desc": "Comecou com preco sem qualificar" },
+      { "time": "07:00", "type": "negativo", "desc": "Ofereceu desconto imediatamente" },
+      { "time": "09:30", "type": "negativo", "desc": "Aceitou 'vou pensar' sem reverter" }
+    ],
+    "nepq_analysis": { "situacao": 4, "problema": 3, "implicacao": 2, "fechamento": 3 },
+    "hormozi_analysis": { "stack_valor": 3, "custo_inacao": 2, "reversao_risco": 3 },
+    "resumo": "Rafael repete mesmos erros. Treinamento urgente necessario."
+  },
+  {
+    "id": "call-009",
+    "name": "Thiago Nascimento",
+    "closer": "Amanda Costa",
+    "date": "2026-02-25",
+    "duration": "17:55",
+    "score": 7.5,
+    "classification": "Boa",
+    "closing_probability": 60,
+    "veiculo_interesse": "Nissan Kicks 2025 Exclusive",
+    "test_drive": true,
+    "proposta_enviada": true,
+    "financiamento_qualificado": true,
+    "entrada_disponivel": "R$12.000",
+    "urgencia_compra": "Media - proximo mes",
+    "performance": {
+      "abordagem": 8.0,
+      "qualificacao": 7.5,
+      "apresentacao": 8.0,
+      "test_drive": 8.0,
+      "objecoes": 7.0,
+      "fechamento": 6.0,
+      "pos_venda": 8.0
+    },
+    "objections": [
+      { "type": "Vou pesquisar mais", "handled": true, "quality": "Boa", "moment": "11:00" },
+      { "type": "Nao gostei da cor", "handled": true, "quality": "Excelente", "moment": "08:30" }
+    ],
+    "top_improvements": [
+      "Redirecionar para fechamento apos resolver objecao",
+      "Mais assertividade no compromisso final",
+      "Usar urgencia do mes como alavanca"
+    ],
+    "next_step": "Confirmar disponibilidade da cor prata + proposta",
+    "critical_moments": [
+      { "time": "05:00", "type": "positivo", "desc": "Excelente apresentacao de seguranca" },
+      { "time": "08:30", "type": "positivo", "desc": "Resolveu objecao de cor rapidamente" },
+      { "time": "15:00", "type": "negativo", "desc": "Tinha tudo para fechar mas recuou" }
+    ],
+    "nepq_analysis": { "situacao": 8, "problema": 7, "implicacao": 7, "fechamento": 6 },
+    "hormozi_analysis": { "stack_valor": 7, "custo_inacao": 6, "reversao_risco": 7 },
+    "resumo": "Amanda consistente. Excelente resolucao de problemas, precisa de assertividade no fechamento."
+  },
+  {
+    "id": "call-010",
+    "name": "Ricardo Barbosa",
+    "closer": "Carlos Silva",
+    "date": "2026-02-25",
+    "duration": "19:40",
+    "score": 8.5,
+    "classification": "Boa",
+    "closing_probability": 80,
+    "veiculo_interesse": "BMW 320i 2025",
+    "test_drive": true,
+    "proposta_enviada": true,
+    "financiamento_qualificado": true,
+    "entrada_disponivel": "R$80.000",
+    "urgencia_compra": "Alta - bonus disponivel",
+    "performance": {
+      "abordagem": 9.0,
+      "qualificacao": 9.0,
+      "apresentacao": 9.5,
+      "test_drive": 8.5,
+      "objecoes": 8.0,
+      "fechamento": 7.5,
+      "pos_venda": 8.5
+    },
+    "objections": [
+      { "type": "Vi mais barato em outro lugar", "handled": true, "quality": "Excelente", "moment": "13:00" }
+    ],
+    "top_improvements": [
+      "Para premium oferecer experiencia VIP",
+      "Fechar na visita - cliente pronto",
+      "Incluir beneficios exclusivos BMW no stack"
+    ],
+    "next_step": "Cliente volta segunda com documentos",
+    "critical_moments": [
+      { "time": "04:00", "type": "positivo", "desc": "Adaptou linguagem para perfil executivo" },
+      { "time": "13:00", "type": "positivo", "desc": "Reverteu preco com experiencia de marca" },
+      { "time": "17:00", "type": "positivo", "desc": "Test drive em rota premium" }
+    ],
+    "nepq_analysis": { "situacao": 9, "problema": 9, "implicacao": 8, "fechamento": 8 },
+    "hormozi_analysis": { "stack_valor": 9, "custo_inacao": 8, "reversao_risco": 8 },
+    "resumo": "Carlos versatil - adaptou para cliente premium com excelencia."
+  },
+  {
+    "id": "call-011",
+    "name": "Fernanda Castro",
+    "closer": "Rafael Santos",
+    "date": "2026-02-24",
+    "duration": "11:00",
+    "score": 5.0,
+    "classification": "Regular",
+    "closing_probability": 25,
+    "veiculo_interesse": "Renault Kwid 2025",
+    "test_drive": false,
+    "proposta_enviada": false,
+    "financiamento_qualificado": false,
+    "entrada_disponivel": "R$5.000",
+    "urgencia_compra": "Baixa",
+    "performance": {
+      "abordagem": 6.5,
+      "qualificacao": 5.0,
+      "apresentacao": 5.5,
+      "test_drive": 2.5,
+      "objecoes": 4.5,
+      "fechamento": 4.0,
+      "pos_venda": 5.0
+    },
+    "objections": [
+      { "type": "Nao sei se financiamento vai aprovar", "handled": false, "quality": "Regular", "moment": "07:00" },
+      { "type": "Vou esperar mais um pouco", "handled": false, "quality": "Fraca", "moment": "10:00" }
+    ],
+    "top_improvements": [
+      "Fazer simulacao de financiamento na hora",
+      "Criar urgencia com condicoes especiais",
+      "Oferecer test drive como experiencia"
+    ],
+    "next_step": "Enviar simulacao por WhatsApp",
+    "critical_moments": [
+      { "time": "03:00", "type": "positivo", "desc": "Identificou primeira compradora" },
+      { "time": "07:00", "type": "negativo", "desc": "Nao fez simulacao na hora" },
+      { "time": "10:00", "type": "negativo", "desc": "Deixou ir sem test drive" }
+    ],
+    "nepq_analysis": { "situacao": 5, "problema": 5, "implicacao": 4, "fechamento": 4 },
+    "hormozi_analysis": { "stack_valor": 4, "custo_inacao": 3, "reversao_risco": 4 },
+    "resumo": "Rafael em padrao mediano. Precisa focar em qualificacao e test drive."
+  },
+  {
+    "id": "call-012",
+    "name": "Gustavo Pereira",
+    "closer": "Carlos Silva",
+    "date": "2026-02-24",
+    "duration": "16:20",
+    "score": 8.0,
+    "classification": "Boa",
+    "closing_probability": 70,
+    "veiculo_interesse": "Fiat Toro 2025 Ranch",
+    "test_drive": true,
+    "proposta_enviada": true,
+    "financiamento_qualificado": true,
+    "entrada_disponivel": "R$25.000",
+    "urgencia_compra": "Media - 2 semanas",
+    "performance": {
+      "abordagem": 8.5,
+      "qualificacao": 8.0,
+      "apresentacao": 8.5,
+      "test_drive": 8.0,
+      "objecoes": 7.5,
+      "fechamento": 7.5,
+      "pos_venda": 8.0
+    },
+    "objections": [
+      { "type": "Quero vender meu carro atual primeiro", "handled": true, "quality": "Boa", "moment": "10:30" }
+    ],
+    "top_improvements": [
+      "Oferecer avaliacao do usado como parte",
+      "Calcular depreciacao por mes do usado",
+      "Agendar retorno com prazo definido"
+    ],
+    "next_step": "Avaliar usado na quinta + proposta troca",
+    "critical_moments": [
+      { "time": "05:30", "type": "positivo", "desc": "Excelente apresentacao Toro Ranch" },
+      { "time": "10:30", "type": "positivo", "desc": "Ofereceu avaliar carro atual" },
+      { "time": "14:00", "type": "positivo", "desc": "Test drive em estrada de terra" }
+    ],
+    "nepq_analysis": { "situacao": 8, "problema": 8, "implicacao": 7, "fechamento": 7 },
+    "hormozi_analysis": { "stack_valor": 8, "custo_inacao": 7, "reversao_risco": 7 },
+    "resumo": "Carlos padrao alto. Solucao criativa ao oferecer troca."
+  }
+]
