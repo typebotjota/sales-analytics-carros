@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0D1B2A">
+<title>Atendimento Presencial — Sales Analytics Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Autocomplete vehicles -->
+<datalist id="dl-veiculos">
+  <option value="Civic"><option value="Corolla"><option value="Corolla Cross">
+  <option value="Compass"><option value="HB20"><option value="T-Cross">
+  <option value="Tracker"><option value="Hilux"><option value="Hilux SRX">
+  <option value="Pulse"><option value="Kicks"><option value="Onix">
+  <option value="Kwid"><option value="Toro"><option value="Toro Ranch">
+  <option value="SW4"><option value="Creta"><option value="Tucson">
+  <option value="Argo"><option value="Mobi"><option value="Sandero">
+  <option value="Duster"><option value="Captur"><option value="Nivus">
+  <option value="Polo"><option value="Virtus"><option value="Jetta">
+</datalist>
+
+<style>
+/* ─── DESIGN TOKENS (idênticos ao index.html) ──────────────────────── */
+:root {
+  --orange: #FF6B00;
+  --orange-light: #FF8C33;
+  --orange-gradient: linear-gradient(135deg, #E55A00, #FF7A1A, #FF9A45);
+  --navy: #0D1B2A;
+  --navy-mid: #112236;
+  --navy-card: #152840;
+  --navy-border: #1E3A55;
+  --navy-hover: #1A3050;
+  --text-primary: #FFFFFF;
+  --text-secondary: #8BA3C1;
+  --text-muted: #5A7A9A;
+  --green: #00D26A;
+  --red: #FF4757;
+  --yellow: #FFC107;
+  --blue: #2196F3;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+/* ─── RESET ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0; padding: 0; box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html { font-family: 'Outfit', system-ui, sans-serif; background: var(--navy); color: var(--text-primary); }
+body { min-height: 100vh; padding-bottom: calc(82px + var(--safe-b)); }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: 2px; }
+
+/* ─── TOPBAR ─────────────────────────────────────────────────────────── */
+.topbar {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--navy-mid);
+  border-bottom: 1px solid var(--navy-border);
+  padding: 10px 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.topbar-logo {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: var(--orange-gradient);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 17px; color: #fff;
+}
+.topbar-info { flex: 1; min-width: 0; }
+.topbar-title { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; }
+.topbar-title span { color: var(--orange); }
+.topbar-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.topbar-pill {
+  background: rgba(255,107,0,.12); border: 1px solid rgba(255,107,0,.3);
+  border-radius: 8px; padding: 4px 10px;
+  font-size: 11px; font-weight: 700; color: var(--orange); white-space: nowrap;
+}
+
+/* ─── PROGRESS BAR ───────────────────────────────────────────────────── */
+.prog-wrap { height: 3px; background: var(--navy-border); position: sticky; top: 58px; z-index: 190; }
+.prog-fill { height: 100%; background: var(--orange-gradient); border-radius: 0 2px 2px 0; transition: width .35s ease; }
+
+/* ─── FORM LAYOUT ────────────────────────────────────────────────────── */
+.form-wrap {
+  max-width: 480px; margin: 0 auto;
+  padding: 18px 14px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+/* ─── SECTION CARD (border-radius 20px) ─────────────────────────────── */
+.sc {
+  background: var(--navy-card);
+  border: 1px solid var(--navy-border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.sc-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 15px 18px 13px;
+  border-bottom: 1px solid var(--navy-border);
+}
+.sc-icon {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+.sc-icon.o { background: rgba(255,107,0,.14); }
+.sc-icon.g { background: rgba(0,210,106,.12); }
+.sc-icon.b { background: rgba(33,150,243,.12); }
+.sc-icon.y { background: rgba(255,193,7,.12); }
+.sc-icon.r { background: rgba(255,71,87,.12); }
+.sc-icon.p { background: rgba(156,39,176,.12); }
+.sc-title { font-size: 14px; font-weight: 700; }
+.sc-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.sc-count {
+  margin-left: auto; flex-shrink: 0;
+  font-size: 10px; font-weight: 700;
+  background: var(--navy); border-radius: 6px; padding: 3px 8px;
+  color: var(--text-muted);
+}
+.sc-count.done { background: rgba(0,210,106,.14); color: var(--green); }
+.sc-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+/* ─── FIELDS (border-radius 14px inputs, 8px small) ─────────────────── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.flabel {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .9px;
+  color: var(--text-muted);
+}
+.finput, .fselect, .ftextarea {
+  background: var(--navy); border: 1.5px solid var(--navy-border);
+  border-radius: 14px; padding: 11px 13px;
+  color: var(--text-primary);
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 14px; font-weight: 500;
+  outline: none; width: 100%; transition: border-color .18s, box-shadow .18s;
+  -webkit-appearance: none; appearance: none;
+}
+.finput:focus, .fselect:focus, .ftextarea:focus {
+  border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,107,0,.11);
+}
+.finput::placeholder, .ftextarea::placeholder { color: var(--text-muted); }
+.fselect {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A7A9A' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 13px center; padding-right: 36px;
+}
+.fselect option { background: var(--navy-card); }
+.ftextarea { resize: vertical; line-height: 1.55; min-height: 110px; }
+
+/* ─── CHECKBOX ITEM ──────────────────────────────────────────────────── */
+.cb-item { display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; }
+.cb-label {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 12px; background: var(--navy);
+  cursor: pointer; min-height: 46px; user-select: none;
+  transition: background .12s;
+}
+.cb-label:active { background: var(--navy-hover); }
+.cb-label input[type="checkbox"] { position: absolute; opacity: 0; pointer-events: none; }
+.cb-box {
+  width: 22px; height: 22px; flex-shrink: 0;
+  background: var(--navy-card); border: 2px solid var(--navy-border);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .18s;
+}
+.cb-box svg { display: none; }
+.cb-label input:checked ~ .cb-box { background: var(--orange); border-color: var(--orange); }
+.cb-label input:checked ~ .cb-box svg { display: block; }
+.cb-text { font-size: 13px; font-weight: 500; color: var(--text-secondary); line-height: 1.3; flex: 1; }
+.cb-label input:checked ~ .cb-text { color: var(--text-primary); }
+
+/* ─── OBJECTION ROW (checkbox + tratou inline) ───────────────────────── */
+.obj-tratou {
+  display: none;
+  padding: 7px 12px 9px 45px;
+  background: rgba(255,107,0,.05);
+  border-top: 1px solid rgba(255,107,0,.14);
+  align-items: center; gap: 10px;
+}
+.obj-tratou.vis {
+  display: flex;
+  animation: slideDown .15s ease;
+}
+@keyframes slideDown { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+.tratou-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); }
+.tratou-btns { display: flex; gap: 6px; }
+.tratou-btn {
+  padding: 4px 16px; border-radius: 8px;
+  border: 1.5px solid var(--navy-border);
+  background: transparent; color: var(--text-muted);
+  font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: all .14s;
+}
+.tratou-btn.sim.on { background: rgba(0,210,106,.14); border-color: var(--green); color: var(--green); }
+.tratou-btn.nao.on { background: rgba(255,71,87,.14); border-color: var(--red); color: var(--red); }
+
+/* ─── RADIO RESULT ───────────────────────────────────────────────────── */
+.rb-item { display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; }
+.rb-label {
+  display: flex; align-items: center; gap: 11px;
+  padding: 12px 12px; background: var(--navy);
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  cursor: pointer; min-height: 46px; user-select: none;
+  transition: all .16s;
+}
+.rb-label:active { background: var(--navy-hover); }
+.rb-label input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+.rb-circle {
+  width: 22px; height: 22px; flex-shrink: 0;
+  background: var(--navy-card); border: 2px solid var(--navy-border); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; transition: all .18s;
+}
+.rb-dot {
+  width: 10px; height: 10px; background: var(--orange); border-radius: 50%;
+  opacity: 0; transform: scale(.2); transition: all .18s;
+}
+.rb-label input:checked ~ .rb-circle { border-color: var(--orange); }
+.rb-label input:checked ~ .rb-circle .rb-dot { opacity: 1; transform: scale(1); }
+.rb-text { font-size: 13px; color: var(--text-secondary); flex: 1; line-height: 1.3; }
+.rb-label input:checked ~ .rb-text { color: var(--text-primary); font-weight: 600; }
+.rb-label.sel {
+  background: rgba(255,107,0,.05);
+  border-color: rgba(255,107,0,.25);
+  border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+}
+.rb-followup {
+  display: none; padding: 8px 12px 11px 45px;
+  background: rgba(255,107,0,.05);
+  border: 1.5px solid rgba(255,107,0,.25); border-top: none;
+  border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
+  align-items: center; gap: 10px;
+  animation: slideDown .15s ease;
+}
+.rb-followup.vis { display: flex; }
+.rb-followup .flabel { white-space: nowrap; }
+.rb-followup .finput { font-size: 13px; padding: 7px 12px; }
+
+/* ─── AUDIO MEMO ─────────────────────────────────────────────────────── */
+.audio-card {
+  background: var(--navy); border-radius: 14px; padding: 13px 14px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.audio-row { display: flex; align-items: center; justify-content: space-between; }
+.audio-title { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; }
+.audio-timer { font-size: 13px; font-weight: 800; color: var(--red); font-variant-numeric: tabular-nums; visibility: hidden; }
+.audio-timer.vis { visibility: visible; }
+.audio-btns { display: flex; gap: 8px; }
+.abtn {
+  flex: 1; height: 44px; border-radius: 12px; border: none;
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
+  transition: all .18s;
+}
+.abtn.rec { background: var(--orange-gradient); color: #fff; }
+.abtn.rec:disabled { opacity: .4; cursor: not-allowed; }
+.abtn.rec.active { background: linear-gradient(135deg, #b30000, #ff1a1a); animation: pulsebtn 1.4s infinite; }
+@keyframes pulsebtn { 0%,100%{transform:scale(1)} 50%{transform:scale(1.025)} }
+.abtn.stop { background: rgba(255,71,87,.12); color: var(--red); border: 1.5px solid var(--red); display: none; }
+.abtn.stop.vis { display: flex; }
+audio.preview { width: 100%; height: 36px; border-radius: 8px; display: none; }
+audio.preview.vis { display: block; }
+.audio-hint { font-size: 11px; color: var(--text-muted); text-align: center; }
+
+/* ─── BOTTOM BAR ─────────────────────────────────────────────────────── */
+.bottom-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+  background: var(--navy-mid); border-top: 1px solid var(--navy-border);
+  padding: 10px 14px calc(10px + var(--safe-b));
+  display: flex; gap: 10px;
+}
+@media (min-width: 480px) {
+  .bottom-bar { max-width: 480px; left: 50%; right: auto; transform: translateX(-50%); }
+}
+.btn-micro {
+  height: 52px; padding: 0 18px;
+  border-radius: 14px; border: 1.5px solid var(--navy-border);
+  background: var(--navy-card); color: var(--text-secondary);
+  font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; gap: 7px;
+  transition: all .18s; white-space: nowrap;
+}
+.btn-micro.active, .btn-micro:hover { border-color: var(--red); color: var(--red); background: rgba(255,71,87,.08); }
+.btn-save {
+  flex: 1; height: 52px;
+  border-radius: 14px; border: none;
+  background: var(--orange-gradient); color: #fff;
+  font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 800;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px;
+  box-shadow: 0 4px 22px rgba(255,107,0,.3); letter-spacing: .3px;
+  transition: transform .14s, box-shadow .14s;
+}
+.btn-save:active { transform: scale(.97); box-shadow: 0 2px 10px rgba(255,107,0,.2); }
+
+/* ─── TOAST ──────────────────────────────────────────────────────────── */
+.toast {
+  position: fixed; top: 68px; left: 50%; transform: translateX(-50%) translateY(-12px);
+  z-index: 999;
+  background: var(--navy-card); border: 1.5px solid var(--green); border-radius: 14px;
+  padding: 12px 20px; display: flex; align-items: center; gap: 9px;
+  font-size: 13px; font-weight: 600; color: var(--green);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s, transform .25s;
+  white-space: nowrap; box-shadow: 0 8px 28px rgba(0,0,0,.45);
+}
+.toast.vis { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.err { border-color: var(--red); color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">A</div>
+  <div class="topbar-info">
+    <div class="topbar-title">Sales <span>Analytics</span> Pro</div>
+    <div class="topbar-sub">Formulário de Atendimento Presencial</div>
+  </div>
+  <div class="topbar-pill">PRO</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Salvo!</span>
+</div>
+
+<form id="mainForm" onsubmit="return false" autocomplete="off">
+<div class="form-wrap">
+
+  <!-- ══════════════════════════════════════════
+       1. DADOS DO ATENDIMENTO
+  ══════════════════════════════════════════ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-icon o">📋</div>
+      <div>
+        <div class="sc-title">Dados do Atendimento</div>
+        <div class="sc-sub">Informações básicas do contato</div>
+      </div>
+    </div>
+    <div class="sc-body">
+
+      <div class="row2">
+        <div class="field">
+          <label class="flabel" for="fData">Data</label>
+          <input class="finput" type="date" id="fData" required>
+        </div>
+        <div class="field">
+          <label class="flabel" for="fHora">Hora</label>
+          <input class="finput" type="time" id="fHora" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel" for="fVendedor">Vendedor</label>
+        <select class="fselect" id="fVendedor" required>
+          <option value="">Selecionar vendedor...</option>
+          <option value="Carlos Silva">Carlos Silva — Consultor Sênior</option>
+          <option value="Rafael Santos">Rafael Santos — Consultor</option>
+          <option value="Amanda Costa">Amanda Costa — Consultora</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="flabel" for="fCliente">Nome do Cliente</label>
+        <input class="finput" type="text" id="fCliente" placeholder="Nome completo" required>
+      </div>
+
+      <div class="field">
+        <label class="flabel" for="fTel">Telefone</label>
+        <input class="finput" type="tel" id="fTel" placeholder="(00) 00000-0000" inputmode="numeric" maxlength="15">
+      </div>
+
+      <div class="field">
+        <label class="flabel" for="fVeiculo">Veículo de Interesse</label>
+        <input class="finput" type="text" id="fVeiculo" placeholder="Ex: Civic 2025, Compass Limited..." list="dl-veiculos">
+      </div>
+
+      <div class="field">
+        <label class="flabel" for="fChegou">Como Chegou</label>
+        <select class="fselect" id="fChegou">
+          <option value="">Selecionar origem...</option>
+          <option value="Walk-in">Walk-in — entrou espontaneamente</option>
+          <option value="Agendamento">Agendamento prévio</option>
+          <option value="Indicação">Indicação de cliente</option>
+          <option value="Retorno">Retorno — já veio antes</option>
+          <option value="Lead digital">Lead digital (site / WhatsApp / redes)</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       2. QUALIFICAÇÃO
+  ══════════════════════════════════════════ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-icon g">🎯</div>
+      <div>
+        <div class="sc-title">Qualificação</div>
+        <div class="sc-sub">O que foi descoberto sobre o cliente</div>
+      </div>
+      <div class="sc-count" id="cQual">0/6</div>
+    </div>
+    <div class="sc-body" id="gQual" style="gap:6px">
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="qual" value="perguntou_uso" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Perguntou uso do veículo (pessoal / profissional / família)</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="qual" value="perguntou_km" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Perguntou km/mês estimado</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="qual" value="identificou_problema_carro_atual" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Identificou problema com o carro atual</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="qual" value="descobriu_urgencia" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Descobriu urgência de compra</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="qual" value="verificou_financiamento_entrada" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Verificou capacidade de financiamento / entrada</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="qual" value="identificou_decisor" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Identificou quem decide a compra</span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       3. APRESENTAÇÃO & TEST DRIVE
+  ══════════════════════════════════════════ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-icon b">🚗</div>
+      <div>
+        <div class="sc-title">Apresentação &amp; Test Drive</div>
+        <div class="sc-sub">Experiência com o veículo</div>
+      </div>
+      <div class="sc-count" id="cApres">0/6</div>
+    </div>
+    <div class="sc-body" id="gApres" style="gap:6px">
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="apres" value="apresentou_veiculo" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Apresentou o veículo pessoalmente</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="apres" value="abriu_interior" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Abriu o carro e mostrou o interior</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="apres" value="ofereceu_test_drive" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Ofereceu test drive</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="apres" value="test_drive_realizado" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Cliente fez test drive</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="apres" value="apresentou_diferenciais_vs_concorrencia" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Apresentou diferenciais vs concorrência</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="apres" value="mostrou_tabela_financiamento" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Mostrou tabela de financiamento</span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       4. PROPOSTA & FECHAMENTO
+  ══════════════════════════════════════════ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-icon y">💼</div>
+      <div>
+        <div class="sc-title">Proposta &amp; Fechamento</div>
+        <div class="sc-sub">Técnicas aplicadas na negociação</div>
+      </div>
+      <div class="sc-count" id="cProp">0/6</div>
+    </div>
+    <div class="sc-body" id="gProp" style="gap:6px">
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="prop" value="montou_proposta_personalizada" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Montou proposta personalizada</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="prop" value="apresentou_condicoes_financiamento" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Apresentou condições de financiamento</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="prop" value="usou_stack_valor" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Usou stack de valor (garantia + revisões + bônus)</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="prop" value="apresentou_custo_inacao" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Apresentou o custo da inação</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="prop" value="tentou_fechar_mesmo_dia" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Tentou fechar no mesmo dia</span>
+        </label>
+      </div>
+
+      <div class="cb-item">
+        <label class="cb-label">
+          <input type="checkbox" name="prop" value="cliente_levou_proposta" onchange="upCount()">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">Cliente levou proposta para avaliar</span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       5. OBJEÇÕES
+  ══════════════════════════════════════════ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-icon r">🛡️</div>
+      <div>
+        <div class="sc-title">Objeções</div>
+        <div class="sc-sub">Marque as que surgiram e se foram tratadas</div>
+      </div>
+    </div>
+    <div class="sc-body" style="gap:6px">
+
+      <!-- macro: obj-row(key, label) -->
+      <div class="cb-item" id="row-pesquisar">
+        <label class="cb-label">
+          <input type="checkbox" name="obj" value="Vou pesquisar mais" data-key="pesquisar" onchange="toggleObj('pesquisar',this)">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">"Vou pesquisar mais"</span>
+        </label>
+        <div class="obj-tratou" id="ot-pesquisar">
+          <span class="tratou-lbl">Tratou?</span>
+          <div class="tratou-btns">
+            <button type="button" class="tratou-btn sim" data-key="pesquisar" data-val="sim" onclick="setTratou(this)">Sim</button>
+            <button type="button" class="tratou-btn nao" data-key="pesquisar" data-val="nao" onclick="setTratou(this)">Não</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="row-caro">
+        <label class="cb-label">
+          <input type="checkbox" name="obj" value="Está caro" data-key="caro" onchange="toggleObj('caro',this)">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">"Está caro"</span>
+        </label>
+        <div class="obj-tratou" id="ot-caro">
+          <span class="tratou-lbl">Tratou?</span>
+          <div class="tratou-btns">
+            <button type="button" class="tratou-btn sim" data-key="caro" data-val="sim" onclick="setTratou(this)">Sim</button>
+            <button type="button" class="tratou-btn nao" data-key="caro" data-val="nao" onclick="setTratou(this)">Não</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="row-concorrente">
+        <label class="cb-label">
+          <input type="checkbox" name="obj" value="Vi mais barato na concorrente" data-key="concorrente" onchange="toggleObj('concorrente',this)">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">"Vi mais barato na concorrente"</span>
+        </label>
+        <div class="obj-tratou" id="ot-concorrente">
+          <span class="tratou-lbl">Tratou?</span>
+          <div class="tratou-btns">
+            <button type="button" class="tratou-btn sim" data-key="concorrente" data-val="sim" onclick="setTratou(this)">Sim</button>
+            <button type="button" class="tratou-btn nao" data-key="concorrente" data-val="nao" onclick="setTratou(this)">Não</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="row-esposa">
+        <label class="cb-label">
+          <input type="checkbox" name="obj" value="Preciso falar com esposa/sócio" data-key="esposa" onchange="toggleObj('esposa',this)">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">"Preciso falar com esposa / sócio"</span>
+        </label>
+        <div class="obj-tratou" id="ot-esposa">
+          <span class="tratou-lbl">Tratou?</span>
+          <div class="tratou-btns">
+            <button type="button" class="tratou-btn sim" data-key="esposa" data-val="sim" onclick="setTratou(this)">Sim</button>
+            <button type="button" class="tratou-btn nao" data-key="esposa" data-val="nao" onclick="setTratou(this)">Não</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="row-financiamento">
+        <label class="cb-label">
+          <input type="checkbox" name="obj" value="Não sei se financiamento aprova" data-key="financiamento" onchange="toggleObj('financiamento',this)">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">"Não sei se financiamento aprova"</span>
+        </label>
+        <div class="obj-tratou" id="ot-financiamento">
+          <span class="tratou-lbl">Tratou?</span>
+          <div class="tratou-btns">
+            <button type="button" class="tratou-btn sim" data-key="financiamento" data-val="sim" onclick="setTratou(this)">Sim</button>
+            <button type="button" class="tratou-btn nao" data-key="financiamento" data-val="nao" onclick="setTratou(this)">Não</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="row-carro-atual">
+        <label class="cb-label">
+          <input type="checkbox" name="obj" value="Quero vender meu carro atual primeiro" data-key="carro-atual" onchange="toggleObj('carro-atual',this)">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">"Quero vender meu carro atual primeiro"</span>
+        </label>
+        <div class="obj-tratou" id="ot-carro-atual">
+          <span class="tratou-lbl">Tratou?</span>
+          <div class="tratou-btns">
+            <button type="button" class="tratou-btn sim" data-key="carro-atual" data-val="sim" onclick="setTratou(this)">Sim</button>
+            <button type="button" class="tratou-btn nao" data-key="carro-atual" data-val="nao" onclick="setTratou(this)">Não</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="row-pensar">
+        <label class="cb-label">
+          <input type="checkbox" name="obj" value="Vou pensar" data-key="pensar" onchange="toggleObj('pensar',this)">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">"Vou pensar"</span>
+        </label>
+        <div class="obj-tratou" id="ot-pensar">
+          <span class="tratou-lbl">Tratou?</span>
+          <div class="tratou-btns">
+            <button type="button" class="tratou-btn sim" data-key="pensar" data-val="sim" onclick="setTratou(this)">Sim</button>
+            <button type="button" class="tratou-btn nao" data-key="pensar" data-val="nao" onclick="setTratou(this)">Não</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="row-cor">
+        <label class="cb-label">
+          <input type="checkbox" name="obj" value="Não gostei da cor/versão" data-key="cor" onchange="toggleObj('cor',this)">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">"Não gostei da cor / versão"</span>
+        </label>
+        <div class="obj-tratou" id="ot-cor">
+          <span class="tratou-lbl">Tratou?</span>
+          <div class="tratou-btns">
+            <button type="button" class="tratou-btn sim" data-key="cor" data-val="sim" onclick="setTratou(this)">Sim</button>
+            <button type="button" class="tratou-btn nao" data-key="cor" data-val="nao" onclick="setTratou(this)">Não</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cb-item" id="row-promocao">
+        <label class="cb-label">
+          <input type="checkbox" name="obj" value="Vou esperar promoção" data-key="promocao" onchange="toggleObj('promocao',this)">
+          <span class="cb-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><polyline points="1,4.5 4.5,8 11,1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="cb-text">"Vou esperar promoção"</span>
+        </label>
+        <div class="obj-tratou" id="ot-promocao">
+          <span class="tratou-lbl">Tratou?</span>
+          <div class="tratou-btns">
+            <button type="button" class="tratou-btn sim" data-key="promocao" data-val="sim" onclick="setTratou(this)">Sim</button>
+            <button type="button" class="tratou-btn nao" data-key="promocao" data-val="nao" onclick="setTratou(this)">Não</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       6. RESULTADO
+  ══════════════════════════════════════════ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-icon p">🏁</div>
+      <div>
+        <div class="sc-title">Resultado do Atendimento</div>
+        <div class="sc-sub">Como terminou este contato</div>
+      </div>
+    </div>
+    <div class="sc-body" style="gap:7px">
+
+      <div class="rb-item">
+        <label class="rb-label" id="rl-fechada">
+          <input type="radio" name="resultado" value="venda_fechada" onchange="onResultado(this)">
+          <span class="rb-circle"><span class="rb-dot"></span></span>
+          <span class="rb-text">🎉&nbsp; Venda fechada</span>
+        </label>
+      </div>
+
+      <div class="rb-item">
+        <label class="rb-label" id="rl-followup">
+          <input type="radio" name="resultado" value="proposta_enviada" onchange="onResultado(this)">
+          <span class="rb-circle"><span class="rb-dot"></span></span>
+          <span class="rb-text">📤&nbsp; Proposta enviada — follow-up agendado</span>
+        </label>
+        <div class="rb-followup" id="rd-followup">
+          <label class="flabel" for="fFollowup" style="white-space:nowrap">Follow-up em:</label>
+          <input class="finput" type="date" id="fFollowup" style="font-size:13px;padding:8px 12px">
+        </div>
+      </div>
+
+      <div class="rb-item">
+        <label class="rb-label" id="rl-semprop">
+          <input type="radio" name="resultado" value="saiu_sem_proposta" onchange="onResultado(this)">
+          <span class="rb-circle"><span class="rb-dot"></span></span>
+          <span class="rb-text">😕&nbsp; Saiu sem proposta</span>
+        </label>
+      </div>
+
+      <div class="rb-item">
+        <label class="rb-label" id="rl-visitando">
+          <input type="radio" name="resultado" value="pesquisa_inicial" onchange="onResultado(this)">
+          <span class="rb-circle"><span class="rb-dot"></span></span>
+          <span class="rb-text">👀&nbsp; Apenas visitando / pesquisa inicial</span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       7. NOTAS + ÁUDIO MEMO
+  ══════════════════════════════════════════ -->
+  <div class="sc">
+    <div class="sc-head">
+      <div class="sc-icon o">✍️</div>
+      <div>
+        <div class="sc-title">Notas do Vendedor</div>
+        <div class="sc-sub">Contexto livre sobre o atendimento</div>
+      </div>
+    </div>
+    <div class="sc-body">
+
+      <textarea
+        class="ftextarea"
+        id="fNotas"
+        rows="5"
+        placeholder="Conte como foi o atendimento com suas palavras...
+
+Ex: Cliente vem comparando com o Corolla Cross, tem carro 2019 para trocar, esposa participa da decisão. Voltou pela segunda vez. Apresentei 3 simulações de financiamento, ficou animado com o test drive mas precisa confirmar entrada com a esposa antes de assinar."
+      ></textarea>
+
+      <!-- Áudio Memo -->
+      <div class="audio-card">
+        <div class="audio-row">
+          <span class="audio-title">🎙 Áudio Memo</span>
+          <span class="audio-timer" id="audioTimer">00:00</span>
+        </div>
+        <div class="audio-btns">
+          <button type="button" class="abtn rec" id="btnRec" onclick="startRec()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Gravar Áudio Memo
+          </button>
+          <button type="button" class="abtn stop" id="btnStop" onclick="stopRec()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+            Parar
+          </button>
+        </div>
+        <audio class="preview" id="audioPreview" controls></audio>
+        <div class="audio-hint" id="audioHint">Grave um memo rápido para complementar as notas escritas</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- spacer -->
+  <div style="height:6px"></div>
+
+</div><!-- /form-wrap -->
+</form>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <button class="btn-micro" id="btnMicro" onclick="scrollToAudio()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+      <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+    </svg>
+    Áudio
+  </button>
+  <button class="btn-save" onclick="salvar()">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+      <polyline points="17 21 17 13 7 13 7 21"/>
+      <polyline points="7 3 7 8 15 8"/>
+    </svg>
+    Salvar Atendimento
+  </button>
+</div>
+
+<script>
+'use strict';
+
+/* ─── INIT ──────────────────────────────────────────────────────────── */
+(function init() {
+  const now = new Date();
+  const p = n => String(n).padStart(2, '0');
+
+  document.getElementById('fData').value =
+    `${now.getFullYear()}-${p(now.getMonth()+1)}-${p(now.getDate())}`;
+  document.getElementById('fHora').value =
+    `${p(now.getHours())}:${p(now.getMinutes())}`;
+
+  // default follow-up = 2 dias
+  const d2 = new Date(now); d2.setDate(d2.getDate() + 2);
+  document.getElementById('fFollowup').value =
+    `${d2.getFullYear()}-${p(d2.getMonth()+1)}-${p(d2.getDate())}`;
+
+  // progress listeners
+  ['fVendedor', 'fCliente'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', upProgress);
+    el.addEventListener('change', upProgress);
+  });
+  document.querySelectorAll('input[name="resultado"]').forEach(r =>
+    r.addEventListener('change', upProgress)
+  );
+
+  upProgress();
+})();
+
+/* ─── PHONE MASK ────────────────────────────────────────────────────── */
+document.getElementById('fTel').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g, '').slice(0, 11);
+  if      (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  else if (v.length > 6)  v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4})$/, '($1) $2-$3');
+  else if (v.length > 2)  v = v.replace(/^(\d{2})(\d+)$/, '($1) $2');
+  this.value = v;
+});
+
+/* ─── CHECKBOX COUNTERS ─────────────────────────────────────────────── */
+function upCount() {
+  [
+    ['#gQual',  '#cQual',  6],
+    ['#gApres', '#cApres', 6],
+    ['#gProp',  '#cProp',  6],
+  ].forEach(([grp, cnt, total]) => {
+    const checked = document.querySelectorAll(`${grp} input[type="checkbox"]:checked`).length;
+    const el = document.querySelector(cnt);
+    el.textContent = `${checked}/${total}`;
+    el.className = 'sc-count' + (checked === total ? ' done' : '');
+  });
+  upProgress();
+}
+
+/* ─── PROGRESS BAR ──────────────────────────────────────────────────── */
+function upProgress() {
+  const checks = [
+    !!document.getElementById('fVendedor').value,
+    !!document.getElementById('fCliente').value.trim(),
+    !!document.querySelector('input[name="resultado"]:checked'),
+  ];
+  const pct = Math.round(checks.filter(Boolean).length / checks.length * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+/* ─── OBJECTIONS TOGGLE ─────────────────────────────────────────────── */
+function toggleObj(key, cb) {
+  const el = document.getElementById('ot-' + key);
+  el.classList.toggle('vis', cb.checked);
+  if (!cb.checked) {
+    // reset tratou buttons
+    el.querySelectorAll('.tratou-btn').forEach(b => b.classList.remove('on'));
+    delete _tratou[key];
+  }
+}
+
+const _tratou = {};
+function setTratou(btn) {
+  const { key, val } = btn.dataset;
+  _tratou[key] = val;
+  const container = document.getElementById('ot-' + key);
+  container.querySelectorAll('.tratou-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+/* ─── RESULTADO RADIO ───────────────────────────────────────────────── */
+function onResultado(radio) {
+  // remove all selected states
+  document.querySelectorAll('.rb-label').forEach(l => l.classList.remove('sel'));
+  document.getElementById('rd-followup').classList.remove('vis');
+
+  if (radio.value === 'proposta_enviada') {
+    document.getElementById('rl-followup').classList.add('sel');
+    document.getElementById('rd-followup').classList.add('vis');
+  } else {
+    radio.closest('.rb-item').querySelector('.rb-label').classList.add('sel');
+    // remove rounded corners trick via class sel-simple
+    // (label already handles border-radius via .sel class rounding bottom)
+  }
+  upProgress();
+}
+
+/* ─── AUDIO RECORDING ───────────────────────────────────────────────── */
+let _recorder = null, _chunks = [], _audioBlob = null;
+let _timerIv = null, _recStart = null;
+
+async function startRec() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    _recorder = new MediaRecorder(stream);
+    _chunks = [];
+    _recorder.ondataavailable = e => _chunks.push(e.data);
+    _recorder.onstop = () => {
+      _audioBlob = new Blob(_chunks, { type: 'audio/webm' });
+      const url = URL.createObjectURL(_audioBlob);
+      const prev = document.getElementById('audioPreview');
+      prev.src = url;
+      prev.classList.add('vis');
+      document.getElementById('audioHint').textContent = '✓ Memo gravado — ouça antes de salvar';
+      document.getElementById('audioHint').style.color = 'var(--green)';
+      stream.getTracks().forEach(t => t.stop());
+    };
+
+    _recorder.start();
+    _recStart = Date.now();
+    _timerIv = setInterval(_tickTimer, 1000);
+
+    // UI
+    const btnRec = document.getElementById('btnRec');
+    btnRec.classList.add('active');
+    btnRec.disabled = true;
+    document.getElementById('btnStop').classList.add('vis');
+    document.getElementById('audioTimer').classList.add('vis');
+    document.getElementById('audioHint').textContent = '● Gravando...';
+    document.getElementById('audioHint').style.color = 'var(--red)';
+    document.getElementById('btnMicro').classList.add('active');
+
+  } catch (err) {
+    document.getElementById('audioHint').textContent = 'Microfone não disponível: ' + err.message;
+    document.getElementById('audioHint').style.color = 'var(--red)';
+  }
+}
+
+function stopRec() {
+  if (_recorder && _recorder.state !== 'inactive') {
+    _recorder.stop();
+    clearInterval(_timerIv);
+    const btnRec = document.getElementById('btnRec');
+    btnRec.classList.remove('active');
+    btnRec.disabled = false;
+    document.getElementById('btnStop').classList.remove('vis');
+    document.getElementById('audioTimer').classList.remove('vis');
+    document.getElementById('btnMicro').classList.remove('active');
+  }
+}
+
+function _tickTimer() {
+  const s = Math.floor((Date.now() - _recStart) / 1000);
+  document.getElementById('audioTimer').textContent =
+    String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+}
+
+function scrollToAudio() {
+  document.getElementById('audioHint')
+    .scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/* ─── COLLECT DATA ──────────────────────────────────────────────────── */
+function collectData() {
+  const boolGroup = sel =>
+    Object.fromEntries(
+      [...document.querySelectorAll(`${sel} input[type="checkbox"]`)]
+        .map(cb => [cb.value, cb.checked])
+    );
+
+  const objecoes = [...document.querySelectorAll('input[name="obj"]:checked')]
+    .map(cb => ({
+      tipo: cb.value,
+      tratou: _tratou[cb.dataset.key] === 'sim'
+               ? true
+               : _tratou[cb.dataset.key] === 'nao'
+                 ? false
+                 : null,
+    }));
+
+  const resultadoEl = document.querySelector('input[name="resultado"]:checked');
+
+  return {
+    canal: 'presencial',
+    data: document.getElementById('fData').value,
+    hora: document.getElementById('fHora').value,
+    vendedor: document.getElementById('fVendedor').value,
+    cliente: document.getElementById('fCliente').value.trim(),
+    telefone: document.getElementById('fTel').value,
+    veiculo_interesse: document.getElementById('fVeiculo').value.trim(),
+    como_chegou: document.getElementById('fChegou').value,
+    qualificacao: boolGroup('#gQual'),
+    apresentacao_test_drive: boolGroup('#gApres'),
+    proposta_fechamento: boolGroup('#gProp'),
+    objecoes,
+    resultado: resultadoEl ? resultadoEl.value : null,
+    followup_data: resultadoEl?.value === 'proposta_enviada'
+      ? document.getElementById('fFollowup').value
+      : null,
+    observacoes: document.getElementById('fNotas').value.trim(),
+    audio_memo: null,       // preenchido async se houver gravação
+    gerado_em: new Date().toISOString(),
+  };
+}
+
+/* ─── SAVE & DOWNLOAD ───────────────────────────────────────────────── */
+function salvar() {
+  const vendedor = document.getElementById('fVendedor').value;
+  const cliente  = document.getElementById('fCliente').value.trim();
+
+  if (!vendedor) { toast('Selecione o vendedor', true); return; }
+  if (!cliente)  { toast('Informe o nome do cliente', true); return; }
+
+  const data = collectData();
+
+  if (_audioBlob) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      data.audio_memo = reader.result;   // base64 data URL
+      _download(data, vendedor, data.data);
+    };
+    reader.readAsDataURL(_audioBlob);
+  } else {
+    _download(data, vendedor, data.data);
+  }
+}
+
+function _download(data, vendedor, dataStr) {
+  const name = vendedor.replace(/\s+/g, '_');
+  const date = (dataStr || '').replace(/-/g, '');
+  const filename = `${name}_${date}.json`;
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  toast(`${filename} baixado com sucesso!`);
+}
+
+/* ─── TOAST ─────────────────────────────────────────────────────────── */
+let _toastTimer = null;
+function toast(msg, isErr = false) {
+  const el  = document.getElementById('toast');
+  const txt = document.getElementById('toastMsg');
+  txt.textContent = msg;
+  el.className = 'toast' + (isErr ? ' err' : '');
+  el.classList.add('vis');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('vis'), 3200);
+}
+</script>
+</body>
+</html>
