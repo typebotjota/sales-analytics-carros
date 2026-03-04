@@ -22,6 +22,8 @@
   --red: #FF4757;
   --yellow: #FFC107;
   --blue: #2196F3;
+  --wpp: #25D366;
+  --presencial: #FF9800;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; background:var(--navy); color:var(--text-primary); }
@@ -60,8 +62,8 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 .sidebar-section-title { padding:8px 14px 4px; font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); font-weight:700; }
 
 /* SIDEBAR FILTERS */
-.sidebar-filters { padding:12px; flex-shrink:0; }
-.filter-tabs { display:flex; gap:6px; margin-bottom:10px; }
+.sidebar-filters { padding:4px 12px 8px; flex-shrink:0; }
+.filter-tabs { display:flex; gap:6px; margin-bottom:8px; }
 .filter-tab { flex:1; padding:6px; border:1px solid var(--navy-border); background:transparent; color:var(--text-secondary); border-radius:8px; cursor:pointer; font-family:inherit; font-size:11px; font-weight:600; transition:all .2s; }
 .filter-tab.active { background:var(--orange); border-color:var(--orange); color:white; }
 .filter-tab:hover:not(.active) { border-color:var(--text-muted); }
@@ -69,19 +71,31 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 .search-box:focus { border-color:var(--orange); }
 .search-box::placeholder { color:var(--text-muted); }
 
+/* CANAL FILTER */
+.canal-filter-row { display:flex; gap:4px; }
+.canal-btn { flex:1; padding:5px 2px; border:1px solid var(--navy-border); background:transparent; color:var(--text-secondary); border-radius:8px; cursor:pointer; font-family:inherit; font-size:10px; font-weight:600; transition:all .2s; text-align:center; white-space:nowrap; }
+.canal-btn.active { background:var(--orange); border-color:var(--orange); color:white; }
+.canal-btn:hover:not(.active) { border-color:var(--text-muted); }
+
+/* CANAL BADGE */
+.canal-badge { font-size:10px; padding:2px 7px; border-radius:6px; font-weight:700; display:inline-block; }
+.canal-badge.ligacao { background:rgba(33,150,243,0.18); color:var(--blue); }
+.canal-badge.whatsapp { background:rgba(37,211,102,0.18); color:var(--wpp); }
+.canal-badge.presencial { background:rgba(255,152,0,0.18); color:var(--presencial); }
+
 /* CALLS LIST */
 .calls-list { flex:1; min-height:0; overflow-y:auto; padding:8px 12px; display:flex; flex-direction:column; gap:6px; }
 .call-item { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:12px; padding:12px; cursor:pointer; transition:all .2s; }
 .call-item:hover { border-color:var(--orange); transform:translateX(2px); }
 .call-item.active { border-color:var(--orange); background:rgba(255,107,0,0.08); }
-.call-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.call-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
 .call-item-name { font-weight:600; font-size:13px; }
 .call-item-score { font-weight:800; font-size:14px; }
 .call-item-score.boa { color:var(--green); }
 .call-item-score.regular { color:var(--yellow); }
 .call-item-score.fraca { color:var(--red); }
 .call-item-meta { display:flex; gap:8px; font-size:11px; color:var(--text-muted); }
-.call-item-tags { display:flex; gap:4px; margin-top:6px; flex-wrap:wrap; }
+.call-item-tags { display:flex; gap:4px; margin-top:6px; flex-wrap:wrap; align-items:center; }
 .call-tag { font-size:10px; padding:2px 8px; border-radius:6px; font-weight:600; }
 .call-tag.td { background:rgba(0,210,106,0.15); color:var(--green); }
 .call-tag.no-td { background:rgba(255,71,87,0.15); color:var(--red); }
@@ -91,7 +105,7 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 /* CONTENT AREA */
 .content { flex:1; min-height:0; overflow-y:auto; padding:24px; }
 
-/* CARDS */
+/* STAT CARDS */
 .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
 .stat-card { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:16px; }
 .stat-card-label { font-size:11px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
@@ -99,6 +113,8 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 .stat-card-value.orange { color:var(--orange); }
 .stat-card-value.green { color:var(--green); }
 .stat-card-value.red { color:var(--red); }
+.stat-card-value.wpp { color:var(--wpp); }
+.stat-card-value.pres { color:var(--presencial); }
 .stat-card-change { font-size:11px; color:var(--text-muted); margin-top:4px; }
 
 /* SECTION HEADERS */
@@ -149,10 +165,6 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 .moment-dot.negativo { background:var(--red); }
 .moment-text { font-size:13px; color:var(--text-secondary); line-height:1.4; }
 
-/* RADAR / CHART */
-.radar-container { display:flex; justify-content:center; padding:20px 0; }
-canvas { max-width:100%; }
-
 /* DNA CLOSER */
 .dna-toggle { display:flex; gap:8px; margin-bottom:16px; }
 .dna-toggle-btn { padding:8px 16px; border:1px solid var(--navy-border); background:transparent; color:var(--text-secondary); border-radius:8px; cursor:pointer; font-family:inherit; font-size:12px; font-weight:600; transition:all .2s; }
@@ -163,7 +175,7 @@ canvas { max-width:100%; }
 .objection-map-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
 .objection-map-type { font-weight:700; font-size:14px; }
 .objection-map-count { background:var(--orange-gradient); padding:2px 10px; border-radius:6px; font-size:12px; font-weight:700; }
-.objection-map-stats { display:flex; gap:16px; font-size:12px; color:var(--text-secondary); margin-bottom:10px; }
+.objection-map-stats { display:flex; gap:12px; font-size:12px; color:var(--text-secondary); margin-bottom:10px; align-items:center; flex-wrap:wrap; }
 .objection-script { background:var(--navy); border-radius:10px; padding:12px; font-size:12px; color:var(--text-secondary); line-height:1.5; }
 .objection-script strong { color:var(--orange); }
 
@@ -175,14 +187,6 @@ canvas { max-width:100%; }
 .upload-hint { font-size:12px; color:var(--text-muted); }
 .upload-btn { background:var(--orange-gradient); border:none; padding:10px 28px; border-radius:10px; color:white; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; margin-top:16px; transition:transform .2s; }
 .upload-btn:hover { transform:scale(1.03); }
-
-/* GAMIFICATION */
-.xp-bar { width:100%; height:12px; background:var(--navy-border); border-radius:6px; overflow:hidden; margin:8px 0; }
-.xp-fill { height:100%; background:var(--orange-gradient); border-radius:6px; transition:width .6s ease; }
-.badge-grid { display:flex; gap:10px; flex-wrap:wrap; }
-.badge { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; border:2px solid var(--navy-border); }
-.badge.earned { border-color:var(--orange); background:rgba(255,107,0,0.1); }
-.badge.locked { opacity:0.3; }
 
 /* REPORT */
 .report-section { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:20px; margin-bottom:16px; }
@@ -202,16 +206,35 @@ canvas { max-width:100%; }
 .methodology-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 .methodology-item { display:flex; align-items:center; gap:10px; padding:8px; }
 .methodology-score { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; }
-.methodology-label { font-size:12px; color:var(--text-secondary); }
 .methodology-name { font-size:13px; font-weight:600; }
+
+/* WPP METRICS */
+.wpp-metrics-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.wpp-metric-box { background:var(--navy); border-radius:10px; padding:12px 8px; text-align:center; }
+.wpp-metric-icon { font-size:18px; margin-bottom:4px; }
+.wpp-metric-label { font-size:9px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.4px; margin-bottom:6px; }
+.wpp-metric-value { font-size:20px; font-weight:800; }
+.wpp-metric-sub { font-size:10px; color:var(--text-muted); margin-top:2px; }
+
+/* CHECKLIST PRESENCIAL */
+.checklist-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.checklist-item { display:flex; align-items:center; gap:10px; padding:8px 10px; background:var(--navy); border-radius:10px; }
+.checklist-check { width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
+.checklist-check.done { background:rgba(0,210,106,0.2); color:var(--green); }
+.checklist-check.miss { background:rgba(255,71,87,0.12); color:var(--red); border:1px solid rgba(255,71,87,0.2); }
+.checklist-label { font-size:12px; color:var(--text-secondary); }
+.progress-track { width:100%; height:10px; background:var(--navy-border); border-radius:5px; overflow:hidden; margin-top:4px; }
+.progress-fill { height:100%; border-radius:5px; background:var(--orange-gradient); transition:width .6s ease; }
+
+/* CANAL PERF */
+.canal-perf-row { display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--navy); border-radius:10px; margin-bottom:8px; }
+.canal-perf-icon { font-size:20px; flex-shrink:0; }
+.canal-perf-name { font-size:13px; font-weight:700; width:88px; flex-shrink:0; }
+.canal-perf-stats { flex:1; display:flex; gap:20px; font-size:12px; color:var(--text-secondary); flex-wrap:wrap; }
 
 /* VIEWS */
 .view { display:none; }
 .view.active { display:block; }
-.view-full { position:relative; display:none; flex-direction:column; }
-.view-full.active { display:flex; }
-.view-full-header { flex-shrink:0; padding-bottom:16px; }
-.view-full-body { flex:1; min-height:0; overflow-y:auto; padding-bottom:60px; }
 
 /* TRANSITIONS */
 .fade-in { animation:fadeIn .3s ease; }
@@ -223,6 +246,8 @@ canvas { max-width:100%; }
   .stats-grid { grid-template-columns:repeat(2,1fr); }
   .detail-grid { grid-template-columns:1fr; }
   .methodology-grid { grid-template-columns:1fr; }
+  .wpp-metrics-grid { grid-template-columns:repeat(3,1fr); }
+  .checklist-grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -236,7 +261,7 @@ canvas { max-width:100%; }
     </div>
     <div class="topbar-right">
       <div class="topbar-badge" id="clientBadge">AutoElite Veiculos</div>
-      <div class="topbar-badge">12 calls</div>
+      <div class="topbar-badge">19 calls</div>
       <div class="topbar-badge live">Live</div>
       <button class="topbar-config" onclick="showView('config')">⚙ Config</button>
     </div>
@@ -296,19 +321,29 @@ canvas { max-width:100%; }
         </div>
       </div>
 
+      <div class="sidebar-section-title">Canal</div>
+      <div class="sidebar-filters">
+        <div class="canal-filter-row" id="canalFilter">
+          <button class="canal-btn active" data-canal="Todos" onclick="filterCanal('Todos')">Todos</button>
+          <button class="canal-btn" data-canal="ligacao" onclick="filterCanal('ligacao')">📞 Ligacao</button>
+          <button class="canal-btn" data-canal="whatsapp" onclick="filterCanal('whatsapp')">💬 WhatsApp</button>
+          <button class="canal-btn" data-canal="presencial" onclick="filterCanal('presencial')">🏪 Presencial</button>
+        </div>
+      </div>
+
       <div class="calls-list" id="callsList"></div>
     </div>
 
     <!-- CONTENT -->
     <div class="content" id="mainContent">
 
-      <!-- VIEW: CALLS (list + detail) -->
+      <!-- VIEW: CALLS -->
       <div class="view active" id="view-calls">
         <div class="stats-grid" id="statsGrid"></div>
         <div id="callDetail"></div>
       </div>
 
-      <!-- VIEW: DIAGNOSTICO (DNA do Closer) -->
+      <!-- VIEW: DIAGNOSTICO -->
       <div class="view" id="view-diagnostico">
         <div class="section-header">
           <div>
@@ -395,23 +430,35 @@ canvas { max-width:100%; }
 <script>
 // ==================== DATA ====================
 const CALLS_DATA = [
-  {id:"call-001",name:"Fernando Almeida",closer:"Carlos Silva",date:"2026-03-01",duration:"18:42",score:8.2,classification:"Boa",closing_probability:75,veiculo_interesse:"Honda Civic 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$15.000",urgencia_compra:"Alta - precisa em 2 semanas",performance:{abordagem:9,qualificacao:8.5,apresentacao:8,test_drive:9,objecoes:7.5,fechamento:7.5,pos_venda:8},objections:[{type:"Esta caro",handled:true,quality:"Boa",moment:"12:30"},{type:"Preciso falar com minha esposa",handled:true,quality:"Regular",moment:"15:45"}],top_improvements:["Explorar mais o custo da inacao antes de apresentar preco","Criar mais urgencia no fechamento com escassez real","Agendar retorno com esposa presente"],next_step:"Retorno agendado para sabado com esposa",critical_moments:[{time:"03:20",type:"positivo",desc:"Excelente rapport - conectou com tecnologia"},{time:"12:30",type:"negativo",desc:"Apresentou preco sem stack de valor"},{time:"16:00",type:"positivo",desc:"Test drive destacando conforto e economia"}],nepq_analysis:{situacao:9,problema:8,implicacao:7,fechamento:7},hormozi_analysis:{stack_valor:7,custo_inacao:6,reversao_risco:8},resumo:"Call de alta qualidade. Excelente rapport e conducao de test drive."},
-  {id:"call-002",name:"Mariana Souza",closer:"Rafael Santos",date:"2026-03-01",duration:"12:15",score:5.8,classification:"Regular",closing_probability:30,veiculo_interesse:"Toyota Corolla Cross 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Baixa",performance:{abordagem:7,qualificacao:5,apresentacao:6.5,test_drive:3,objecoes:5.5,fechamento:4,pos_venda:6.5},objections:[{type:"Vou pesquisar mais",handled:false,quality:"Fraca",moment:"08:40"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"11:30"}],top_improvements:["Fazer qualificacao completa antes de mostrar veiculo","NUNCA deixar cliente sair sem test drive","Ao ouvir 'vou pesquisar', perguntar o que exatamente"],next_step:"Enviar WhatsApp em 48h com comparativo",critical_moments:[{time:"02:00",type:"negativo",desc:"Pulou qualificacao"},{time:"08:40",type:"negativo",desc:"Aceitou 'vou pesquisar' sem questionar"},{time:"10:00",type:"negativo",desc:"Nao ofereceu test drive"}],nepq_analysis:{situacao:5,problema:4,implicacao:3,fechamento:4},hormozi_analysis:{stack_valor:5,custo_inacao:3,reversao_risco:4},resumo:"Call com muitas oportunidades perdidas."},
-  {id:"call-003",name:"Roberto Mendes",closer:"Carlos Silva",date:"2026-02-28",duration:"22:10",score:9.1,classification:"Boa",closing_probability:90,veiculo_interesse:"Jeep Compass 2025 Limited",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$35.000 + usado",urgencia_compra:"Alta - cambio com problema",performance:{abordagem:9.5,qualificacao:9,apresentacao:9.5,test_drive:9,objecoes:9,fechamento:8.5,pos_venda:9},objections:[{type:"Vi mais barato em outro lugar",handled:true,quality:"Excelente",moment:"14:20"},{type:"Quero vender meu carro atual primeiro",handled:true,quality:"Boa",moment:"17:00"}],top_improvements:["Poderia ter fechado na hora","Mais dados no comparativo de preco","Documentar avaliacao do usado na hora"],next_step:"Cliente volta amanha para assinar",critical_moments:[{time:"05:00",type:"positivo",desc:"Descobriu problema no cambio - criou urgencia"},{time:"14:20",type:"positivo",desc:"Reverteu objecao com custo total de propriedade"},{time:"19:00",type:"positivo",desc:"Ofereceu avaliar usado como entrada"}],nepq_analysis:{situacao:9,problema:10,implicacao:9,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:10,reversao_risco:8},resumo:"Call excepcional. Dominio completo de NEPQ e Hormozi."},
-  {id:"call-004",name:"Patricia Lima",closer:"Amanda Costa",date:"2026-02-28",duration:"15:30",score:7.0,classification:"Boa",closing_probability:55,veiculo_interesse:"Hyundai HB20 2025",test_drive:true,proposta_enviada:false,financiamento_qualificado:true,entrada_disponivel:"R$8.000",urgencia_compra:"Media - 1 mes",performance:{abordagem:8,qualificacao:7.5,apresentacao:7,test_drive:7.5,objecoes:6,fechamento:5.5,pos_venda:7.5},objections:[{type:"Nao sei se financiamento vai aprovar",handled:true,quality:"Boa",moment:"09:15"},{type:"Esta caro",handled:false,quality:"Regular",moment:"13:00"}],top_improvements:["Fazer pre-analise de financiamento na hora","Usar stack de valor contra objecao de preco","Enviar proposta formal sempre"],next_step:"Enviar simulacao por WhatsApp",critical_moments:[{time:"04:30",type:"positivo",desc:"Boa qualificacao - primeiro carro da cliente"},{time:"09:15",type:"positivo",desc:"Tranquilizou sobre financiamento"},{time:"13:00",type:"negativo",desc:"Recuou no preco quando ouviu 'esta caro'"}],nepq_analysis:{situacao:8,problema:7,implicacao:6,fechamento:5},hormozi_analysis:{stack_valor:6,custo_inacao:5,reversao_risco:6},resumo:"Amanda tem boa abordagem mas precisa fortalecer fechamento."},
-  {id:"call-005",name:"Lucas Ferreira",closer:"Rafael Santos",date:"2026-02-27",duration:"08:45",score:3.5,classification:"Fraca",closing_probability:10,veiculo_interesse:"Volkswagen T-Cross 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",performance:{abordagem:5,qualificacao:3,apresentacao:4,test_drive:1,objecoes:3,fechamento:2.5,pos_venda:3.5},objections:[{type:"Vou ver em outras lojas",handled:false,quality:"Fraca",moment:"06:00"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"08:00"}],top_improvements:["URGENTE: Fazer qualificacao ANTES de falar de carro","URGENTE: Sempre oferecer test drive","Reverter 'vou ver em outras lojas' com comparativo"],next_step:"Call perdida - resgatar com ligacao em 24h",critical_moments:[{time:"01:00",type:"negativo",desc:"Comecou falando de preco sem qualificar"},{time:"06:00",type:"negativo",desc:"Aceitou 'vou ver em outras lojas'"},{time:"08:00",type:"negativo",desc:"Encerrou sem test drive nem proximo passo"}],nepq_analysis:{situacao:3,problema:2,implicacao:1,fechamento:2},hormozi_analysis:{stack_valor:3,custo_inacao:1,reversao_risco:2},resumo:"Call muito fraca. Treinamento urgente necessario."},
-  {id:"call-006",name:"Juliana Martins",closer:"Amanda Costa",date:"2026-02-27",duration:"20:05",score:7.8,classification:"Boa",closing_probability:65,veiculo_interesse:"Chevrolet Tracker 2025 Premier",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$20.000",urgencia_compra:"Alta - novo emprego",performance:{abordagem:8.5,qualificacao:8,apresentacao:8,test_drive:8.5,objecoes:7,fechamento:6.5,pos_venda:8},objections:[{type:"Preciso falar com meu socio",handled:true,quality:"Boa",moment:"14:00"},{type:"Vou esperar mais um pouco",handled:true,quality:"Regular",moment:"17:30"}],top_improvements:["Agendar reuniao com ambos decisores","Usar urgencia do emprego como alavanca","Mais assertividade no fechamento"],next_step:"Reuniao quinta com Juliana e socio",critical_moments:[{time:"03:00",type:"positivo",desc:"Descobriu necessidade para novo emprego"},{time:"11:00",type:"positivo",desc:"Test drive impecavel"},{time:"18:00",type:"negativo",desc:"Recuou no momento de fechar"}],nepq_analysis:{situacao:8,problema:8,implicacao:7,fechamento:6},hormozi_analysis:{stack_valor:8,custo_inacao:7,reversao_risco:7},resumo:"Amanda excelente em qualificacao mas hesita no fechamento."},
-  {id:"call-007",name:"Andre Oliveira",closer:"Carlos Silva",date:"2026-02-26",duration:"25:30",score:8.8,classification:"Boa",closing_probability:85,veiculo_interesse:"Toyota Hilux 2025 SRX",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$50.000 + Hilux 2020",urgencia_compra:"Alta - precisa para safra",performance:{abordagem:9,qualificacao:9.5,apresentacao:9,test_drive:8.5,objecoes:8.5,fechamento:8.5,pos_venda:9},objections:[{type:"Esta caro",handled:true,quality:"Excelente",moment:"16:00"},{type:"Vi mais barato em outro lugar",handled:true,quality:"Excelente",moment:"20:00"}],top_improvements:["Calcular ROI em planilha","Incluir seguro agricola no stack","Fechar na visita - cliente pronto"],next_step:"Cliente confirma sexta - financiamento pre-aprovado",critical_moments:[{time:"06:00",type:"positivo",desc:"Identificou produtor rural - safra abril"},{time:"16:00",type:"positivo",desc:"Reverteu 'esta caro' com economia"},{time:"22:00",type:"positivo",desc:"Proposta com taxa rural especial"}],nepq_analysis:{situacao:10,problema:9,implicacao:9,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:9,reversao_risco:8},resumo:"Call excelente. Adaptou para produtor rural."},
-  {id:"call-008",name:"Camila Rodrigues",closer:"Rafael Santos",date:"2026-02-26",duration:"10:20",score:4.2,classification:"Fraca",closing_probability:15,veiculo_interesse:"Fiat Pulse 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",performance:{abordagem:6,qualificacao:4,apresentacao:5,test_drive:2,objecoes:3.5,fechamento:3,pos_venda:4},objections:[{type:"Esta caro",handled:false,quality:"Fraca",moment:"07:00"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"09:30"}],top_improvements:["Parar de comecar com preco","Objecao 'esta caro' precisa de stack de valor","Oferecer test drive sempre"],next_step:"Resgate por WhatsApp com video",critical_moments:[{time:"01:30",type:"negativo",desc:"Comecou com preco sem qualificar"},{time:"07:00",type:"negativo",desc:"Ofereceu desconto imediatamente"},{time:"09:30",type:"negativo",desc:"Aceitou 'vou pensar' sem reverter"}],nepq_analysis:{situacao:4,problema:3,implicacao:2,fechamento:3},hormozi_analysis:{stack_valor:3,custo_inacao:2,reversao_risco:3},resumo:"Rafael repete mesmos erros. Treinamento urgente."},
-  {id:"call-009",name:"Thiago Nascimento",closer:"Amanda Costa",date:"2026-02-25",duration:"17:55",score:7.5,classification:"Boa",closing_probability:60,veiculo_interesse:"Nissan Kicks 2025 Exclusive",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$12.000",urgencia_compra:"Media - proximo mes",performance:{abordagem:8,qualificacao:7.5,apresentacao:8,test_drive:8,objecoes:7,fechamento:6,pos_venda:8},objections:[{type:"Vou pesquisar mais",handled:true,quality:"Boa",moment:"11:00"},{type:"Nao gostei da cor",handled:true,quality:"Excelente",moment:"08:30"}],top_improvements:["Redirecionar para fechamento apos resolver objecao","Mais assertividade","Usar urgencia do mes como alavanca"],next_step:"Confirmar cor prata + proposta",critical_moments:[{time:"05:00",type:"positivo",desc:"Excelente apresentacao de seguranca"},{time:"08:30",type:"positivo",desc:"Resolveu objecao de cor rapidamente"},{time:"15:00",type:"negativo",desc:"Tinha tudo para fechar mas recuou"}],nepq_analysis:{situacao:8,problema:7,implicacao:7,fechamento:6},hormozi_analysis:{stack_valor:7,custo_inacao:6,reversao_risco:7},resumo:"Amanda consistente. Precisa de assertividade no fechamento."},
-  {id:"call-010",name:"Ricardo Barbosa",closer:"Carlos Silva",date:"2026-02-25",duration:"19:40",score:8.5,classification:"Boa",closing_probability:80,veiculo_interesse:"BMW 320i 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$80.000",urgencia_compra:"Alta - bonus disponivel",performance:{abordagem:9,qualificacao:9,apresentacao:9.5,test_drive:8.5,objecoes:8,fechamento:7.5,pos_venda:8.5},objections:[{type:"Vi mais barato em outro lugar",handled:true,quality:"Excelente",moment:"13:00"}],top_improvements:["Experiencia VIP para premium","Fechar na visita","Beneficios exclusivos BMW no stack"],next_step:"Cliente volta segunda com documentos",critical_moments:[{time:"04:00",type:"positivo",desc:"Adaptou linguagem para executivo"},{time:"13:00",type:"positivo",desc:"Reverteu preco com experiencia de marca"},{time:"17:00",type:"positivo",desc:"Test drive em rota premium"}],nepq_analysis:{situacao:9,problema:9,implicacao:8,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:8,reversao_risco:8},resumo:"Carlos versatil - adaptou para premium."},
-  {id:"call-011",name:"Fernanda Castro",closer:"Rafael Santos",date:"2026-02-24",duration:"11:00",score:5.0,classification:"Regular",closing_probability:25,veiculo_interesse:"Renault Kwid 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"R$5.000",urgencia_compra:"Baixa",performance:{abordagem:6.5,qualificacao:5,apresentacao:5.5,test_drive:2.5,objecoes:4.5,fechamento:4,pos_venda:5},objections:[{type:"Nao sei se financiamento vai aprovar",handled:false,quality:"Regular",moment:"07:00"},{type:"Vou esperar mais um pouco",handled:false,quality:"Fraca",moment:"10:00"}],top_improvements:["Fazer simulacao na hora","Criar urgencia","Oferecer test drive como experiencia"],next_step:"Enviar simulacao por WhatsApp",critical_moments:[{time:"03:00",type:"positivo",desc:"Identificou primeira compradora"},{time:"07:00",type:"negativo",desc:"Nao fez simulacao na hora"},{time:"10:00",type:"negativo",desc:"Deixou ir sem test drive"}],nepq_analysis:{situacao:5,problema:5,implicacao:4,fechamento:4},hormozi_analysis:{stack_valor:4,custo_inacao:3,reversao_risco:4},resumo:"Rafael em padrao mediano."},
-  {id:"call-012",name:"Gustavo Pereira",closer:"Carlos Silva",date:"2026-02-24",duration:"16:20",score:8.0,classification:"Boa",closing_probability:70,veiculo_interesse:"Fiat Toro 2025 Ranch",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$25.000",urgencia_compra:"Media - 2 semanas",performance:{abordagem:8.5,qualificacao:8,apresentacao:8.5,test_drive:8,objecoes:7.5,fechamento:7.5,pos_venda:8},objections:[{type:"Quero vender meu carro atual primeiro",handled:true,quality:"Boa",moment:"10:30"}],top_improvements:["Avaliar usado como parte","Calcular depreciacao mensal","Agendar com prazo definido"],next_step:"Avaliar usado quinta + proposta troca",critical_moments:[{time:"05:30",type:"positivo",desc:"Excelente apresentacao Toro Ranch"},{time:"10:30",type:"positivo",desc:"Ofereceu avaliar carro atual"},{time:"14:00",type:"positivo",desc:"Test drive em estrada de terra"}],nepq_analysis:{situacao:8,problema:8,implicacao:7,fechamento:7},hormozi_analysis:{stack_valor:8,custo_inacao:7,reversao_risco:7},resumo:"Carlos padrao alto. Solucao criativa na troca."}
+  {id:"call-001",canal:"ligacao",name:"Fernando Almeida",closer:"Carlos Silva",date:"2026-03-01",duration:"18:42",score:8.2,classification:"Boa",closing_probability:75,veiculo_interesse:"Honda Civic 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$15.000",urgencia_compra:"Alta - precisa em 2 semanas",performance:{abordagem:9,qualificacao:8.5,apresentacao:8,test_drive:9,objecoes:7.5,fechamento:7.5,pos_venda:8},objections:[{type:"Esta caro",handled:true,quality:"Boa",moment:"12:30"},{type:"Preciso falar com minha esposa",handled:true,quality:"Regular",moment:"15:45"}],top_improvements:["Explorar mais o custo da inacao antes de apresentar preco","Criar mais urgencia no fechamento com escassez real","Agendar retorno com esposa presente"],next_step:"Retorno agendado para sabado com esposa",critical_moments:[{time:"03:20",type:"positivo",desc:"Excelente rapport - conectou com tecnologia"},{time:"12:30",type:"negativo",desc:"Apresentou preco sem stack de valor"},{time:"16:00",type:"positivo",desc:"Test drive destacando conforto e economia"}],nepq_analysis:{situacao:9,problema:8,implicacao:7,fechamento:7},hormozi_analysis:{stack_valor:7,custo_inacao:6,reversao_risco:8},resumo:"Call de alta qualidade. Excelente rapport e conducao de test drive."},
+  {id:"call-002",canal:"ligacao",name:"Mariana Souza",closer:"Rafael Santos",date:"2026-03-01",duration:"12:15",score:5.8,classification:"Regular",closing_probability:30,veiculo_interesse:"Toyota Corolla Cross 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Baixa",performance:{abordagem:7,qualificacao:5,apresentacao:6.5,test_drive:3,objecoes:5.5,fechamento:4,pos_venda:6.5},objections:[{type:"Vou pesquisar mais",handled:false,quality:"Fraca",moment:"08:40"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"11:30"}],top_improvements:["Fazer qualificacao completa antes de mostrar veiculo","NUNCA deixar cliente sair sem test drive","Ao ouvir 'vou pesquisar', perguntar o que exatamente"],next_step:"Enviar WhatsApp em 48h com comparativo",critical_moments:[{time:"02:00",type:"negativo",desc:"Pulou qualificacao"},{time:"08:40",type:"negativo",desc:"Aceitou 'vou pesquisar' sem questionar"},{time:"10:00",type:"negativo",desc:"Nao ofereceu test drive"}],nepq_analysis:{situacao:5,problema:4,implicacao:3,fechamento:4},hormozi_analysis:{stack_valor:5,custo_inacao:3,reversao_risco:4},resumo:"Call com muitas oportunidades perdidas."},
+  {id:"call-003",canal:"ligacao",name:"Roberto Mendes",closer:"Carlos Silva",date:"2026-02-28",duration:"22:10",score:9.1,classification:"Boa",closing_probability:90,veiculo_interesse:"Jeep Compass 2025 Limited",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$35.000 + usado",urgencia_compra:"Alta - cambio com problema",performance:{abordagem:9.5,qualificacao:9,apresentacao:9.5,test_drive:9,objecoes:9,fechamento:8.5,pos_venda:9},objections:[{type:"Vi mais barato em outro lugar",handled:true,quality:"Excelente",moment:"14:20"},{type:"Quero vender meu carro atual primeiro",handled:true,quality:"Boa",moment:"17:00"}],top_improvements:["Poderia ter fechado na hora","Mais dados no comparativo de preco","Documentar avaliacao do usado na hora"],next_step:"Cliente volta amanha para assinar",critical_moments:[{time:"05:00",type:"positivo",desc:"Descobriu problema no cambio - criou urgencia"},{time:"14:20",type:"positivo",desc:"Reverteu objecao com custo total de propriedade"},{time:"19:00",type:"positivo",desc:"Ofereceu avaliar usado como entrada"}],nepq_analysis:{situacao:9,problema:10,implicacao:9,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:10,reversao_risco:8},resumo:"Call excepcional. Dominio completo de NEPQ e Hormozi."},
+  {id:"call-004",canal:"ligacao",name:"Patricia Lima",closer:"Amanda Costa",date:"2026-02-28",duration:"15:30",score:7.0,classification:"Boa",closing_probability:55,veiculo_interesse:"Hyundai HB20 2025",test_drive:true,proposta_enviada:false,financiamento_qualificado:true,entrada_disponivel:"R$8.000",urgencia_compra:"Media - 1 mes",performance:{abordagem:8,qualificacao:7.5,apresentacao:7,test_drive:7.5,objecoes:6,fechamento:5.5,pos_venda:7.5},objections:[{type:"Nao sei se financiamento vai aprovar",handled:true,quality:"Boa",moment:"09:15"},{type:"Esta caro",handled:false,quality:"Regular",moment:"13:00"}],top_improvements:["Fazer pre-analise de financiamento na hora","Usar stack de valor contra objecao de preco","Enviar proposta formal sempre"],next_step:"Enviar simulacao por WhatsApp",critical_moments:[{time:"04:30",type:"positivo",desc:"Boa qualificacao - primeiro carro da cliente"},{time:"09:15",type:"positivo",desc:"Tranquilizou sobre financiamento"},{time:"13:00",type:"negativo",desc:"Recuou no preco quando ouviu 'esta caro'"}],nepq_analysis:{situacao:8,problema:7,implicacao:6,fechamento:5},hormozi_analysis:{stack_valor:6,custo_inacao:5,reversao_risco:6},resumo:"Amanda tem boa abordagem mas precisa fortalecer fechamento."},
+  {id:"call-005",canal:"ligacao",name:"Lucas Ferreira",closer:"Rafael Santos",date:"2026-02-27",duration:"08:45",score:3.5,classification:"Fraca",closing_probability:10,veiculo_interesse:"Volkswagen T-Cross 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",performance:{abordagem:5,qualificacao:3,apresentacao:4,test_drive:1,objecoes:3,fechamento:2.5,pos_venda:3.5},objections:[{type:"Vou ver em outras lojas",handled:false,quality:"Fraca",moment:"06:00"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"08:00"}],top_improvements:["URGENTE: Fazer qualificacao ANTES de falar de carro","URGENTE: Sempre oferecer test drive","Reverter 'vou ver em outras lojas' com comparativo"],next_step:"Call perdida - resgatar com ligacao em 24h",critical_moments:[{time:"01:00",type:"negativo",desc:"Comecou falando de preco sem qualificar"},{time:"06:00",type:"negativo",desc:"Aceitou 'vou ver em outras lojas'"},{time:"08:00",type:"negativo",desc:"Encerrou sem test drive nem proximo passo"}],nepq_analysis:{situacao:3,problema:2,implicacao:1,fechamento:2},hormozi_analysis:{stack_valor:3,custo_inacao:1,reversao_risco:2},resumo:"Call muito fraca. Treinamento urgente necessario."},
+  {id:"call-006",canal:"ligacao",name:"Juliana Martins",closer:"Amanda Costa",date:"2026-02-27",duration:"20:05",score:7.8,classification:"Boa",closing_probability:65,veiculo_interesse:"Chevrolet Tracker 2025 Premier",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$20.000",urgencia_compra:"Alta - novo emprego",performance:{abordagem:8.5,qualificacao:8,apresentacao:8,test_drive:8.5,objecoes:7,fechamento:6.5,pos_venda:8},objections:[{type:"Preciso falar com meu socio",handled:true,quality:"Boa",moment:"14:00"},{type:"Vou esperar mais um pouco",handled:true,quality:"Regular",moment:"17:30"}],top_improvements:["Agendar reuniao com ambos decisores","Usar urgencia do emprego como alavanca","Mais assertividade no fechamento"],next_step:"Reuniao quinta com Juliana e socio",critical_moments:[{time:"03:00",type:"positivo",desc:"Descobriu necessidade para novo emprego"},{time:"11:00",type:"positivo",desc:"Test drive impecavel"},{time:"18:00",type:"negativo",desc:"Recuou no momento de fechar"}],nepq_analysis:{situacao:8,problema:8,implicacao:7,fechamento:6},hormozi_analysis:{stack_valor:8,custo_inacao:7,reversao_risco:7},resumo:"Amanda excelente em qualificacao mas hesita no fechamento."},
+  {id:"call-007",canal:"ligacao",name:"Andre Oliveira",closer:"Carlos Silva",date:"2026-02-26",duration:"25:30",score:8.8,classification:"Boa",closing_probability:85,veiculo_interesse:"Toyota Hilux 2025 SRX",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$50.000 + Hilux 2020",urgencia_compra:"Alta - precisa para safra",performance:{abordagem:9,qualificacao:9.5,apresentacao:9,test_drive:8.5,objecoes:8.5,fechamento:8.5,pos_venda:9},objections:[{type:"Esta caro",handled:true,quality:"Excelente",moment:"16:00"},{type:"Vi mais barato em outro lugar",handled:true,quality:"Excelente",moment:"20:00"}],top_improvements:["Calcular ROI em planilha","Incluir seguro agricola no stack","Fechar na visita - cliente pronto"],next_step:"Cliente confirma sexta - financiamento pre-aprovado",critical_moments:[{time:"06:00",type:"positivo",desc:"Identificou produtor rural - safra abril"},{time:"16:00",type:"positivo",desc:"Reverteu 'esta caro' com economia"},{time:"22:00",type:"positivo",desc:"Proposta com taxa rural especial"}],nepq_analysis:{situacao:10,problema:9,implicacao:9,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:9,reversao_risco:8},resumo:"Call excelente. Adaptou para produtor rural."},
+  {id:"call-008",canal:"ligacao",name:"Camila Rodrigues",closer:"Rafael Santos",date:"2026-02-26",duration:"10:20",score:4.2,classification:"Fraca",closing_probability:15,veiculo_interesse:"Fiat Pulse 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",performance:{abordagem:6,qualificacao:4,apresentacao:5,test_drive:2,objecoes:3.5,fechamento:3,pos_venda:4},objections:[{type:"Esta caro",handled:false,quality:"Fraca",moment:"07:00"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"09:30"}],top_improvements:["Parar de comecar com preco","Objecao 'esta caro' precisa de stack de valor","Oferecer test drive sempre"],next_step:"Resgate por WhatsApp com video",critical_moments:[{time:"01:30",type:"negativo",desc:"Comecou com preco sem qualificar"},{time:"07:00",type:"negativo",desc:"Ofereceu desconto imediatamente"},{time:"09:30",type:"negativo",desc:"Aceitou 'vou pensar' sem reverter"}],nepq_analysis:{situacao:4,problema:3,implicacao:2,fechamento:3},hormozi_analysis:{stack_valor:3,custo_inacao:2,reversao_risco:3},resumo:"Rafael repete mesmos erros. Treinamento urgente."},
+  {id:"call-009",canal:"ligacao",name:"Thiago Nascimento",closer:"Amanda Costa",date:"2026-02-25",duration:"17:55",score:7.5,classification:"Boa",closing_probability:60,veiculo_interesse:"Nissan Kicks 2025 Exclusive",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$12.000",urgencia_compra:"Media - proximo mes",performance:{abordagem:8,qualificacao:7.5,apresentacao:8,test_drive:8,objecoes:7,fechamento:6,pos_venda:8},objections:[{type:"Vou pesquisar mais",handled:true,quality:"Boa",moment:"11:00"},{type:"Nao gostei da cor",handled:true,quality:"Excelente",moment:"08:30"}],top_improvements:["Redirecionar para fechamento apos resolver objecao","Mais assertividade","Usar urgencia do mes como alavanca"],next_step:"Confirmar cor prata + proposta",critical_moments:[{time:"05:00",type:"positivo",desc:"Excelente apresentacao de seguranca"},{time:"08:30",type:"positivo",desc:"Resolveu objecao de cor rapidamente"},{time:"15:00",type:"negativo",desc:"Tinha tudo para fechar mas recuou"}],nepq_analysis:{situacao:8,problema:7,implicacao:7,fechamento:6},hormozi_analysis:{stack_valor:7,custo_inacao:6,reversao_risco:7},resumo:"Amanda consistente. Precisa de assertividade no fechamento."},
+  {id:"call-010",canal:"ligacao",name:"Ricardo Barbosa",closer:"Carlos Silva",date:"2026-02-25",duration:"19:40",score:8.5,classification:"Boa",closing_probability:80,veiculo_interesse:"BMW 320i 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$80.000",urgencia_compra:"Alta - bonus disponivel",performance:{abordagem:9,qualificacao:9,apresentacao:9.5,test_drive:8.5,objecoes:8,fechamento:7.5,pos_venda:8.5},objections:[{type:"Vi mais barato em outro lugar",handled:true,quality:"Excelente",moment:"13:00"}],top_improvements:["Experiencia VIP para premium","Fechar na visita","Beneficios exclusivos BMW no stack"],next_step:"Cliente volta segunda com documentos",critical_moments:[{time:"04:00",type:"positivo",desc:"Adaptou linguagem para executivo"},{time:"13:00",type:"positivo",desc:"Reverteu preco com experiencia de marca"},{time:"17:00",type:"positivo",desc:"Test drive em rota premium"}],nepq_analysis:{situacao:9,problema:9,implicacao:8,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:8,reversao_risco:8},resumo:"Carlos versatil - adaptou para premium."},
+  {id:"call-011",canal:"ligacao",name:"Fernanda Castro",closer:"Rafael Santos",date:"2026-02-24",duration:"11:00",score:5.0,classification:"Regular",closing_probability:25,veiculo_interesse:"Renault Kwid 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"R$5.000",urgencia_compra:"Baixa",performance:{abordagem:6.5,qualificacao:5,apresentacao:5.5,test_drive:2.5,objecoes:4.5,fechamento:4,pos_venda:5},objections:[{type:"Nao sei se financiamento vai aprovar",handled:false,quality:"Regular",moment:"07:00"},{type:"Vou esperar mais um pouco",handled:false,quality:"Fraca",moment:"10:00"}],top_improvements:["Fazer simulacao na hora","Criar urgencia","Oferecer test drive como experiencia"],next_step:"Enviar simulacao por WhatsApp",critical_moments:[{time:"03:00",type:"positivo",desc:"Identificou primeira compradora"},{time:"07:00",type:"negativo",desc:"Nao fez simulacao na hora"},{time:"10:00",type:"negativo",desc:"Deixou ir sem test drive"}],nepq_analysis:{situacao:5,problema:5,implicacao:4,fechamento:4},hormozi_analysis:{stack_valor:4,custo_inacao:3,reversao_risco:4},resumo:"Rafael em padrao mediano."},
+  {id:"call-012",canal:"ligacao",name:"Gustavo Pereira",closer:"Carlos Silva",date:"2026-02-24",duration:"16:20",score:8.0,classification:"Boa",closing_probability:70,veiculo_interesse:"Fiat Toro 2025 Ranch",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$25.000",urgencia_compra:"Media - 2 semanas",performance:{abordagem:8.5,qualificacao:8,apresentacao:8.5,test_drive:8,objecoes:7.5,fechamento:7.5,pos_venda:8},objections:[{type:"Quero vender meu carro atual primeiro",handled:true,quality:"Boa",moment:"10:30"}],top_improvements:["Avaliar usado como parte","Calcular depreciacao mensal","Agendar com prazo definido"],next_step:"Avaliar usado quinta + proposta troca",critical_moments:[{time:"05:30",type:"positivo",desc:"Excelente apresentacao Toro Ranch"},{time:"10:30",type:"positivo",desc:"Ofereceu avaliar carro atual"},{time:"14:00",type:"positivo",desc:"Test drive em estrada de terra"}],nepq_analysis:{situacao:8,problema:8,implicacao:7,fechamento:7},hormozi_analysis:{stack_valor:8,custo_inacao:7,reversao_risco:7},resumo:"Carlos padrao alto. Solucao criativa na troca."},
+
+  // === WHATSAPP ===
+  {id:"call-013",canal:"whatsapp",name:"Bruno Carvalho",closer:"Carlos Silva",date:"2026-03-02",duration:"—",score:8.6,classification:"Boa",closing_probability:78,veiculo_interesse:"Toyota Corolla Cross 2025",test_drive:false,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$18.000",urgencia_compra:"Alta - troca em marco",whatsapp_metrics:{tempo_primeira_resposta:3,tempo_medio_resposta:7,midia_enviada:true,followups:3,fora_expediente:false},performance:{abordagem:9,qualificacao:8.5,apresentacao:9,test_drive:4,objecoes:8.5,fechamento:8.5,pos_venda:9},objections:[{type:"Esta caro",handled:true,quality:"Boa",moment:"msg 8"},{type:"Vou pesquisar mais",handled:true,quality:"Regular",moment:"msg 14"}],top_improvements:["Convidar para test drive presencial","Usar video do carro no WhatsApp","Fechar com proposta digital assinavel"],next_step:"Test drive agendado para sabado",critical_moments:[{time:"msg 2",type:"positivo",desc:"Respondeu em menos de 3 minutos — referencia de tempo"},{time:"msg 8",type:"positivo",desc:"Enviou video comparativo e catalogo digital"},{time:"msg 16",type:"positivo",desc:"Proposta personalizada com simulacao de financiamento"}],nepq_analysis:{situacao:9,problema:8,implicacao:8,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:8,reversao_risco:8},resumo:"Atendimento WhatsApp exemplar. Carlos usou midia corretamente e respondeu rapido."},
+  {id:"call-014",canal:"whatsapp",name:"Leticia Moura",closer:"Rafael Santos",date:"2026-03-01",duration:"—",score:4.5,classification:"Fraca",closing_probability:12,veiculo_interesse:"Volkswagen Polo GTS 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",whatsapp_metrics:{tempo_primeira_resposta:42,tempo_medio_resposta:65,midia_enviada:false,followups:0,fora_expediente:false},performance:{abordagem:5,qualificacao:4,apresentacao:4.5,test_drive:1,objecoes:4,fechamento:3,pos_venda:4},objections:[{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"msg 5"},{type:"Vou ver em outras lojas",handled:false,quality:"Fraca",moment:"msg 9"}],top_improvements:["URGENTE: Responder em menos de 5 minutos","Enviar fotos e videos do veiculo","Nao deixar conversa morrer sem proximo passo"],next_step:"Resgatar com mensagem + video do Polo GTS",critical_moments:[{time:"msg 1",type:"negativo",desc:"Demorou 42 minutos para primeira resposta"},{time:"msg 5",type:"negativo",desc:"Aceitou 'vou pensar' sem contra-oferta"},{time:"msg 9",type:"negativo",desc:"Nao enviou nenhuma midia ou proposta"}],nepq_analysis:{situacao:4,problema:3,implicacao:2,fechamento:3},hormozi_analysis:{stack_valor:3,custo_inacao:2,reversao_risco:3},resumo:"WhatsApp lento e sem midia. Rafael precisa urgente de treinamento em atendimento digital."},
+  {id:"call-015",canal:"whatsapp",name:"Diego Henrique",closer:"Amanda Costa",date:"2026-02-28",duration:"—",score:6.9,classification:"Regular",closing_probability:40,veiculo_interesse:"Fiat Pulse Audace 2025",test_drive:false,proposta_enviada:true,financiamento_qualificado:false,entrada_disponivel:"R$10.000",urgencia_compra:"Media - proximo mes",whatsapp_metrics:{tempo_primeira_resposta:8,tempo_medio_resposta:22,midia_enviada:true,followups:2,fora_expediente:true},performance:{abordagem:7.5,qualificacao:6.5,apresentacao:7,test_drive:2,objecoes:6.5,fechamento:6,pos_venda:7},objections:[{type:"Nao sei se financiamento vai aprovar",handled:true,quality:"Regular",moment:"msg 11"},{type:"Esta caro",handled:false,quality:"Fraca",moment:"msg 18"}],top_improvements:["Qualificar financiamento antes de enviar proposta","Configurar resposta automatica fora do expediente","Convidar para test drive presencial"],next_step:"Simulacao de financiamento + agendamento test drive",critical_moments:[{time:"msg 2",type:"positivo",desc:"Enviou fotos reais do Pulse no estoque"},{time:"msg 11",type:"positivo",desc:"Encaminhou para simulacao de financiamento"},{time:"msg 18",type:"negativo",desc:"Objecao de preco sem stack de valor"}],nepq_analysis:{situacao:7,problema:6,implicacao:5,fechamento:6},hormozi_analysis:{stack_valor:6,custo_inacao:5,reversao_risco:6},resumo:"Amanda boa com midia mas precisa tratar objecao de preco e qualificar financiamento cedo."},
+  {id:"call-016",canal:"whatsapp",name:"Vanessa Torres",closer:"Carlos Silva",date:"2026-02-27",duration:"—",score:7.8,classification:"Boa",closing_probability:62,veiculo_interesse:"Jeep Renegade Longitude 2025",test_drive:false,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$22.000",urgencia_compra:"Alta - SUV para familia",whatsapp_metrics:{tempo_primeira_resposta:4,tempo_medio_resposta:11,midia_enviada:true,followups:4,fora_expediente:false},performance:{abordagem:8.5,qualificacao:8,apresentacao:8,test_drive:3,objecoes:7.5,fechamento:7.5,pos_venda:8},objections:[{type:"Preciso falar com minha esposa",handled:true,quality:"Boa",moment:"msg 12"},{type:"Vi mais barato em outro lugar",handled:true,quality:"Regular",moment:"msg 20"}],top_improvements:["Converter conversa digital em visita presencial","Enviar video exclusivo para esposa decidir","Fortalecer reversao de preco com custo total"],next_step:"Visita com familia agendada para domingo",critical_moments:[{time:"msg 3",type:"positivo",desc:"Enviou tour virtual e lista de seguranca"},{time:"msg 12",type:"positivo",desc:"Incluiu esposa na conversa com link"},{time:"msg 22",type:"positivo",desc:"Follow-up com comparativo de custo total"}],nepq_analysis:{situacao:8,problema:7,implicacao:7,fechamento:7},hormozi_analysis:{stack_valor:8,custo_inacao:7,reversao_risco:7},resumo:"Carlos conduziu bem o WhatsApp. Agendou visita presencial como proximo passo ideal."},
+
+  // === PRESENCIAL ===
+  {id:"call-017",canal:"presencial",name:"Marcos Siqueira",closer:"Carlos Silva",date:"2026-03-02",duration:"35:00",score:9.2,classification:"Boa",closing_probability:92,veiculo_interesse:"Toyota Hilux SRX 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$60.000 + Hilux 2021",urgencia_compra:"Alta - precisa para fazenda",formulario_preenchido:true,checklist_presencial:{recepcao:true,qualificacao:true,apresentacao:true,test_drive:true,proposta:true,negociacao:true,fechamento:true,proximo_passo:true},performance:{abordagem:9.5,qualificacao:9,apresentacao:9.5,test_drive:9.5,objecoes:9,fechamento:8.5,pos_venda:9},objections:[{type:"Esta caro",handled:true,quality:"Excelente",moment:"22:00"},{type:"Quero vender meu carro atual primeiro",handled:true,quality:"Excelente",moment:"26:00"}],top_improvements:["Fechar na visita - cliente estava pronto","Calcular ROI da Hilux em planilha na hora","Documentar avaliacao do usado imediatamente"],next_step:"Assinatura e entrada segunda-feira",critical_moments:[{time:"05:00",type:"positivo",desc:"Recepcao VIP - cafe e tour pela loja"},{time:"15:00",type:"positivo",desc:"Test drive off-road - cliente emocionado"},{time:"22:00",type:"positivo",desc:"Reverteu 'esta caro' com ROI da safra"}],nepq_analysis:{situacao:10,problema:9,implicacao:9,fechamento:9},hormozi_analysis:{stack_valor:10,custo_inacao:9,reversao_risco:9},resumo:"Atendimento presencial impecavel. Carlos criou experiencia completa e conduziu cada etapa."},
+  {id:"call-018",canal:"presencial",name:"Simone Batista",closer:"Rafael Santos",date:"2026-03-01",duration:"14:00",score:5.5,classification:"Regular",closing_probability:22,veiculo_interesse:"Fiat Argo Drive 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Baixa",formulario_preenchido:true,checklist_presencial:{recepcao:true,qualificacao:false,apresentacao:true,test_drive:false,proposta:false,negociacao:false,fechamento:false,proximo_passo:false},performance:{abordagem:6,qualificacao:4.5,apresentacao:5.5,test_drive:2,objecoes:5,fechamento:4,pos_venda:5},objections:[{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"10:00"},{type:"Vou esperar mais um pouco",handled:false,quality:"Fraca",moment:"12:30"}],top_improvements:["URGENTE: Qualificar cliente antes de apresentar carro","Nunca deixar cliente sair sem test drive","Preencher formulario COM o cliente, nao depois"],next_step:"Ligar em 24h com simulacao de financiamento",critical_moments:[{time:"02:00",type:"positivo",desc:"Recepcao cordial - ambiente agradavel"},{time:"05:00",type:"negativo",desc:"Pulou qualificacao e foi direto ao carro"},{time:"12:30",type:"negativo",desc:"Deixou cliente ir sem test drive nem proposta"}],nepq_analysis:{situacao:4,problema:4,implicacao:3,fechamento:4},hormozi_analysis:{stack_valor:4,custo_inacao:3,reversao_risco:4},resumo:"Rafael perdeu visita presencial por nao qualificar e nao oferecer test drive."},
+  {id:"call-019",canal:"presencial",name:"Paulo Rocha",closer:"Amanda Costa",date:"2026-02-28",duration:"28:00",score:7.8,classification:"Boa",closing_probability:65,veiculo_interesse:"Chevrolet Tracker Premier 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$28.000",urgencia_compra:"Media - 3 semanas",formulario_preenchido:true,checklist_presencial:{recepcao:true,qualificacao:true,apresentacao:true,test_drive:true,proposta:true,negociacao:false,fechamento:false,proximo_passo:true},performance:{abordagem:8.5,qualificacao:8,apresentacao:8,test_drive:8,objecoes:7.5,fechamento:6,pos_venda:8},objections:[{type:"Preciso falar com minha esposa",handled:true,quality:"Boa",moment:"20:00"},{type:"Esta caro",handled:true,quality:"Regular",moment:"24:00"}],top_improvements:["Convidar decisores desde a marcacao","Ser mais assertiva no fechamento","Usar urgencia - modelo com poucos disponiveis"],next_step:"Retorno com esposa quinta-feira",critical_moments:[{time:"08:00",type:"positivo",desc:"Excelente apresentacao dos itens de seguranca"},{time:"16:00",type:"positivo",desc:"Test drive impecavel - cliente empolgado"},{time:"22:00",type:"negativo",desc:"Hesitou no momento de pedir o fechamento"}],nepq_analysis:{situacao:8,problema:7,implicacao:7,fechamento:6},hormozi_analysis:{stack_valor:7,custo_inacao:7,reversao_risco:7},resumo:"Amanda excelente em apresentacao e test drive. Precisa ser mais assertiva no fechamento."}
 ];
 
 // ==================== STATE ====================
 let currentCloser = 'Todos';
 let currentClass = 'Todos';
+let currentCanal = 'Todos';
 let searchQuery = '';
 let selectedCall = null;
 
@@ -422,10 +469,25 @@ function getScoreColor(score) {
   return 'var(--red)';
 }
 function getClassCSS(c) { return c === 'Boa' ? 'boa' : c === 'Regular' ? 'regular' : 'fraca'; }
+function getCanal(c) { return c.canal || 'ligacao'; }
+function getCanalBadge(canal) {
+  const map = {
+    ligacao: '<span class="canal-badge ligacao">📞 Ligacao</span>',
+    whatsapp: '<span class="canal-badge whatsapp">💬 WhatsApp</span>',
+    presencial: '<span class="canal-badge presencial">🏪 Presencial</span>'
+  };
+  return map[canal] || map.ligacao;
+}
+function getTempoColor(min) {
+  if(min < 5) return 'var(--green)';
+  if(min < 15) return 'var(--yellow)';
+  return 'var(--red)';
+}
 function getFiltered() {
   return CALLS_DATA.filter(c => {
     if(currentCloser !== 'Todos' && c.closer !== currentCloser) return false;
     if(currentClass !== 'Todos' && c.classification !== currentClass) return false;
+    if(currentCanal !== 'Todos' && getCanal(c) !== currentCanal) return false;
     if(searchQuery && !c.name.toLowerCase().includes(searchQuery.toLowerCase()) && !c.veiculo_interesse.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
   });
@@ -436,14 +498,17 @@ function avg(arr) { return arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length).to
 function filterCloser(name) {
   currentCloser = name;
   document.querySelectorAll('#closerFilter .filter-tab').forEach(b => b.classList.toggle('active', b.textContent.trim() === (name === 'Todos' ? 'Todos' : name.split(' ')[0])));
-  renderCallsList();
-  renderStats();
+  renderCallsList(); renderStats();
 }
 function filterClass(cls) {
   currentClass = cls;
   document.querySelectorAll('#classFilter .filter-tab').forEach(b => b.classList.toggle('active', b.textContent.trim() === cls));
-  renderCallsList();
-  renderStats();
+  renderCallsList(); renderStats();
+}
+function filterCanal(canal) {
+  currentCanal = canal;
+  document.querySelectorAll('#canalFilter .canal-btn').forEach(b => b.classList.toggle('active', b.dataset.canal === canal));
+  renderCallsList(); renderStats();
 }
 function filterSearch(val) { searchQuery = val; renderCallsList(); }
 
@@ -474,10 +539,9 @@ function renderCallsList() {
         <span>${c.date}</span>
         <span>•</span>
         <span>${c.duration}</span>
-        <span>•</span>
-        <span>${c.veiculo_interesse}</span>
       </div>
       <div class="call-item-tags">
+        ${getCanalBadge(getCanal(c))}
         <span class="call-tag ${c.test_drive ? 'td' : 'no-td'}">${c.test_drive ? '✓ Test Drive' : '✗ Sem TD'}</span>
         ${c.proposta_enviada ? '<span class="call-tag prop">Proposta</span>' : ''}
         ${c.financiamento_qualificado ? '<span class="call-tag fin">Financ.</span>' : ''}
@@ -490,31 +554,40 @@ function renderCallsList() {
 function renderStats() {
   const filtered = getFiltered();
   const scores = filtered.map(c => c.score);
-  const tdRate = filtered.length ? Math.round(filtered.filter(c=>c.test_drive).length / filtered.length * 100) : 0;
-  const propRate = filtered.length ? Math.round(filtered.filter(c=>c.proposta_enviada).length / filtered.length * 100) : 0;
-  const avgProb = filtered.length ? Math.round(filtered.reduce((a,c)=>a+c.closing_probability,0)/filtered.length) : 0;
-  document.getElementById('statsGrid').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-card-label">Score Medio</div>
-      <div class="stat-card-value orange">${avg(scores)}</div>
-      <div class="stat-card-change">${filtered.length} calls analisadas</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-label">Taxa Test Drive</div>
-      <div class="stat-card-value ${tdRate >= 60 ? 'green' : 'red'}">${tdRate}%</div>
-      <div class="stat-card-change">${filtered.filter(c=>c.test_drive).length}/${filtered.length} calls</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-label">Propostas Enviadas</div>
-      <div class="stat-card-value ${propRate >= 50 ? 'green' : 'red'}">${propRate}%</div>
-      <div class="stat-card-change">${filtered.filter(c=>c.proposta_enviada).length}/${filtered.length} calls</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-label">Prob. Fechamento</div>
-      <div class="stat-card-value orange">${avgProb}%</div>
-      <div class="stat-card-change">media do pipeline</div>
-    </div>
-  `;
+  const avgScore = avg(scores);
+
+  if(currentCanal === 'whatsapp') {
+    const wpp = filtered.filter(c => c.whatsapp_metrics);
+    const avgTempo = wpp.length ? Math.round(wpp.reduce((a,c)=>a+c.whatsapp_metrics.tempo_medio_resposta,0)/wpp.length) : 0;
+    const midiaRate = wpp.length ? Math.round(wpp.filter(c=>c.whatsapp_metrics.midia_enviada).length/wpp.length*100) : 0;
+    const avgFollowup = wpp.length ? (wpp.reduce((a,c)=>a+c.whatsapp_metrics.followups,0)/wpp.length).toFixed(1) : 0;
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-card-label">Score Medio</div><div class="stat-card-value wpp">${avgScore}</div><div class="stat-card-change">${filtered.length} atendimentos WhatsApp</div></div>
+      <div class="stat-card"><div class="stat-card-label">Tempo Medio Resposta</div><div class="stat-card-value ${avgTempo<5?'green':avgTempo<15?'orange':'red'}">${avgTempo}min</div><div class="stat-card-change">${avgTempo<5?'Excelente':avgTempo<15?'Aceitavel':'Critico'}</div></div>
+      <div class="stat-card"><div class="stat-card-label">Midia Enviada</div><div class="stat-card-value ${midiaRate>=50?'green':'red'}">${midiaRate}%</div><div class="stat-card-change">${wpp.filter(c=>c.whatsapp_metrics.midia_enviada).length}/${wpp.length} conversas</div></div>
+      <div class="stat-card"><div class="stat-card-label">Follow-ups Medio</div><div class="stat-card-value wpp">${avgFollowup}</div><div class="stat-card-change">por atendimento</div></div>
+    `;
+  } else if(currentCanal === 'presencial') {
+    const tdRate = filtered.length ? Math.round(filtered.filter(c=>c.test_drive).length/filtered.length*100) : 0;
+    const formRate = filtered.length ? Math.round(filtered.filter(c=>c.formulario_preenchido).length/filtered.length*100) : 0;
+    const avgProb = filtered.length ? Math.round(filtered.reduce((a,c)=>a+c.closing_probability,0)/filtered.length) : 0;
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-card-label">Score Medio</div><div class="stat-card-value pres">${avgScore}</div><div class="stat-card-change">${filtered.length} visitas presenciais</div></div>
+      <div class="stat-card"><div class="stat-card-label">Taxa Test Drive</div><div class="stat-card-value ${tdRate>=60?'green':'red'}">${tdRate}%</div><div class="stat-card-change">${filtered.filter(c=>c.test_drive).length}/${filtered.length} visitas</div></div>
+      <div class="stat-card"><div class="stat-card-label">Formularios</div><div class="stat-card-value ${formRate>=80?'green':'orange'}">${formRate}%</div><div class="stat-card-change">${filtered.filter(c=>c.formulario_preenchido).length}/${filtered.length} preenchidos</div></div>
+      <div class="stat-card"><div class="stat-card-label">Prob. Fechamento</div><div class="stat-card-value pres">${avgProb}%</div><div class="stat-card-change">media das visitas</div></div>
+    `;
+  } else {
+    const tdRate = filtered.length ? Math.round(filtered.filter(c=>c.test_drive).length/filtered.length*100) : 0;
+    const propRate = filtered.length ? Math.round(filtered.filter(c=>c.proposta_enviada).length/filtered.length*100) : 0;
+    const avgProb = filtered.length ? Math.round(filtered.reduce((a,c)=>a+c.closing_probability,0)/filtered.length) : 0;
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-card-label">Score Medio</div><div class="stat-card-value orange">${avgScore}</div><div class="stat-card-change">${filtered.length} calls analisadas</div></div>
+      <div class="stat-card"><div class="stat-card-label">Taxa Test Drive</div><div class="stat-card-value ${tdRate>=60?'green':'red'}">${tdRate}%</div><div class="stat-card-change">${filtered.filter(c=>c.test_drive).length}/${filtered.length} calls</div></div>
+      <div class="stat-card"><div class="stat-card-label">Propostas Enviadas</div><div class="stat-card-value ${propRate>=50?'green':'red'}">${propRate}%</div><div class="stat-card-change">${filtered.filter(c=>c.proposta_enviada).length}/${filtered.length} calls</div></div>
+      <div class="stat-card"><div class="stat-card-label">Prob. Fechamento</div><div class="stat-card-value orange">${avgProb}%</div><div class="stat-card-change">media do pipeline</div></div>
+    `;
+  }
 }
 
 // ==================== SELECT CALL ====================
@@ -526,57 +599,118 @@ function selectCall(id) {
 }
 
 function renderCallDetail() {
-  if(!selectedCall) { document.getElementById('callDetail').innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-muted)"><div style="font-size:48px;margin-bottom:12px">🚗</div><div style="font-size:16px;font-weight:600">Selecione uma call na sidebar</div><div style="font-size:13px;margin-top:6px">Analise detalhada de cada atendimento</div></div>'; return; }
+  if(!selectedCall) {
+    document.getElementById('callDetail').innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-muted)"><div style="font-size:48px;margin-bottom:12px">🚗</div><div style="font-size:16px;font-weight:600">Selecione uma call na sidebar</div><div style="font-size:13px;margin-top:6px">Analise detalhada de cada atendimento</div></div>';
+    return;
+  }
   const c = selectedCall;
   const p = c.performance;
+  const canal = getCanal(c);
   const dims = ['abordagem','qualificacao','apresentacao','test_drive','objecoes','fechamento','pos_venda'];
-  const dimLabels = {'abordagem':'Abordagem & Rapport','qualificacao':'Qualificacao','apresentacao':'Apresentacao do Veiculo','test_drive':'Test Drive','objecoes':'Tratamento de Objecoes','fechamento':'Fechamento','pos_venda':'Pos-venda'};
+  const dimLabels = {abordagem:'Abordagem & Rapport',qualificacao:'Qualificacao',apresentacao:'Apresentacao do Veiculo',test_drive:'Test Drive',objecoes:'Tratamento de Objecoes',fechamento:'Fechamento',pos_venda:'Pos-venda'};
+
+  // WPP extra section
+  let wppSection = '';
+  if(canal === 'whatsapp' && c.whatsapp_metrics) {
+    const wm = c.whatsapp_metrics;
+    wppSection = `
+      <div class="detail-card full fade-in" style="border-color:rgba(37,211,102,0.3)">
+        <div class="detail-card-title" style="color:var(--wpp)">💬 Metricas WhatsApp</div>
+        <div class="wpp-metrics-grid">
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">⚡</div>
+            <div class="wpp-metric-label">1a Resposta</div>
+            <div class="wpp-metric-value" style="color:${getTempoColor(wm.tempo_primeira_resposta)}">${wm.tempo_primeira_resposta}min</div>
+            <div class="wpp-metric-sub">${wm.tempo_primeira_resposta<5?'Excelente':wm.tempo_primeira_resposta<15?'Aceitavel':'Critico'}</div>
+          </div>
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">⏱️</div>
+            <div class="wpp-metric-label">Tempo Medio</div>
+            <div class="wpp-metric-value" style="color:${getTempoColor(wm.tempo_medio_resposta)}">${wm.tempo_medio_resposta}min</div>
+            <div class="wpp-metric-sub">${wm.tempo_medio_resposta<5?'Excelente':wm.tempo_medio_resposta<15?'Aceitavel':'Critico'}</div>
+          </div>
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">🖼️</div>
+            <div class="wpp-metric-label">Midia Enviada</div>
+            <div class="wpp-metric-value" style="color:${wm.midia_enviada?'var(--green)':'var(--red)'}">${wm.midia_enviada?'Sim':'Nao'}</div>
+            <div class="wpp-metric-sub">${wm.midia_enviada?'Fotos/videos':'Apenas texto'}</div>
+          </div>
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">🔄</div>
+            <div class="wpp-metric-label">Follow-ups</div>
+            <div class="wpp-metric-value" style="color:${wm.followups>=2?'var(--green)':'var(--yellow)'}">${wm.followups}</div>
+            <div class="wpp-metric-sub">${wm.followups>=3?'Consistente':wm.followups>=1?'Basico':'Nenhum'}</div>
+          </div>
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">🌙</div>
+            <div class="wpp-metric-label">Fora Expediente</div>
+            <div class="wpp-metric-value" style="color:${wm.fora_expediente?'var(--yellow)':'var(--green)'}">${wm.fora_expediente?'Sim':'Nao'}</div>
+            <div class="wpp-metric-sub">${wm.fora_expediente?'Ativar automacao':'Dentro do horario'}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // Presencial extra section
+  let presSection = '';
+  if(canal === 'presencial' && c.checklist_presencial) {
+    const ck = c.checklist_presencial;
+    const checkItems = [
+      {key:'recepcao', label:'Recepcao do Cliente'},
+      {key:'qualificacao', label:'Qualificacao Completa'},
+      {key:'apresentacao', label:'Apresentacao do Veiculo'},
+      {key:'test_drive', label:'Test Drive Realizado'},
+      {key:'proposta', label:'Proposta Formal'},
+      {key:'negociacao', label:'Negociacao Ativa'},
+      {key:'fechamento', label:'Fechamento Tentado'},
+      {key:'proximo_passo', label:'Proximo Passo Claro'}
+    ];
+    const done = checkItems.filter(i=>ck[i.key]).length;
+    const pct = Math.round(done/checkItems.length*100);
+    const pctColor = pct>=75?'var(--green)':pct>=50?'var(--yellow)':'var(--red)';
+    presSection = `
+      <div class="detail-card full fade-in" style="border-color:rgba(255,152,0,0.3)">
+        <div class="detail-card-title" style="color:var(--presencial)">🏪 Checklist Presencial</div>
+        <div class="checklist-grid">
+          ${checkItems.map(item=>`
+            <div class="checklist-item">
+              <div class="checklist-check ${ck[item.key]?'done':'miss'}">${ck[item.key]?'✓':'✗'}</div>
+              <span class="checklist-label">${item.label}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:12px;color:var(--text-muted)">Progresso do Atendimento</span>
+            <span style="font-size:14px;font-weight:800;color:${pctColor}">${done}/${checkItems.length} etapas (${pct}%)</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${pct>=75?'var(--orange-gradient)':pct>=50?'linear-gradient(135deg,#e6a817,#ffc107)':'linear-gradient(135deg,#cc2233,#ff4757)'}"></div></div>
+        </div>
+      </div>`;
+  }
 
   document.getElementById('callDetail').innerHTML = `
     <div class="fade-in">
       <div class="section-header" style="margin-bottom:16px">
         <div>
-          <div class="section-title">${c.name} — ${c.veiculo_interesse}</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+            <div class="section-title">${c.name} — ${c.veiculo_interesse}</div>
+            ${getCanalBadge(canal)}
+          </div>
           <div class="section-subtitle">${c.closer} • ${c.date} • ${c.duration} • Prob. fechamento: ${c.closing_probability}%</div>
         </div>
       </div>
 
-      <!-- CAR METRICS -->
       <div class="car-metrics">
-        <div class="car-metric">
-          <div class="car-metric-icon">🚗</div>
-          <div class="car-metric-label">Test Drive</div>
-          <div class="car-metric-value ${c.test_drive?'yes':'no'}">${c.test_drive?'Realizado':'Nao feito'}</div>
-        </div>
-        <div class="car-metric">
-          <div class="car-metric-icon">📋</div>
-          <div class="car-metric-label">Proposta</div>
-          <div class="car-metric-value ${c.proposta_enviada?'yes':'no'}">${c.proposta_enviada?'Enviada':'Nao enviada'}</div>
-        </div>
-        <div class="car-metric">
-          <div class="car-metric-icon">💰</div>
-          <div class="car-metric-label">Financiamento</div>
-          <div class="car-metric-value ${c.financiamento_qualificado?'yes':'no'}">${c.financiamento_qualificado?'Qualificado':'Nao qualif.'}</div>
-        </div>
-        <div class="car-metric">
-          <div class="car-metric-icon">💵</div>
-          <div class="car-metric-label">Entrada</div>
-          <div class="car-metric-value" style="color:var(--text-primary)">${c.entrada_disponivel}</div>
-        </div>
-        <div class="car-metric">
-          <div class="car-metric-icon">⏰</div>
-          <div class="car-metric-label">Urgencia</div>
-          <div class="car-metric-value" style="color:var(--text-primary);font-size:11px">${c.urgencia_compra}</div>
-        </div>
-        <div class="car-metric">
-          <div class="car-metric-icon">🎯</div>
-          <div class="car-metric-label">Proximo Passo</div>
-          <div class="car-metric-value" style="color:var(--orange);font-size:11px">${c.next_step}</div>
-        </div>
+        <div class="car-metric"><div class="car-metric-icon">🚗</div><div class="car-metric-label">Test Drive</div><div class="car-metric-value ${c.test_drive?'yes':'no'}">${c.test_drive?'Realizado':'Nao feito'}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">📋</div><div class="car-metric-label">Proposta</div><div class="car-metric-value ${c.proposta_enviada?'yes':'no'}">${c.proposta_enviada?'Enviada':'Nao enviada'}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">💰</div><div class="car-metric-label">Financiamento</div><div class="car-metric-value ${c.financiamento_qualificado?'yes':'no'}">${c.financiamento_qualificado?'Qualificado':'Nao qualif.'}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">💵</div><div class="car-metric-label">Entrada</div><div class="car-metric-value" style="color:var(--text-primary)">${c.entrada_disponivel}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">⏰</div><div class="car-metric-label">Urgencia</div><div class="car-metric-value" style="color:var(--text-primary);font-size:11px">${c.urgencia_compra}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">🎯</div><div class="car-metric-label">Proximo Passo</div><div class="car-metric-value" style="color:var(--orange);font-size:11px">${c.next_step}</div></div>
       </div>
 
       <div class="detail-grid">
-        <!-- SCORE -->
         <div class="detail-card" style="text-align:center">
           <div class="detail-card-title">Score Geral</div>
           <div class="score-big ${getClassCSS(c.classification)}">${c.score}</div>
@@ -584,7 +718,6 @@ function renderCallDetail() {
           <div style="margin-top:12px;font-size:13px;color:var(--text-secondary);line-height:1.5">${c.resumo}</div>
         </div>
 
-        <!-- PERFORMANCE BARS -->
         <div class="detail-card">
           <div class="detail-card-title">Performance por Dimensao</div>
           ${dims.map(d => `
@@ -596,7 +729,6 @@ function renderCallDetail() {
           `).join('')}
         </div>
 
-        <!-- OBJECOES -->
         <div class="detail-card">
           <div class="detail-card-title">Objecoes</div>
           ${c.objections.map(o => `
@@ -608,7 +740,6 @@ function renderCallDetail() {
           `).join('')}
         </div>
 
-        <!-- TOP MELHORIAS -->
         <div class="detail-card">
           <div class="detail-card-title">Top 3 Melhorias</div>
           ${c.top_improvements.map((imp,i) => `
@@ -619,7 +750,6 @@ function renderCallDetail() {
           `).join('')}
         </div>
 
-        <!-- MOMENTOS CRITICOS -->
         <div class="detail-card full">
           <div class="detail-card-title">Momentos Criticos</div>
           ${c.critical_moments.map(m => `
@@ -631,7 +761,6 @@ function renderCallDetail() {
           `).join('')}
         </div>
 
-        <!-- NEPQ -->
         <div class="detail-card">
           <div class="detail-card-title">Analise NEPQ</div>
           <div class="methodology-grid">
@@ -644,7 +773,6 @@ function renderCallDetail() {
           </div>
         </div>
 
-        <!-- HORMOZI -->
         <div class="detail-card">
           <div class="detail-card-title">Analise Hormozi</div>
           <div class="methodology-grid">
@@ -659,6 +787,9 @@ function renderCallDetail() {
           </div>
         </div>
       </div>
+
+      ${wppSection}
+      ${presSection}
     </div>
   `;
 }
@@ -676,7 +807,7 @@ function renderDNAFor(closerName, btn) {
   if(btn) { document.querySelectorAll('.dna-toggle-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
   const calls = CALLS_DATA.filter(c=>c.closer===closerName);
   const dims = ['abordagem','qualificacao','apresentacao','test_drive','objecoes','fechamento','pos_venda'];
-  const dimLabels = {'abordagem':'Abordagem','qualificacao':'Qualificacao','apresentacao':'Apresentacao','test_drive':'Test Drive','objecoes':'Objecoes','fechamento':'Fechamento','pos_venda':'Pos-venda'};
+  const dimLabels = {abordagem:'Abordagem',qualificacao:'Qualificacao',apresentacao:'Apresentacao',test_drive:'Test Drive',objecoes:'Objecoes',fechamento:'Fechamento',pos_venda:'Pos-venda'};
   const avgs = {};
   dims.forEach(d => { avgs[d] = calls.length ? (calls.reduce((a,c)=>a+c.performance[d],0)/calls.length).toFixed(1) : 0; });
   const totalAvg = (Object.values(avgs).reduce((a,v)=>a+parseFloat(v),0)/dims.length).toFixed(1);
@@ -718,7 +849,7 @@ function renderDNAFor(closerName, btn) {
       <div style="margin-top:12px;padding:12px;background:var(--navy);border-radius:10px">
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Recomendacao</div>
         <div style="font-size:13px;color:var(--text-secondary);line-height:1.5">
-          ${parseFloat(avgs.fechamento) < 6 ? `<strong style="color:var(--orange)">${closerName.split(' ')[0]}</strong> precisa trabalhar assertividade no fechamento. Treinar: pedir compromisso com clareza, usar escassez real, e nao recuar quando o cliente esta pronto.` : 
+          ${parseFloat(avgs.fechamento) < 6 ? `<strong style="color:var(--orange)">${closerName.split(' ')[0]}</strong> precisa trabalhar assertividade no fechamento. Treinar: pedir compromisso com clareza, usar escassez real, e nao recuar quando o cliente esta pronto.` :
           parseFloat(avgs.qualificacao) < 6 ? `<strong style="color:var(--orange)">${closerName.split(' ')[0]}</strong> precisa melhorar a qualificacao. Treinar: perguntas NEPQ de situacao e problema antes de apresentar qualquer veiculo.` :
           parseFloat(avgs.test_drive) < 5 ? `<strong style="color:var(--orange)">${closerName.split(' ')[0]}</strong> precisa SEMPRE oferecer test drive. E a arma emocional mais forte na venda de carros.` :
           `<strong style="color:var(--orange)">${closerName.split(' ')[0]}</strong> tem performance consistente. Focar em micro-otimizacoes de ${dimLabels[weakest].toLowerCase()} para subir o nivel.`}
@@ -731,12 +862,20 @@ function renderDNAFor(closerName, btn) {
 // ==================== OBJECTION MAP ====================
 function renderObjectionMap() {
   const objMap = {};
+  const canalBadgeMap = {
+    ligacao: '<span class="canal-badge ligacao">📞 Ligacao</span>',
+    whatsapp: '<span class="canal-badge whatsapp">💬 WhatsApp</span>',
+    presencial: '<span class="canal-badge presencial">🏪 Presencial</span>'
+  };
+
   CALLS_DATA.forEach(c => {
+    const canal = getCanal(c);
     c.objections.forEach(o => {
-      if(!objMap[o.type]) objMap[o.type] = {count:0,handled:0,calls:[]};
+      if(!objMap[o.type]) objMap[o.type] = {count:0,handled:0,calls:[],canals:{}};
       objMap[o.type].count++;
       if(o.handled) objMap[o.type].handled++;
       objMap[o.type].calls.push({closer:c.closer,quality:o.quality,name:c.name});
+      objMap[o.type].canals[canal] = (objMap[o.type].canals[canal]||0) + 1;
     });
   });
   const sorted = Object.entries(objMap).sort((a,b)=>b[1].count-a[1].count);
@@ -752,11 +891,14 @@ function renderObjectionMap() {
     "Vou esperar mais um pouco": "NEPQ: 'Entendo. O que precisa acontecer para voce se sentir pronto? Talvez a gente resolva isso hoje.'\nHORMOZI: 'A cada mes que passa, seu carro atual deprecia R$X e custa R$Y em manutencao. Esperar esta te custando dinheiro.'",
     "Quero vender meu carro atual primeiro": "NEPQ: 'Faz sentido querer resolver isso antes. Voce ja pensou em usar como parte da troca? Avaliamos na hora.'\nHORMOZI: 'Temos programa de troca facilitada. Avaliamos seu carro aqui e damos um valor justo como entrada. Zero trabalho pra voce.'",
     "Vou ver em outras lojas": "NEPQ: 'Legal, pesquisar e importante. O que voce vai comparar especificamente? Posso te dar essas informacoes agora.'\nHORMOZI: 'Garanto que nossas condicoes sao as melhores. Se encontrar melhor, me liga que eu cubro. Mas antes de ir, faz o test drive.'",
-    "Nao gostei da cor": "NEPQ: 'Qual cor voce tinha em mente? Vamos ver a disponibilidade ou podemos encomendar.'\nHORMOZI: 'Temos esse modelo em X cores. Se a sua preferida nao esta aqui, consigo trazer em Y dias com condicao especial de reserva.'"
+    "Nao gostei da cor": "NEPQ: 'Qual cor voce tinha em mente? Vamos ver a disponibilidade ou podemos encomendar.'\nHORMOZI: 'Temos esse modelo em X cores. Se a sua preferida nao esta aqui, consigo trazer em Y dias com condicao especial de reserva.'",
+    "Vou ver em outras lojas": "NEPQ: 'Legal, pesquisar e importante. O que voce vai comparar? Posso dar essas informacoes agora.'\nHORMOZI: 'Garanto que nossas condicoes sao as melhores. Se encontrar melhor me liga que eu cubro. Mas antes de ir, faz o test drive.'"
   };
 
   document.getElementById('objectionMap').innerHTML = sorted.map(([type, data]) => {
     const rate = Math.round(data.handled/data.count*100);
+    const topCanal = Object.entries(data.canals).sort((a,b)=>b[1]-a[1])[0];
+    const topCanalBadge = topCanal ? canalBadgeMap[topCanal[0]] : '';
     return `
     <div class="objection-map-item fade-in">
       <div class="objection-map-header">
@@ -764,15 +906,46 @@ function renderObjectionMap() {
         <div class="objection-map-count">${data.count}x</div>
       </div>
       <div class="objection-map-stats">
-        <span>Taxa de reversao: <strong style="color:${rate>=50?'var(--green)':'var(--red)'}"> ${rate}%</strong></span>
+        <span>Reversao: <strong style="color:${rate>=50?'var(--green)':'var(--red)'}"> ${rate}%</strong></span>
         <span>•</span>
-        <span>${data.calls.map(c=>c.closer.split(' ')[0]).join(', ')}</span>
+        <span>${data.calls.map(c=>c.closer.split(' ')[0]).filter((v,i,a)=>a.indexOf(v)===i).join(', ')}</span>
+        <span>•</span>
+        <span>Canal +freq: ${topCanalBadge}</span>
       </div>
       <div class="objection-script">
         <strong>Script Anti-Objecao:</strong><br>
-        ${(scripts[type] || 'Script em desenvolvimento para esta objecao.').replace(/\n/g, '<br>')}
+        ${(scripts[type]||'Script em desenvolvimento para esta objecao.').replace(/\n/g,'<br>')}
       </div>
     </div>`;
+  }).join('');
+}
+
+// ==================== CANAL PERFORMANCE ====================
+function renderCanalPerf() {
+  const canais = [
+    {key:'ligacao', icon:'📞', label:'Ligacao', color:'var(--blue)'},
+    {key:'whatsapp', icon:'💬', label:'WhatsApp', color:'var(--wpp)'},
+    {key:'presencial', icon:'🏪', label:'Presencial', color:'var(--presencial)'}
+  ];
+  return canais.map(info => {
+    const calls = CALLS_DATA.filter(c=>getCanal(c)===info.key);
+    if(!calls.length) return '';
+    const avgScore = avg(calls.map(c=>c.score));
+    const tdRate = Math.round(calls.filter(c=>c.test_drive).length/calls.length*100);
+    const propRate = Math.round(calls.filter(c=>c.proposta_enviada).length/calls.length*100);
+    const avgProb = Math.round(calls.reduce((a,c)=>a+c.closing_probability,0)/calls.length);
+    return `
+      <div class="canal-perf-row">
+        <span class="canal-perf-icon">${info.icon}</span>
+        <span class="canal-perf-name" style="color:${info.color}">${info.label}</span>
+        <div class="canal-perf-stats">
+          <span><strong>${calls.length}</strong> calls</span>
+          <span>Score: <strong style="color:${getScoreColor(parseFloat(avgScore))}">${avgScore}</strong></span>
+          <span>Test Drive: <strong>${tdRate}%</strong></span>
+          <span>Propostas: <strong>${propRate}%</strong></span>
+          <span>Prob. Fechamento: <strong>${avgProb}%</strong></span>
+        </div>
+      </div>`;
   }).join('');
 }
 
@@ -794,7 +967,7 @@ function renderReport() {
       const b = calls.reduce((s,c)=>s+c.performance[min],0)/calls.length;
       return a < b ? d : min;
     }, dims[0]);
-    const dimLabels = {'abordagem':'Abordagem','qualificacao':'Qualificacao','apresentacao':'Apresentacao','test_drive':'Test Drive','objecoes':'Objecoes','fechamento':'Fechamento','pos_venda':'Pos-venda'};
+    const dimLabels = {abordagem:'Abordagem',qualificacao:'Qualificacao',apresentacao:'Apresentacao',test_drive:'Test Drive',objecoes:'Objecoes',fechamento:'Fechamento',pos_venda:'Pos-venda'};
     return `
       <div class="report-section">
         <div class="report-section-title">${closer} — Score ${cAvg} • ${calls.length} calls • TD ${cTD}%</div>
@@ -813,6 +986,11 @@ function renderReport() {
         <strong>${totalCalls} calls analisadas</strong> com score medio de <strong style="color:var(--orange)">${avgScore}</strong>.<br>
         Taxa de test drive: <strong style="color:${tdRate>=60?'var(--green)':'var(--red)'}"> ${tdRate}%</strong> | Propostas enviadas: <strong style="color:${propRate>=50?'var(--green)':'var(--red)'}"> ${propRate}%</strong>
       </div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">📊 Performance por Canal</div>
+      <div class="report-text" style="margin-bottom:10px">Comparativo de eficiencia entre os 3 canais de atendimento da equipe.</div>
+      ${renderCanalPerf()}
     </div>
     ${closerReports}
     <div class="report-section">
@@ -843,7 +1021,6 @@ function renderScript() {
       <div class="report-text">
         <strong style="color:var(--orange)">FASE 1: ABORDAGEM (0-2 min)</strong><br>
         "Bem-vindo! Meu nome e [NOME], sou consultor aqui na [EMPRESA]. Antes de te mostrar qualquer carro, quero entender o que e importante pra voce. Posso fazer algumas perguntas rapidas?"<br><br>
-
         <strong style="color:var(--orange)">FASE 2: QUALIFICACAO NEPQ (2-8 min)</strong><br>
         <strong>Situacao:</strong><br>
         → "Voce esta buscando pra uso do dia a dia ou tem uma necessidade especifica?"<br>
@@ -855,20 +1032,14 @@ function renderScript() {
         <strong>Implicacao:</strong><br>
         → "Quanto voce gasta por mes em manutencao e combustivel?"<br>
         → "Isso ja te fez perder algum compromisso importante?"<br><br>
-
         <strong style="color:var(--orange)">FASE 3: APRESENTACAO + TEST DRIVE (8-15 min)</strong><br>
-        [Apresentar veiculo conectando features com necessidades descobertas]<br>
         "Baseado no que voce me contou, esse [MODELO] resolve exatamente o problema de [DOR]. Vamos fazer um test drive pra voce sentir?"<br><br>
-
         <strong style="color:var(--orange)">FASE 4: STACK DE VALOR HORMOZI (15-18 min)</strong><br>
-        "Alem do carro, voce leva: garantia de [X] anos, [Y] revisoes gratis, seguro no primeiro ano, e a menor taxa de financiamento da regiao. Tudo isso junto, no mercado, custaria mais de R$[VALOR]."<br><br>
-
+        "Alem do carro, voce leva: garantia de [X] anos, [Y] revisoes gratis, seguro no primeiro ano, e a menor taxa de financiamento da regiao."<br><br>
         <strong style="color:var(--orange)">FASE 5: CUSTO DA INACAO (18-20 min)</strong><br>
-        "Vamos fazer uma conta: seu carro atual custa R$[X]/mes em manutencao. Em 6 meses sao R$[Y]. Esse valor paga [Z]% da entrada do novo. Cada mes que espera, voce esta perdendo dinheiro."<br><br>
-
+        "Vamos fazer uma conta: seu carro atual custa R$[X]/mes em manutencao. Em 6 meses sao R$[Y]. Esse valor paga [Z]% da entrada do novo."<br><br>
         <strong style="color:var(--orange)">FASE 6: FECHAMENTO (20-22 min)</strong><br>
         "Com tudo isso que conversamos, se eu conseguir encaixar dentro do seu orcamento hoje, teria algum motivo para nao fechar?"<br><br>
-
         <strong style="color:var(--orange)">REVERSAO DE RISCO:</strong><br>
         "E olha: se em 7 dias voce nao estiver 100% satisfeito, devolvemos sem perguntas. Risco zero pra voce."
       </div>
