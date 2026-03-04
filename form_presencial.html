@@ -313,6 +313,46 @@ audio.preview.vis { display: block; }
 }
 .toast.vis { opacity: 1; transform: translateX(-50%) translateY(0); }
 .toast.err { border-color: var(--red); color: var(--red); }
+
+/* ─── EXPORT BUTTON ─────────────────────────────────────────────────── */
+.btn-export {
+  flex: 1; height: 52px;
+  background: rgba(0,210,106,0.1);
+  border: 1.5px solid rgba(0,210,106,0.28);
+  border-radius: 14px;
+  color: var(--green);
+  cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all .2s;
+}
+.btn-export:active { transform: scale(.97); }
+.btn-export:hover { background: rgba(0,210,106,0.2); }
+
+/* ─── EXPORT PANEL ──────────────────────────────────────────────────── */
+.export-panel {
+  display: none; position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 32px); max-width: 480px;
+  background: #071e10; border: 1px solid rgba(0,210,106,0.35); border-radius: 16px;
+  padding: 16px 20px; z-index: 400; box-shadow: 0 8px 32px rgba(0,0,0,.5);
+}
+.export-panel.vis { display: block; animation: fadeUpPanel .3s ease; }
+@keyframes fadeUpPanel {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.export-panel-title { font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: 10px; }
+.export-panel-cmd {
+  font-family: monospace; font-size: 12px; background: #0D1B2A;
+  border: 1px solid rgba(0,210,106,0.2); border-radius: 8px;
+  padding: 10px 12px; color: #8BA3C1; word-break: break-all; line-height: 1.6;
+  cursor: pointer; transition: background .2s; white-space: pre-wrap;
+}
+.export-panel-cmd:hover { background: #112236; }
+.export-panel-hint { font-size: 11px; color: #5A7A9A; margin-top: 8px; }
+.export-panel-close {
+  position: absolute; top: 10px; right: 14px;
+  background: none; border: none; color: #5A7A9A; cursor: pointer; font-size: 18px; line-height: 1;
+}
 </style>
 </head>
 <body>
@@ -863,6 +903,14 @@ Ex: Cliente vem comparando com o Corolla Cross, tem carro 2019 para trocar, espo
     </svg>
     Áudio
   </button>
+  <button class="btn-export" onclick="exportarDashboard()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+      <polyline points="17 8 12 3 7 8"/>
+      <line x1="12" y1="3" x2="12" y2="15"/>
+    </svg>
+    Exportar JSON
+  </button>
   <button class="btn-save" onclick="salvar()">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
@@ -871,6 +919,14 @@ Ex: Cliente vem comparando com o Corolla Cross, tem carro 2019 para trocar, espo
     </svg>
     Salvar Atendimento
   </button>
+</div>
+
+<!-- EXPORT PANEL -->
+<div class="export-panel" id="exportPanel">
+  <button class="export-panel-close" onclick="document.getElementById('exportPanel').classList.remove('vis')">✕</button>
+  <div class="export-panel-title">✅ JSON baixado com sucesso!</div>
+  <div class="export-panel-cmd" id="exportCmd" onclick="copyExportCmd()" title="Toque para copiar o comando">python analyze_call.py <span id="exportFilename">arquivo.json</span> --canal presencial</div>
+  <div class="export-panel-hint">💡 Toque no comando para copiar · Execute no terminal para analisar com IA</div>
 </div>
 
 <script>
@@ -1120,6 +1176,51 @@ function _download(data, vendedor, dataStr) {
   URL.revokeObjectURL(url);
 
   toast(`${filename} baixado com sucesso!`);
+}
+
+/* ─── EXPORT PARA DASHBOARD ─────────────────────────────────────────── */
+function exportarDashboard() {
+  const vendedor = document.getElementById('fVendedor').value;
+  const cliente  = document.getElementById('fCliente').value.trim();
+  if (!vendedor) { toast('Selecione o vendedor', true); return; }
+  if (!cliente)  { toast('Informe o nome do cliente', true); return; }
+
+  const data = collectData();
+  const name = vendedor.replace(/\s+/g, '_');
+  const date = (data.data || '').replace(/-/g, '');
+  const filename = `${name}_${date}.json`;
+
+  function afterDownload() {
+    document.getElementById('exportFilename').textContent = filename;
+    document.getElementById('exportPanel').classList.add('vis');
+    // Auto-fechar após 12s
+    setTimeout(() => document.getElementById('exportPanel').classList.remove('vis'), 12000);
+  }
+
+  if (_audioBlob) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      data.audio_memo = reader.result;
+      _download(data, vendedor, data.data);
+      afterDownload();
+    };
+    reader.readAsDataURL(_audioBlob);
+  } else {
+    _download(data, vendedor, data.data);
+    afterDownload();
+  }
+}
+
+function copyExportCmd() {
+  const filename = document.getElementById('exportFilename').textContent;
+  const cmd = `python analyze_call.py ${filename} --canal presencial`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(cmd)
+      .then(() => toast('Comando copiado! Cole no terminal.'))
+      .catch(() => toast(cmd));
+  } else {
+    toast('Copie: ' + cmd);
+  }
 }
 
 /* ─── TOAST ─────────────────────────────────────────────────────────── */

@@ -11,6 +11,29 @@
     { "id": "v2", "nome": "Rafael Santos", "cargo": "Consultor" },
     { "id": "v3", "nome": "Amanda Costa", "cargo": "Consultora" }
   ],
+  "canais": {
+    "ativos": ["ligacao", "whatsapp", "presencial"],
+    "meta_semanal_por_vendedor": {
+      "ligacao": 3,
+      "whatsapp": 5,
+      "presencial": 3
+    },
+    "whatsapp_thresholds_minutos": {
+      "bom": 5,
+      "medio": 15,
+      "ruim": 30
+    },
+    "labels": {
+      "ligacao": "Ligação",
+      "whatsapp": "WhatsApp",
+      "presencial": "Presencial"
+    },
+    "icones": {
+      "ligacao": "📞",
+      "whatsapp": "💬",
+      "presencial": "🏪"
+    }
+  },
   "metricas_nicho": {
     "test_drive": true,
     "proposta_enviada": true,
@@ -28,6 +51,11 @@
     "fechamento",
     "pos_venda"
   ],
+  "scoring": {
+    "boa": 7.0,
+    "regular": 5.0,
+    "fraca": 0.0
+  },
   "plano": {
     "tipo": "pro",
     "implementacao": 10000,

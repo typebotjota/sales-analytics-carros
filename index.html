@@ -188,6 +188,18 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 .upload-btn { background:var(--orange-gradient); border:none; padding:10px 28px; border-radius:10px; color:white; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; margin-top:16px; transition:transform .2s; }
 .upload-btn:hover { transform:scale(1.03); }
 
+/* UPLOAD TABS */
+.upload-tabs { display:flex; gap:8px; margin-bottom:20px; }
+.upload-tab { flex:1; padding:10px; border:1px solid var(--navy-border); background:transparent; color:var(--text-secondary); border-radius:10px; cursor:pointer; font-family:inherit; font-size:13px; font-weight:600; transition:all .2s; }
+.upload-tab.active { background:var(--orange); border-color:var(--orange); color:white; }
+.upload-tab:hover:not(.active) { border-color:var(--text-muted); }
+.upload-tab-content { display:none; }
+.upload-tab-content.active { display:block; }
+.wpp-preview-area { display:flex; flex-direction:column; gap:6px; padding:16px; background:var(--navy); border-radius:12px; max-height:320px; overflow-y:auto; }
+.wpp-bubble { max-width:75%; padding:8px 12px; border-radius:12px; font-size:12px; line-height:1.4; }
+.wpp-bubble.recv { background:var(--navy-card); border:1px solid var(--navy-border); align-self:flex-start; }
+.wpp-bubble.sent { background:rgba(37,211,102,0.12); border:1px solid rgba(37,211,102,0.2); align-self:flex-end; }
+
 /* REPORT */
 .report-section { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:20px; margin-bottom:16px; }
 .report-section-title { font-size:14px; font-weight:700; color:var(--orange); margin-bottom:10px; }
@@ -381,18 +393,64 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
       <div class="view" id="view-upload">
         <div class="section-header">
           <div>
-            <div class="section-title">Upload de Calls</div>
-            <div class="section-subtitle">Arraste ou selecione suas gravacoes para analise</div>
+            <div class="section-title">Upload de Atendimentos</div>
+            <div class="section-subtitle">Selecione o canal para importar e analisar com IA</div>
           </div>
         </div>
-        <div class="upload-zone" id="uploadZone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="document.getElementById('fileInput').click()">
-          <div class="upload-icon">🎙️</div>
-          <div class="upload-text">Arraste suas calls aqui</div>
-          <div class="upload-hint">.mp4 .mp3 .m4a .wav .webm .ogg</div>
-          <input type="file" id="fileInput" multiple accept=".mp4,.mp3,.m4a,.wav,.webm,.ogg" style="display:none" onchange="handleFiles(this.files)">
+
+        <div class="upload-tabs" id="uploadTabBtns">
+          <button class="upload-tab active" data-tab="ligacao" onclick="switchUploadTab('ligacao')">📞 Ligacao</button>
+          <button class="upload-tab" data-tab="whatsapp" onclick="switchUploadTab('whatsapp')">💬 WhatsApp</button>
+          <button class="upload-tab" data-tab="presencial" onclick="switchUploadTab('presencial')">🏪 Presencial</button>
         </div>
-        <div id="uploadQueue" style="margin-top:16px"></div>
-        <button class="upload-btn" id="processBtn" style="display:none" onclick="processUploads()">Processar Calls</button>
+
+        <!-- TAB: LIGACAO -->
+        <div class="upload-tab-content active" id="utab-ligacao">
+          <div class="upload-zone" id="uploadZone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">🎙️</div>
+            <div class="upload-text">Arraste suas calls aqui</div>
+            <div class="upload-hint">.mp4 .mp3 .m4a .wav .webm .ogg</div>
+            <input type="file" id="fileInput" multiple accept=".mp4,.mp3,.m4a,.wav,.webm,.ogg" style="display:none" onchange="handleFiles(this.files)">
+          </div>
+          <div id="uploadQueue" style="margin-top:16px"></div>
+          <button class="upload-btn" id="processBtn" style="display:none" onclick="processUploads()">Processar Calls</button>
+        </div>
+
+        <!-- TAB: WHATSAPP -->
+        <div class="upload-tab-content" id="utab-whatsapp">
+          <div class="upload-zone" id="wppZone"
+            ondragover="event.preventDefault();this.classList.add('dragover')"
+            ondragleave="this.classList.remove('dragover')"
+            ondrop="handleWppDrop(event)"
+            onclick="document.getElementById('wppFileInput').click()"
+            style="padding:40px">
+            <div class="upload-icon">💬</div>
+            <div class="upload-text">Arraste o .txt do WhatsApp aqui</div>
+            <div class="upload-hint">No WhatsApp: Menu → Mais → Exportar conversa (sem mídia) → .txt</div>
+            <input type="file" id="wppFileInput" accept=".txt" style="display:none" onchange="handleWppFile(this.files[0])">
+          </div>
+          <div id="wppPreview" style="margin-top:16px"></div>
+        </div>
+
+        <!-- TAB: PRESENCIAL -->
+        <div class="upload-tab-content" id="utab-presencial">
+          <div style="text-align:center;padding:50px 20px">
+            <div style="font-size:56px;margin-bottom:16px">🏪</div>
+            <div style="font-size:18px;font-weight:700;margin-bottom:8px">Formulario Presencial Mobile-First</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.6">Preencha durante ou apos o atendimento. Gera o JSON para analise automatica com IA.</div>
+            <div style="font-size:12px;font-family:monospace;color:var(--orange);background:var(--navy-card);border:1px solid var(--navy-border);border-radius:8px;padding:8px 12px;display:inline-block;margin-bottom:20px">python analyze_call.py arquivo.json --canal presencial</div>
+            <div><a href="form_presencial.html" target="_blank" style="display:inline-block;background:var(--orange-gradient);padding:12px 32px;border-radius:12px;color:white;font-weight:700;font-size:14px;text-decoration:none">Abrir Formulario Presencial ↗</a></div>
+          </div>
+          <div style="border-top:1px solid var(--navy-border);padding-top:20px;margin-top:4px">
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;text-align:center">Ou importe um JSON já gerado pelo formulário:</div>
+            <div class="upload-zone" onclick="document.getElementById('presFileInput').click()" style="padding:24px;cursor:pointer">
+              <div style="font-size:24px;margin-bottom:6px">📂</div>
+              <div style="font-size:13px;color:var(--text-secondary)">Clique para importar .json do formulario presencial</div>
+              <input type="file" id="presFileInput" accept=".json" style="display:none" onchange="handlePresJson(this.files[0])">
+            </div>
+            <div id="presPreview" style="margin-top:12px"></div>
+          </div>
+        </div>
       </div>
 
       <!-- VIEW: SCRIPT IA -->
@@ -1045,6 +1103,97 @@ function renderScript() {
       </div>
     </div>
   `;
+}
+
+// ==================== UPLOAD TABS ====================
+function switchUploadTab(tab) {
+  document.querySelectorAll('#uploadTabBtns .upload-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.upload-tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('utab-' + tab).classList.add('active');
+}
+
+// ==================== WHATSAPP UPLOAD ====================
+function handleWppDrop(e) {
+  e.preventDefault();
+  document.getElementById('wppZone').classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  if(f) handleWppFile(f);
+}
+function handleWppFile(file) {
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => renderWppPreview(e.target.result, file.name);
+  reader.readAsText(file, 'UTF-8');
+}
+function renderWppPreview(text, filename) {
+  const lines = text.split('\n').filter(l => l.trim());
+  const msgs = [];
+  const senders = new Set();
+  const patterns = [
+    /^\[?(\d{1,2}\/\d{1,2}\/\d{2,4})[^\]]*\]?\s*[-–]\s*([^:]+):\s*(.+)$/,
+    /^(\d{1,2}\/\d{1,2}\/\d{2,4}),?\s+\d{1,2}:\d{2}(?::\d{2})?(?:\s?[APap][Mm])?\s*[-–]\s*([^:]+):\s*(.+)$/
+  ];
+  lines.forEach(line => {
+    for(const pat of patterns) {
+      const m = line.match(pat);
+      if(m) { const s = m[2].trim(); senders.add(s); msgs.push({sender:s, text:m[3]}); break; }
+    }
+  });
+  const sArr = [...senders];
+  const vendedor = sArr.length > 1 ? sArr[1] : sArr[0];
+  const preview = document.getElementById('wppPreview');
+  if(!msgs.length) {
+    preview.innerHTML = '<div style="padding:16px;color:var(--text-muted);text-align:center;background:var(--navy-card);border:1px solid var(--navy-border);border-radius:12px">Formato nao reconhecido. Exporte o chat do WhatsApp (sem midia) em .txt.</div>';
+    return;
+  }
+  preview.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:13px;color:var(--text-secondary)"><strong>${msgs.length}</strong> mensagens • <strong>${senders.size}</strong> participantes</span>
+      <span class="canal-badge whatsapp">💬 WhatsApp</span>
+    </div>
+    <div class="wpp-preview-area">
+      ${msgs.slice(0,25).map(m=>`
+        <div style="display:flex;flex-direction:column;align-items:${m.sender===vendedor?'flex-end':'flex-start'}">
+          <div style="font-size:9px;color:var(--text-muted);margin-bottom:2px">${m.sender}</div>
+          <div class="wpp-bubble ${m.sender===vendedor?'sent':'recv'}">${m.text.slice(0,140)}</div>
+        </div>
+      `).join('')}
+      ${msgs.length>25?`<div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px">... e mais ${msgs.length-25} mensagens</div>`:''}
+    </div>
+    <div style="margin-top:12px;padding:12px;background:var(--navy);border-radius:10px">
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Comando para analisar:</div>
+      <div style="font-family:monospace;font-size:12px;color:var(--orange);padding:8px;background:var(--navy-card);border-radius:8px;word-break:break-all">python analyze_call.py ${filename} --canal whatsapp --closer "Nome Vendedor"</div>
+    </div>
+    <button class="upload-btn" onclick="alert('Pipeline: TXT → parse_whatsapp.py → Claude API → Dashboard\n\nConfigurar endpoint do backend para processar.')" style="margin-top:10px">Analisar com IA</button>
+  `;
+}
+
+// ==================== PRESENCIAL JSON ====================
+function handlePresJson(file) {
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      document.getElementById('presPreview').innerHTML = `
+        <div style="background:var(--navy-card);border:1px solid rgba(255,152,0,0.3);border-radius:12px;padding:16px" class="fade-in">
+          <div style="font-size:12px;font-weight:700;color:var(--presencial);margin-bottom:10px">🏪 Formulario importado com sucesso</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;color:var(--text-secondary);margin-bottom:12px">
+            <div><span style="color:var(--text-muted)">Vendedor:</span> <strong>${d.vendedor||'—'}</strong></div>
+            <div><span style="color:var(--text-muted)">Cliente:</span> <strong>${d.cliente||'—'}</strong></div>
+            <div><span style="color:var(--text-muted)">Data:</span> ${d.data||'—'}</div>
+            <div><span style="color:var(--text-muted)">Veiculo:</span> ${d.veiculo_interesse||'—'}</div>
+            <div><span style="color:var(--text-muted)">Resultado:</span> ${d.resultado||'—'}</div>
+            <div><span style="color:var(--text-muted)">Canal:</span> ${d.canal||'presencial'}</div>
+          </div>
+          <div style="font-family:monospace;font-size:11px;color:var(--orange);padding:8px;background:var(--navy);border-radius:8px;word-break:break-all;margin-bottom:8px">python analyze_call.py ${file.name} --canal presencial</div>
+          <button class="upload-btn" onclick="alert('Pipeline: JSON → Claude API → Dashboard\n\nConfigurar endpoint do backend para processar.')" style="width:100%;margin-top:0">Analisar Formulario</button>
+        </div>`;
+    } catch(err) {
+      document.getElementById('presPreview').innerHTML = '<div style="color:var(--red);padding:8px;font-size:13px">Arquivo JSON invalido.</div>';
+    }
+  };
+  reader.readAsText(file);
 }
 
 // ==================== UPLOAD ====================
