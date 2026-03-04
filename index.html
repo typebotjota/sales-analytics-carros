@@ -244,6 +244,53 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 .canal-perf-name { font-size:13px; font-weight:700; width:88px; flex-shrink:0; }
 .canal-perf-stats { flex:1; display:flex; gap:20px; font-size:12px; color:var(--text-secondary); flex-wrap:wrap; }
 
+/* ACADEMIA */
+.academia-module { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:16px; margin-bottom:16px; overflow:hidden; }
+.academia-module-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; user-select:none; transition:background .2s; }
+.academia-module-header:hover { background:var(--navy-hover); }
+.academia-module-title { display:flex; align-items:center; gap:12px; }
+.academia-module-icon { width:36px; height:36px; border-radius:10px; background:var(--orange-gradient); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.academia-module-name { font-size:15px; font-weight:700; }
+.academia-module-desc { font-size:12px; color:var(--text-muted); margin-top:2px; }
+.academia-module-arrow { font-size:12px; color:var(--text-muted); transition:transform .3s; }
+.academia-module-arrow.open { transform:rotate(180deg); }
+.academia-module-body { display:none; padding:0 20px 20px; }
+.academia-module-body.open { display:block; }
+.academia-phase { margin-bottom:16px; }
+.academia-phase-title { font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--navy-border); }
+.academia-question-card { background:var(--navy); border:1px solid var(--navy-border); border-radius:10px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:flex-start; gap:12px; }
+.academia-question-text { flex:1; font-size:13px; color:var(--text-secondary); line-height:1.5; font-style:italic; }
+.academia-copy-btn { flex-shrink:0; background:none; border:1px solid var(--navy-border); border-radius:6px; padding:4px 10px; color:var(--text-muted); cursor:pointer; font-family:inherit; font-size:11px; font-weight:600; transition:all .2s; white-space:nowrap; }
+.academia-copy-btn:hover { border-color:var(--orange); color:var(--orange); }
+.academia-copy-btn.copied { border-color:var(--green); color:var(--green); }
+.academia-tip { background:rgba(255,107,0,0.08); border:1px solid rgba(255,107,0,0.2); border-radius:10px; padding:10px 14px; margin-top:8px; font-size:12px; color:var(--text-secondary); line-height:1.5; }
+.academia-tip strong { color:var(--orange); }
+.hormozi-pillar { background:var(--navy); border-radius:12px; padding:14px; margin-bottom:12px; }
+.hormozi-pillar-title { font-size:13px; font-weight:700; color:var(--orange); margin-bottom:8px; }
+.hormozi-pillar-items { display:flex; flex-direction:column; gap:6px; }
+.hormozi-item { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--text-secondary); line-height:1.5; }
+.hormozi-item::before { content:'→'; color:var(--orange); font-weight:700; flex-shrink:0; margin-top:1px; }
+.simulador-card { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:18px; }
+.simulador-scenario { background:var(--navy); border-radius:12px; padding:14px; margin-bottom:12px; }
+.simulador-scenario-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.simulador-scenario-emoji { font-size:24px; }
+.simulador-scenario-title { font-size:14px; font-weight:700; }
+.simulador-scenario-context { font-size:12px; color:var(--text-muted); margin-bottom:10px; line-height:1.5; }
+.simulador-challenge { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:8px; padding:10px 12px; font-size:13px; color:var(--text-primary); font-style:italic; margin-bottom:8px; }
+.simulador-answer-toggle { background:none; border:1px solid var(--navy-border); border-radius:8px; padding:6px 14px; color:var(--text-muted); cursor:pointer; font-family:inherit; font-size:12px; font-weight:600; transition:all .2s; }
+.simulador-answer-toggle:hover { border-color:var(--orange); color:var(--orange); }
+.simulador-answer { display:none; margin-top:10px; background:rgba(0,210,106,0.08); border:1px solid rgba(0,210,106,0.2); border-radius:8px; padding:12px; font-size:12px; color:var(--text-secondary); line-height:1.6; }
+.simulador-answer.open { display:block; }
+.simulador-new-btn { display:block; width:100%; padding:12px; background:var(--orange-gradient); border:none; border-radius:10px; color:white; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; margin-top:12px; transition:transform .2s; }
+.simulador-new-btn:hover { transform:scale(1.02); }
+.seus-dados-card { background:var(--navy); border-radius:12px; padding:16px; margin-bottom:10px; display:flex; align-items:flex-start; gap:14px; }
+.seus-dados-icon { font-size:28px; flex-shrink:0; }
+.seus-dados-label { font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+.seus-dados-value { font-size:15px; font-weight:700; margin-bottom:4px; }
+.seus-dados-action { font-size:12px; color:var(--orange); line-height:1.5; }
+.academia-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:900px) { .academia-grid { grid-template-columns:1fr; } }
+
 /* VIEWS */
 .view { display:none; }
 .view.active { display:block; }
@@ -308,6 +355,10 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
         <button class="sidebar-btn" onclick="showView('script')" data-view="script">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           Script IA
+        </button>
+        <button class="sidebar-btn" onclick="showView('academia')" data-view="academia">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Academia
         </button>
       </div>
 
@@ -464,6 +515,205 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
         <div id="scriptContent"></div>
       </div>
 
+      <!-- VIEW: ACADEMIA -->
+      <div class="view" id="view-academia">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Academia de Vendas</div>
+            <div class="section-subtitle">NEPQ + Hormozi aplicados a vendas automotivas — treine, simule e evolua</div>
+          </div>
+        </div>
+
+        <!-- MODULO 1: NEPQ -->
+        <div class="academia-module">
+          <div class="academia-module-header" onclick="toggleAccordion('nepq')">
+            <div class="academia-module-title">
+              <div class="academia-module-icon">🧠</div>
+              <div>
+                <div class="academia-module-name">Modulo 1 — NEPQ (Neuro-Emotional Persuasion Questions)</div>
+                <div class="academia-module-desc">4 fases de perguntas que ativam o cerbro emocional do comprador</div>
+              </div>
+            </div>
+            <span class="academia-module-arrow" id="arrow-nepq">▼</span>
+          </div>
+          <div class="academia-module-body" id="body-nepq">
+
+            <div class="academia-phase">
+              <div class="academia-phase-title">Fase 1 — Situacao (entenda o contexto atual)</div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Voce esta usando carro atualmente ou vai comprar o primeiro?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Voce esta usando carro atualmente ou vai comprar o primeiro?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Qual modelo voce esta considerando — ja tem algum favorito ou ainda esta pesquisando opcoes?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Qual modelo voce esta considerando — ja tem algum favorito ou ainda esta pesquisando opcoes?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Com que frequencia voce usa o carro — trabalho, familia, viagens? Me conta um pouco da sua rotina."</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Com que frequencia voce usa o carro — trabalho, familia, viagens? Me conta um pouco da sua rotina.')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Qual e a sua principal prioridade no proximo carro: economia, conforto, espaco, status ou seguranca?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Qual e a sua principal prioridade no proximo carro: economia, conforto, espaco, status ou seguranca?')">Copiar</button>
+              </div>
+              <div class="academia-tip"><strong>PRO:</strong> Nao apresente nenhum carro ate entender profundamente a situacao. Perguntas de situacao criam conexao e eliminam abordagens genericas.</div>
+            </div>
+
+            <div class="academia-phase">
+              <div class="academia-phase-title">Fase 2 — Problema (descubra as dores reais)</div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"O que mais te incomoda no seu carro atual — mecanicamente, no conforto ou nos custos?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'O que mais te incomoda no seu carro atual — mecanicamente, no conforto ou nos custos?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Voce ja sentiu inseguranca com o carro em alguma situacao — numa chuva forte, numa estrada ruim, com a familia?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Voce ja sentiu inseguranca com o carro em alguma situacao — numa chuva forte, numa estrada ruim, com a familia?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Quanto voce gasta por mes com manutencao e combustivel hoje? Isso esta dentro do que voce considera aceitavel?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Quanto voce gasta por mes com manutencao e combustivel hoje? Isso esta dentro do que voce considera aceitavel?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Se voce pudesse mudar uma coisa agora no seu dia a dia com o carro, o que seria?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Se voce pudesse mudar uma coisa agora no seu dia a dia com o carro, o que seria?')">Copiar</button>
+              </div>
+              <div class="academia-tip"><strong>PRO:</strong> Deixe o cliente falar. Quem descobre a dor sozinho fica 3x mais motivado a resolver. Use silencio estrategico apos a pergunta.</div>
+            </div>
+
+            <div class="academia-phase">
+              <div class="academia-phase-title">Fase 3 — Implicacao (amplifique o custo da inacao)</div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Se esse problema continuar por mais 12 meses, como isso vai afetar sua rotina — financeiramente, no trabalho, com sua familia?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Se esse problema continuar por mais 12 meses, como isso vai afetar sua rotina — financeiramente, no trabalho, com sua familia?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Quanto voce acha que ja perdeu, ou vai perder, mantendo um carro que nao atende suas necessidades?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Quanto voce acha que ja perdeu, ou vai perder, mantendo um carro que nao atende suas necessidades?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"O que aconteceria se voce precisasse de um carro confiavel numa emergencia e o seu te deixasse na mao?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'O que aconteceria se voce precisasse de um carro confiavel numa emergencia e o seu te deixasse na mao?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Esse problema tem impacto so em voce ou afeta sua familia tambem? Me conta mais."</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Esse problema tem impacto so em voce ou afeta sua familia tambem? Me conta mais.')">Copiar</button>
+              </div>
+              <div class="academia-tip"><strong>PRO:</strong> Implicacao e a fase mais poderosa. Quando o cliente calcula o custo da inacao sozinho, o preco do carro novo passa a ser pequeno em comparacao.</div>
+            </div>
+
+            <div class="academia-phase">
+              <div class="academia-phase-title">Fase 4 — Fechamento (conecte a solucao a vida deles)</div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Se eu conseguir te mostrar um carro que resolve exatamente esses pontos que voce me descreveu, faz sentido a gente avanar hoje?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Se eu conseguir te mostrar um carro que resolve exatamente esses pontos que voce me descreveu, faz sentido a gente avancar hoje?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"O que precisaria acontecer aqui hoje para voce sair com a certeza de que tomou a melhor decisao?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'O que precisaria acontecer aqui hoje para voce sair com a certeza de que tomou a melhor decisao?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Alem do preco, ha mais alguma coisa que te impediria de resolver isso hoje?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Alem do preco, ha mais alguma coisa que te impediria de resolver isso hoje?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Se tudo fizer sentido depois do test drive, voce estaria em posicao de decidir ainda essa semana?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Se tudo fizer sentido depois do test drive, voce estaria em posicao de decidir ainda essa semana?')">Copiar</button>
+              </div>
+              <div class="academia-tip"><strong>PRO:</strong> Nunca feche sem ter passado pelas 3 fases anteriores. O fechamento NEPQ e uma conclusao natural — o cliente ja convenceu a si mesmo.</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- MODULO 2: HORMOZI -->
+        <div class="academia-module">
+          <div class="academia-module-header" onclick="toggleAccordion('hormozi')">
+            <div class="academia-module-title">
+              <div class="academia-module-icon" style="font-size:16px">💰</div>
+              <div>
+                <div class="academia-module-name">Modulo 2 — Framework Hormozi (Valor Irresistivel)</div>
+                <div class="academia-module-desc">3 pilares para tornar qualquer oferta impossivel de recusar</div>
+              </div>
+            </div>
+            <span class="academia-module-arrow" id="arrow-hormozi">▼</span>
+          </div>
+          <div class="academia-module-body" id="body-hormozi">
+
+            <div class="hormozi-pillar">
+              <div class="hormozi-pillar-title">Pilar 1 — Stack de Valor (empilhe beneficios ate o preco parecer pequeno)</div>
+              <div class="hormozi-pillar-items">
+                <div class="hormozi-item">Nunca venda carro — venda o que o carro faz pela vida do cliente (seguranca da familia, produtividade, status, liberdade)</div>
+                <div class="hormozi-item">Liste todos os itens de serie: "Esse carro ja vem com camera de re, sensor de ponto cego, frenagem automatica, banco de couro..." (cada item tem valor percebido)</div>
+                <div class="hormozi-item">Inclua beneficios da concessionaria no stack: garantia estendida, revisoes inclusas, suporte 24h, app de rastreamento</div>
+                <div class="hormozi-item">Exemplo de stack: "Voce esta levando o carro + 3 revisoes gratis + garantia de 3 anos + avaliacao do seu usado + taxa de financiamento preferencial + peliculas inclusas"</div>
+                <div class="hormozi-item">Calcule o valor separado de cada item antes de revelar o preco total: "Se vendesse tudo separado, passaria de R$180.000. Voce paga R$142.900."</div>
+              </div>
+            </div>
+
+            <div class="hormozi-pillar">
+              <div class="hormozi-pillar-title">Pilar 2 — Custo da Inacao (calcule o preco de NAO comprar)</div>
+              <div class="hormozi-pillar-items">
+                <div class="hormozi-item">Carro velho: "Voce gasta R$800/mes em manutencao. Em 12 meses sao R$9.600 — quase a diferenca para o novo."</div>
+                <div class="hormozi-item">Depreciacao: "Seu carro atual perde R$500/mes de valor. Em 2 anos, perdeu R$12.000. O novo deprecia muito menos nos primeiros anos."</div>
+                <div class="hormozi-item">Combustivel: "O novo consome 30% menos. Na sua quilometragem, isso e R$350/mes economizados — R$4.200 por ano."</div>
+                <div class="hormozi-item">Custo emocional: "Quanto vale dormir tranquilo sabendo que o carro nao vai te deixar na mao numa emergencia com sua familia?"</div>
+                <div class="hormozi-item">ROI para produtor/empresa: "Com essa picape, voce consegue carregar X toneladas. Qual o faturamento adicional possivel por safra?"</div>
+              </div>
+            </div>
+
+            <div class="hormozi-pillar">
+              <div class="hormozi-pillar-title">Pilar 3 — Reversao de Risco (elimine o medo de errar)</div>
+              <div class="hormozi-pillar-items">
+                <div class="hormozi-item">Test drive completo: "Faca o test drive real — na sua rota, com sua familia. Se nao for o que esperava, sem pressao."</div>
+                <div class="hormozi-item">Garantia de fabrica: "3 anos ou 100.000 km de garantia — qualquer problema e nossa responsabilidade."</div>
+                <div class="hormozi-item">Avaliacao do usado: "Avaliamos seu carro atual com preco justo de mercado. Voce nao perde nada na troca."</div>
+                <div class="hormozi-item">Financiamento sem surpresa: "A gente faz a simulacao agora, voce ve a parcela exata antes de decidir qualquer coisa."</div>
+                <div class="hormozi-item">Reversao direta: "Voce so paga se ficar 100% satisfeito. Se nao for exatamente o que precisava, a gente encontra outro."</div>
+              </div>
+            </div>
+
+            <div class="academia-tip" style="margin-top:4px"><strong>REGRA DE OURO HORMOZI:</strong> O valor percebido precisa ser pelo menos 10x o preco cobrado. Se o cliente acha caro, voce nao empilhou valor suficiente — nunca baixe o preco, empilhe mais valor.</div>
+
+          </div>
+        </div>
+
+        <!-- SIMULADOR + SEUS DADOS em grid -->
+        <div class="academia-grid">
+
+          <!-- SIMULADOR -->
+          <div class="simulador-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+              <div>
+                <div class="section-title" style="font-size:16px">Simulador de Cenarios</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Pratique com situacoes reais de clientes</div>
+              </div>
+            </div>
+            <div id="simuladorContent"></div>
+            <button class="simulador-new-btn" onclick="newScenario()">🎲 Novo Cenario</button>
+          </div>
+
+          <!-- SEUS DADOS -->
+          <div>
+            <div class="academia-module" style="margin-bottom:12px">
+              <div class="academia-module-header" onclick="toggleAccordion('seus-dados')">
+                <div class="academia-module-title">
+                  <div class="academia-module-icon" style="background:linear-gradient(135deg,#1565C0,#2196F3);font-size:16px">📊</div>
+                  <div>
+                    <div class="academia-module-name">Seus Dados — Onde Treinar Agora</div>
+                    <div class="academia-module-desc">Baseado nas suas calls analisadas</div>
+                  </div>
+                </div>
+                <span class="academia-module-arrow" id="arrow-seus-dados">▼</span>
+              </div>
+              <div class="academia-module-body" id="body-seus-dados">
+                <div id="seusDadosContent"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <!-- VIEW: CONFIG -->
       <div class="view" id="view-config">
         <div class="section-header">
@@ -579,6 +829,7 @@ function showView(view) {
   if(view === 'objecoes') renderObjectionMap();
   if(view === 'relatorio') renderReport();
   if(view === 'script') renderScript();
+  if(view === 'academia') renderAcademia();
 }
 
 // ==================== RENDER CALLS LIST ====================
@@ -1218,6 +1469,178 @@ function renderUploadQueue() {
   document.getElementById('processBtn').style.display = uploadQueue.length ? 'inline-block' : 'none';
 }
 function processUploads() { alert('Pipeline de processamento: Audio → Whisper → Claude API → Dashboard\n\nConfigurar endpoint do backend para processar.'); }
+
+// ==================== ACADEMIA ====================
+const SCENARIOS = [
+  {
+    emoji:'👨‍👩‍👧',title:'Familia em busca de SUV',
+    context:'Casal com 2 filhos, carro atual e um sedan 2015 com 120.000km. Preocupados com seguranca e espaco.',
+    challenge:'"Gostamos muito do Tracker, mas R$142.000 esta pesado para a gente agora."',
+    answer:'Resposta ideal (Hormozi + NEPQ):\n\n• Stack de valor: "Alem do carro, voce leva: 3 revisoes gratis, garantia de 3 anos, 7 airbags, frenagem autonoma e sensor de ponto cego — itens que protegem sua familia todos os dias."\n\n• Custo da inacao: "Seu sedan atual consome R$900/mes em manutencao. Sao R$10.800 no ano. Em 2 anos, voce quase paga a diferenca."\n\n• Reversao de risco: "Faz o test drive com a familia. Se a criancada nao adorar o espaco, a gente olha outras opcoes — sem pressao."'
+  },
+  {
+    emoji:'💼',title:'Empresario interessado em frota',
+    context:'Dono de empresa de servicos, quer trocar 3 carros da frota. Muito racional, focado em custo-beneficio.',
+    challenge:'"Preciso pensar melhor. Vou levantar proposta com mais 2 concessionarias antes de decidir."',
+    answer:'Resposta ideal (NEPQ — Implicacao + Fechamento):\n\n• Implicacao: "Entendo. Enquanto isso, quanto sua frota atual esta custando em manutencao corretiva por mes? Esse numero muda se um carro parar numa semana critica?"\n\n• Custo de atraso: "Nossa condicao de frota e valida ate sexta. Se voce fechar hoje, garanto a taxa preferencial de 0,99% ao mes para os 3 — posso colocar em contrato agora."\n\n• Reversao: "Se depois de ver as outras propostas nos tivermos o melhor custo-beneficio, o que te impediria de fechar com a gente?"'
+  },
+  {
+    emoji:'🎓',title:'Jovem comprando o primeiro carro',
+    context:'25 anos, primeiro carro, CLT, entrada de R$8.000. Muito pesquisa online, comparou varios modelos.',
+    challenge:'"Vi o mesmo HB20 R$4.000 mais barato numa outra loja online."',
+    answer:'Resposta ideal (Hormozi — Stack + Reversao de Risco):\n\n• Pergunte primeiro: "Essa loja e autorizada? Tem garantia de fabrica? Aceita seu usado como entrada? Qual o historico do veiculo?"\n\n• Stack: "Aqui voce compra com revisao dos 10.000km gratis, garantia Toyota/Hyundai direto, nota fiscal, documentacao em dia e suporte pos-venda se surgir qualquer duvida."\n\n• Diferencial: "Aqueles R$4.000 a menos podem virar R$15.000 de dor de cabeca no primeiro problema. Voce prefere pagar menos agora ou ter certeza que vai dar certo?"'
+  },
+  {
+    emoji:'👴',title:'Aposentado em busca de conforto',
+    context:'68 anos, carro atual e um Corolla 2010. Quer algo moderno, confortavel, mas nao sabe se aprende a usar a tecnologia.',
+    challenge:'"Esses carros novos tem muita tecnologia, nao sei se vou conseguir usar tudo isso."',
+    answer:'Resposta ideal (NEPQ — Problema + Implicacao):\n\n• Problema: "Entendo completamente. O que e mais importante para o senhor no dia a dia — estacionamento, dirigir a noite, estabilidade em chuva?"\n\n• Implicacao suave: "Sabe que boa parte da tecnologia nova e justamente para facilitar — a camera de re ja evitou varios arranhoes e acidentes com idosos. O senhor se sentiria mais seguro com isso?"\n\n• Test drive como prova: "A melhor forma e experimentar. Posso mostrar cada recurso um a um durante o test drive — e muito mais simples do que parece. Que tal agora?"'
+  },
+  {
+    emoji:'🚜',title:'Produtor rural prospectando picape',
+    context:'Fazendeiro do interior, precisa de picape robusta para fazenda. Virou de longe, tem o dia todo.',
+    challenge:'"Essa Hilux esta cara demais. Olhei a Saveiro por metade do preco."',
+    answer:'Resposta ideal (Hormozi — Custo da Inacao + ROI):\n\n• ROI direto: "Quanto o senhor carrega por viagem na Saveiro versus na Hilux? Se carregar 40% a mais por viagem, em quantas viagens o senhor recupera a diferenca de preco?"\n\n• Custo da inacao: "Hilux 2025 tem garantia de 3 anos. Uma parada na roça na epoca da safra quanto custa — em mao de obra, atraso, perda de produto?"\n\n• Depreciacao: "Daqui a 5 anos, Hilux vale 70% do preco hoje. Saveiro, 45%. A diferenca de valor residual praticamente paga o preco a mais hoje."'
+  },
+  {
+    emoji:'👔',title:'Executivo interessado em premium',
+    context:'Diretor financeiro, 42 anos, quer BMW ou Mercedes. Ja tem carro da empresa, esse e pessoal.',
+    challenge:'"Ja tenho carro da empresa. Nao sei se vale o investimento em algo proprio agora."',
+    answer:'Resposta ideal (NEPQ — Situacao + Problema):\n\n• Situacao: "O carro da empresa fica disponivel nos finais de semana? Nas ferias? Quando sai com a familia?"\n\n• Problema: "Entao tem momentos em que voce esta sem carro ou depende de logistica? Isso ja foi incomodo alguma vez?"\n\n• Status e identidade: "Esse carro vai ser sua escolha — nao a da empresa. O que seria mais significativo para voce: economia ou ter algo que represente o que voce construiu?"\n\n• Fechamento: "Se fizer sentido nos numeros e emocional, algo te impediria de decidir hoje?"'
+  },
+  {
+    emoji:'👶',title:'Casal esperando bebe',
+    context:'Primeiro filho a caminho, carro atual e um hatch pequeno 2018. Urgencia real — bebe nasce em 2 meses.',
+    challenge:'"Queremos esperar o bebe nascer para ver como vai ser a rotina e depois decidir."',
+    answer:'Resposta ideal (NEPQ — Implicacao + Urgencia real):\n\n• Implicacao: "Entendo a cautela. Mas imagina: bebe nasce, rotina muda 100%, cansaco, noites sem dormir — esse seria o momento de pesquisar carro e lidar com burocracia?"\n\n• Urgencia sem pressao: "Voces tem exatamente esse momento agora para testar com calma, comparar, fazer o test drive de verdade. Depois do bebe, esse tempo some."\n\n• Pratico: "Posso separar o carro hoje com entrada minima. Voces buscam quando quiserem — inclusive com o bebe ja nascido, se preferirem."'
+  },
+  {
+    emoji:'📱',title:'Motorista de app economizando',
+    context:'Uber/99, percorre 5.000km/mes. Carro atual e um Uno 2017, comeca a dar problemas. Muito focado em custo.',
+    challenge:'"Preco da parcela ta alto. Nao sei se consigo pagar com o que ganho no app."',
+    answer:'Resposta ideal (Hormozi — Custo da Inacao + ROI concreto):\n\n• Calculo direto: "Quanto voce paga hoje em manutencao do Uno por mes? E em combustivel rodando 5.000km?"\n\n• ROI: "O Cronos Flex consome 20% menos. Na sua quilometragem, isso e R$380/mes economizados. Quase metade da parcela. E sem contar as manutencoes que vao parar."\n\n• Renda adicional: "Com um carro mais confiavel, quantas horas extras voce consegue trabalhar sem medo de pane? Quanto isso representa por mes?"\n\n• Fechamento: "Se a conta fechar em R$200 de ganho liquido por mes, faz sentido fechar hoje?"'
+  },
+  {
+    emoji:'💰',title:'Cliente com heranca para investir',
+    context:'Recebeu heranca, nunca comprou carro novo, vem de indicacao. Tem dinheiro a vista mas e desconfiado.',
+    challenge:'"Nao sei se vale comprar carro novo agora. Talvez fosse melhor investir esse dinheiro."',
+    answer:'Resposta ideal (NEPQ — Situacao + Problema):\n\n• Explore valores: "Que tipo de investimento o senhor esta considerando? Renda fixa, imovel?"\n\n• Compare concretamente: "Um CDB a 12% ao ano rende R$12.000 em R$100.000. Quanto o senhor gasta hoje sem carro proprio — uber, taxi, transtorno, dependencia de terceiros?"\n\n• Qualidade de vida: "Ha quanto tempo o senhor quer ter um carro proprio e conveniente? Esse recurso agora e a oportunidade de resolver isso sem impacto no orcamento mensal."\n\n• Reversao: "Se o carro resolver uma necessidade real, ele tambem e um ativo — e um que o senhor usa todo dia."'
+  },
+  {
+    emoji:'😤',title:'Cliente insatisfeito trocando de marca',
+    context:'Teve problemas com a marca atual (revisao cara, atendimento ruim). Quer trocar mas esta ressentido.',
+    challenge:'"Minha experiencia com a ultima concessionaria foi pessima. Estou com pe atras com o mercado."',
+    answer:'Resposta ideal (Validacao + Reversao de Risco):\n\n• Validacao genuina: "Voce tem razao em ser criterioso. Experiencia ruim de pos-venda e uma das maiores frustracoes — e voce nao deveria passar por isso de novo."\n\n• Diferencie: "Posso te mostrar como nosso pos-venda funciona na pratica: agenda pelo app, carro reserva disponivel, comunicacao transparente. Inclusive, te coloco em contato com clientes nossos se quiser uma referencia real."\n\n• Compromisso tangivel: "O que precisaria acontecer aqui para voce sair convencido de que essa experiencia sera completamente diferente?"'
+  }
+];
+
+let currentScenarioIndex = 0;
+
+function toggleAccordion(id) {
+  const body = document.getElementById('body-' + id);
+  const arrow = document.getElementById('arrow-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+}
+
+function copyQuestion(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copiado';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    btn.textContent = '✓';
+    setTimeout(() => { btn.textContent = 'Copiar'; }, 1500);
+  });
+}
+
+function newScenario() {
+  currentScenarioIndex = Math.floor(Math.random() * SCENARIOS.length);
+  renderSimulador();
+}
+
+function toggleSimuladorAnswer(btn) {
+  const ans = btn.nextElementSibling;
+  const isOpen = ans.classList.contains('open');
+  ans.classList.toggle('open', !isOpen);
+  btn.textContent = isOpen ? '💡 Ver resposta sugerida' : '🔼 Ocultar resposta';
+}
+
+function renderSimulador() {
+  const s = SCENARIOS[currentScenarioIndex];
+  document.getElementById('simuladorContent').innerHTML = `
+    <div class="simulador-scenario">
+      <div class="simulador-scenario-header">
+        <span class="simulador-scenario-emoji">${s.emoji}</span>
+        <span class="simulador-scenario-title">${s.title}</span>
+      </div>
+      <div class="simulador-scenario-context">${s.context}</div>
+      <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">O cliente diz:</div>
+      <div class="simulador-challenge">"${s.challenge}"</div>
+      <button class="simulador-answer-toggle" onclick="toggleSimuladorAnswer(this)">💡 Ver resposta sugerida</button>
+      <div class="simulador-answer">${s.answer.replace(/\n/g,'<br>')}</div>
+    </div>
+  `;
+}
+
+function renderSeusDados() {
+  // Calcula fase NEPQ mais fraca
+  const dims = ['situacao','problema','implicacao','fechamento'];
+  const dimLabels = {situacao:'Perguntas de Situacao',problema:'Perguntas de Problema',implicacao:'Perguntas de Implicacao',fechamento:'Fechamento NEPQ'};
+  const dimAvg = {};
+  dims.forEach(d => {
+    const vals = CALLS_DATA.filter(c=>c.nepq_analysis).map(c=>c.nepq_analysis[d]);
+    dimAvg[d] = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
+  });
+  const weakestNepq = dims.reduce((a,b)=>dimAvg[a]<dimAvg[b]?a:b);
+
+  // Objecao mais perdida
+  const objCount = {};
+  CALLS_DATA.forEach(c => {
+    c.objections.forEach(o => {
+      if(!o.handled) {
+        objCount[o.type] = (objCount[o.type]||0) + 1;
+      }
+    });
+  });
+  const topMissedObj = Object.keys(objCount).sort((a,b)=>objCount[b]-objCount[a])[0] || '—';
+
+  // Score medio
+  const avgScore = (CALLS_DATA.reduce((a,c)=>a+c.score,0)/CALLS_DATA.length).toFixed(1);
+
+  document.getElementById('seusDadosContent').innerHTML = `
+    <div class="seus-dados-card">
+      <span class="seus-dados-icon">🧠</span>
+      <div>
+        <div class="seus-dados-label">Fase NEPQ mais fraca</div>
+        <div class="seus-dados-value" style="color:var(--red)">${dimLabels[weakestNepq]} — media ${dimAvg[weakestNepq].toFixed(1)}</div>
+        <div class="seus-dados-action">Revise as perguntas do Modulo 1 Fase "${dimLabels[weakestNepq]}" e treine com o simulador acima.</div>
+      </div>
+    </div>
+    <div class="seus-dados-card">
+      <span class="seus-dados-icon">🛡️</span>
+      <div>
+        <div class="seus-dados-label">Objecao mais perdida</div>
+        <div class="seus-dados-value" style="color:var(--yellow)">"${topMissedObj}" — ${objCount[topMissedObj]||0} vezes sem reverter</div>
+        <div class="seus-dados-action">Estude o Mapa de Objecoes para o script anti-objecao especifico para esse caso.</div>
+      </div>
+    </div>
+    <div class="seus-dados-card">
+      <span class="seus-dados-icon">📈</span>
+      <div>
+        <div class="seus-dados-label">Score medio da equipe</div>
+        <div class="seus-dados-value" style="color:${avgScore>=7?'var(--green)':avgScore>=5?'var(--yellow)':'var(--red)'}">${avgScore} / 10</div>
+        <div class="seus-dados-action">${avgScore>=7?'Equipe em bom nivel. Foco em consistencia e fechamento.':avgScore>=5?'Potencial para crescer. Priorize qualificacao e test drive.':'Treinamento urgente. Comece pelo Modulo 1 NEPQ.'}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAcademia() {
+  renderSimulador();
+  renderSeusDados();
+}
 
 // ==================== INIT ====================
 renderCallsList();
