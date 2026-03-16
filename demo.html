@@ -52,6 +52,31 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 .topbar-config { background:none; border:1px solid var(--navy-border); border-radius:8px; padding:6px 12px; color:var(--text-secondary); cursor:pointer; font-family:inherit; font-size:12px; transition:all .2s; }
 .topbar-config:hover { border-color:var(--orange); color:var(--orange); }
+.topbar-present-btn { background:rgba(255,107,0,0.12); border:1px solid rgba(255,107,0,0.35); border-radius:8px; padding:6px 14px; color:var(--orange); cursor:pointer; font-family:inherit; font-size:12px; font-weight:700; transition:all .2s; }
+.topbar-present-btn:hover { background:rgba(255,107,0,0.22); }
+
+/* ── Teleprompter ── */
+.tp-overlay { position:fixed; bottom:0; left:0; right:0; z-index:9999; transition:transform .3s ease; }
+.tp-overlay.tp-hidden { transform:translateY(100%); }
+.tp-bar { background:rgba(8,14,22,0.96); backdrop-filter:blur(20px); border-top:1px solid rgba(255,107,0,0.3); padding:18px 20px 20px; display:flex; flex-direction:column; gap:14px; }
+.tp-top-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.tp-step-badge { background:rgba(255,107,0,0.15); border:1px solid rgba(255,107,0,0.3); border-radius:100px; padding:3px 12px; font-size:11px; font-weight:700; color:var(--orange); white-space:nowrap; }
+.tp-progress { flex:1; height:3px; background:rgba(255,255,255,0.08); border-radius:100px; overflow:hidden; }
+.tp-progress-fill { height:100%; background:var(--orange-gradient); border-radius:100px; transition:width .4s ease; }
+.tp-minimize-btn { background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:16px; padding:2px 6px; }
+.tp-text { font-size:clamp(14px,2vw,17px); color:#F0F4F8; line-height:1.65; font-weight:400; margin:0; }
+.tp-text strong { color:var(--orange); }
+.tp-controls { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.tp-btn { border:none; border-radius:10px; padding:10px 22px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:all .2s; }
+.tp-btn-back { background:rgba(255,255,255,0.07); color:var(--text-secondary); }
+.tp-btn-back:hover { background:rgba(255,255,255,0.12); color:var(--text-primary); }
+.tp-btn-next { background:var(--orange-gradient); color:white; box-shadow:0 4px 16px rgba(255,107,0,0.3); }
+.tp-btn-next:hover { transform:scale(1.04); }
+.tp-btn-exit { background:rgba(255,71,87,0.12); border:1px solid rgba(255,71,87,0.3); color:#FF4757; border-radius:10px; padding:10px 18px; font-family:inherit; font-size:12px; cursor:pointer; }
+.tp-minimized { background:rgba(8,14,22,0.96); backdrop-filter:blur(20px); border-top:1px solid rgba(255,107,0,0.25); padding:10px 20px; display:none; align-items:center; justify-content:space-between; cursor:pointer; }
+.tp-minimized.active { display:flex; }
+.tp-minimized-text { font-size:12px; color:var(--text-secondary); }
+.tp-minimized-text span { color:var(--orange); font-weight:700; }
 
 /* MAIN LAYOUT */
 .main-layout { display:flex; flex:1; min-height:0; overflow:hidden; }
@@ -372,6 +397,7 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
       <div class="topbar-badge demo">🎬 DEMONSTRAÇÃO AO VIVO</div>
       <div class="topbar-badge">Auto Premium Veículos</div>
       <div class="topbar-badge">25 atendimentos</div>
+      <button class="topbar-present-btn" onclick="startPresentation()">▶️ Modo Apresentação</button>
       <button class="topbar-config" onclick="showView('config')">⚙ Config</button>
     </div>
   </div>
@@ -2110,6 +2136,132 @@ function resetAmostra() {
 renderCallsList();
 renderStats();
 renderCallDetail();
+
+// ==================== MODO APRESENTAÇÃO ====================
+const PRESENTATION_STEPS = [
+  {
+    label: 'Resumo Executivo',
+    text: 'Olha, esse é o dashboard de uma concessionária que a gente atende. 3 vendedores. Olha o resumo: <strong>a equipe perdeu 11 vendas no último mês</strong>. São <strong>R$33.000 de margem</strong> que evaporaram.',
+    action: () => showView('relatorio')
+  },
+  {
+    label: 'Rafael — Calls',
+    text: 'Agora olha o Rafael. <strong>Score médio: 3.4.</strong> Quase todas as vendas perdidas são dele. Vamos abrir uma call pra você ver o que acontece...',
+    action: () => { filterCloser('Rafael Lima'); showView('calls'); }
+  },
+  {
+    label: 'Call do Pulse',
+    text: 'Olha essa: o cliente <strong>QUERIA comprar um Pulse</strong>. Disse "gostei muito, vou levar". Sabe o que o Rafael fez? Disse "beleza, mando a proposta por WhatsApp". E <strong>NUNCA MANDOU</strong>. A IA pegou isso. Score 2.6. Sem esse dashboard, você nunca saberia.',
+    action: () => selectCall('demo-r08')
+  },
+  {
+    label: 'WhatsApp do Rafael',
+    text: 'Agora olha o WhatsApp dele. <strong>Tempo médio de resposta: 3 horas e 34 minutos.</strong> O cliente mandou mensagem de manhã, ele respondeu de tarde. O concorrente já tinha fechado.',
+    action: () => selectCall('demo-r06')
+  },
+  {
+    label: 'DNA dos Closers',
+    text: 'Agora compara com o Carlos. <strong>Score médio 8.7.</strong> Mesma loja, mesmos carros, mesmos leads. A diferença é o atendimento. O radar mostra: Carlos é forte em tudo. Rafael é fraco em tudo. Isso <strong>não é opinião — é dado.</strong>',
+    action: () => { filterCloser('Todos'); showView('diagnostico'); }
+  },
+  {
+    label: 'Mapa de Objeções',
+    text: 'Olha as objeções: <strong>"vou pesquisar mais" apareceu 18 vezes.</strong> O Carlos reverteu 70%. O Rafael reverteu 0%. E aqui tem o script exato de como reverter cada uma.',
+    action: () => showView('objecoes')
+  },
+  {
+    label: 'Academia de Vendas',
+    text: 'E não para na análise. Tem a <strong>Academia de Vendas</strong> dentro, com metodologia NEPQ e Hormozi adaptada pra carros. O vendedor estuda exatamente o que ele erra. Não é curso genérico — é <strong>treinamento conectado com a performance real.</strong>',
+    action: () => showView('academia')
+  },
+  {
+    label: 'Amostra Grátis',
+    text: 'Agora a melhor parte: <strong>quer ver funcionando com seus dados?</strong> Me passa uma gravação de ligação ou exporta um WhatsApp de atendimento. A IA analisa na hora e você vê o resultado com os <strong>SEUS vendedores.</strong>',
+    action: () => showView('amostra')
+  }
+];
+
+let tpStep = 0;
+let tpActive = false;
+let tpMinimized = false;
+
+function startPresentation() {
+  tpActive = true;
+  tpMinimized = false;
+  tpStep = 0;
+  document.getElementById('tpOverlay').classList.remove('tp-hidden');
+  document.getElementById('tpBar').style.display = 'flex';
+  document.getElementById('tpMinimizedBar').classList.remove('active');
+  renderTpStep();
+}
+
+function exitPresentation() {
+  tpActive = false;
+  document.getElementById('tpOverlay').classList.add('tp-hidden');
+}
+
+function tpNext() {
+  if(tpStep < PRESENTATION_STEPS.length - 1) {
+    tpStep++;
+    renderTpStep();
+  } else {
+    exitPresentation();
+  }
+}
+
+function tpPrev() {
+  if(tpStep > 0) { tpStep--; renderTpStep(); }
+}
+
+function toggleTp() {
+  tpMinimized = !tpMinimized;
+  document.getElementById('tpBar').style.display = tpMinimized ? 'none' : 'flex';
+  const minBar = document.getElementById('tpMinimizedBar');
+  minBar.classList.toggle('active', tpMinimized);
+  if(!tpMinimized) renderTpStep();
+}
+
+function renderTpStep() {
+  const step = PRESENTATION_STEPS[tpStep];
+  const total = PRESENTATION_STEPS.length;
+  // Step indicator
+  document.getElementById('tpStepBadge').textContent = (tpStep + 1) + ' de ' + total + ' — ' + step.label;
+  // Progress bar
+  document.getElementById('tpProgressFill').style.width = ((tpStep + 1) / total * 100) + '%';
+  // Text
+  document.getElementById('tpText').innerHTML = step.text;
+  // Buttons
+  document.getElementById('tpPrevBtn').style.visibility = tpStep === 0 ? 'hidden' : 'visible';
+  const nextBtn = document.getElementById('tpNextBtn');
+  nextBtn.textContent = tpStep === total - 1 ? 'Finalizar ✓' : 'Próximo →';
+  // Minimized label
+  document.getElementById('tpMinStep').textContent = (tpStep + 1) + ' de ' + total;
+  // Navigate
+  step.action();
+}
 </script>
+
+<!-- TELEPROMPTER -->
+<div class="tp-overlay tp-hidden" id="tpOverlay">
+  <div class="tp-minimized" id="tpMinimizedBar" onclick="toggleTp()">
+    <span class="tp-minimized-text">▶️ Modo Apresentação — passo <span id="tpMinStep">1</span> de 8</span>
+    <span style="font-size:11px;color:var(--orange)">▲ Expandir</span>
+  </div>
+  <div class="tp-bar" id="tpBar">
+    <div class="tp-top-row">
+      <div class="tp-step-badge" id="tpStepBadge">1 de 8</div>
+      <div class="tp-progress"><div class="tp-progress-fill" id="tpProgressFill" style="width:12.5%"></div></div>
+      <button class="tp-minimize-btn" onclick="toggleTp()" title="Minimizar">▼</button>
+    </div>
+    <p class="tp-text" id="tpText"></p>
+    <div class="tp-controls">
+      <button class="tp-btn-exit" onclick="exitPresentation()">✕ Sair</button>
+      <div style="display:flex;gap:8px">
+        <button class="tp-btn tp-btn-back" id="tpPrevBtn" onclick="tpPrev()">← Voltar</button>
+        <button class="tp-btn tp-btn-next" id="tpNextBtn" onclick="tpNext()">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
