@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Analytics Pro — Demo | Auto Premium Veículos</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #FF6B00;
+  --orange-light: #FF8C33;
+  --orange-gradient: linear-gradient(135deg, #E55A00, #FF7A1A, #FF9A45);
+  --navy: #0D1B2A;
+  --navy-mid: #112236;
+  --navy-card: #152840;
+  --navy-border: #1E3A55;
+  --navy-hover: #1A3050;
+  --text-primary: #FFFFFF;
+  --text-secondary: #8BA3C1;
+  --text-muted: #5A7A9A;
+  --green: #00D26A;
+  --red: #FF4757;
+  --yellow: #FFC107;
+  --blue: #2196F3;
+  --wpp: #25D366;
+  --presencial: #FF9800;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; background:var(--navy); color:var(--text-primary); }
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--navy-border); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--text-muted); }
+
+.app { display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+
+/* TOPBAR */
+.topbar { flex-shrink:0; height:54px; background:var(--navy-mid); border-bottom:1px solid var(--navy-border); display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:100; }
+.topbar-left { display:flex; align-items:center; gap:12px; }
+.topbar-logo { width:32px; height:32px; background:var(--orange-gradient); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; }
+.topbar-title { font-weight:700; font-size:15px; letter-spacing:-0.3px; }
+.topbar-title span { color:var(--orange); }
+.topbar-right { display:flex; align-items:center; gap:16px; }
+.topbar-badge { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:8px; padding:4px 12px; font-size:12px; color:var(--text-secondary); font-weight:600; }
+.topbar-badge.live { background:rgba(0,210,106,0.15); border-color:rgba(0,210,106,0.3); color:var(--green); }
+.topbar-badge.live::before { content:''; display:inline-block; width:6px; height:6px; background:var(--green); border-radius:50%; margin-right:6px; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.topbar-config { background:none; border:1px solid var(--navy-border); border-radius:8px; padding:6px 12px; color:var(--text-secondary); cursor:pointer; font-family:inherit; font-size:12px; transition:all .2s; }
+.topbar-config:hover { border-color:var(--orange); color:var(--orange); }
+
+/* MAIN LAYOUT */
+.main-layout { display:flex; flex:1; min-height:0; overflow:hidden; }
+
+/* SIDEBAR */
+.sidebar { width:280px; flex-shrink:0; background:var(--navy-mid); border-right:1px solid var(--navy-border); display:flex; flex-direction:column; min-height:0; }
+.sidebar-nav { padding:12px; display:flex; flex-direction:column; gap:4px; flex-shrink:0; }
+.sidebar-btn { display:flex; align-items:center; gap:10px; padding:10px 14px; border:none; background:transparent; color:var(--text-secondary); border-radius:10px; cursor:pointer; font-family:inherit; font-size:13px; font-weight:500; transition:all .2s; width:100%; text-align:left; }
+.sidebar-btn:hover { background:var(--navy-hover); color:var(--text-primary); }
+.sidebar-btn.active { background:rgba(255,107,0,0.12); color:var(--orange); font-weight:600; }
+.sidebar-btn svg { width:18px; height:18px; flex-shrink:0; }
+.sidebar-divider { height:1px; background:var(--navy-border); margin:8px 14px; }
+.sidebar-section-title { padding:8px 14px 4px; font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); font-weight:700; }
+
+/* SIDEBAR FILTERS */
+.sidebar-filters { padding:4px 12px 8px; flex-shrink:0; }
+.filter-tabs { display:flex; gap:6px; margin-bottom:8px; }
+.filter-tab { flex:1; padding:6px; border:1px solid var(--navy-border); background:transparent; color:var(--text-secondary); border-radius:8px; cursor:pointer; font-family:inherit; font-size:11px; font-weight:600; transition:all .2s; }
+.filter-tab.active { background:var(--orange); border-color:var(--orange); color:white; }
+.filter-tab:hover:not(.active) { border-color:var(--text-muted); }
+.search-box { width:100%; padding:8px 12px; background:var(--navy-card); border:1px solid var(--navy-border); border-radius:8px; color:var(--text-primary); font-family:inherit; font-size:12px; outline:none; }
+.search-box:focus { border-color:var(--orange); }
+.search-box::placeholder { color:var(--text-muted); }
+
+/* CANAL FILTER */
+.canal-filter-row { display:flex; gap:4px; }
+.canal-btn { flex:1; padding:5px 2px; border:1px solid var(--navy-border); background:transparent; color:var(--text-secondary); border-radius:8px; cursor:pointer; font-family:inherit; font-size:10px; font-weight:600; transition:all .2s; text-align:center; white-space:nowrap; }
+.canal-btn.active { background:var(--orange); border-color:var(--orange); color:white; }
+.canal-btn:hover:not(.active) { border-color:var(--text-muted); }
+
+/* CANAL BADGE */
+.canal-badge { font-size:10px; padding:2px 7px; border-radius:6px; font-weight:700; display:inline-block; }
+.canal-badge.ligacao { background:rgba(33,150,243,0.18); color:var(--blue); }
+.canal-badge.whatsapp { background:rgba(37,211,102,0.18); color:var(--wpp); }
+.canal-badge.presencial { background:rgba(255,152,0,0.18); color:var(--presencial); }
+
+/* CALLS LIST */
+.calls-list { flex:1; min-height:0; overflow-y:auto; padding:8px 12px; display:flex; flex-direction:column; gap:6px; }
+.call-item { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:12px; padding:12px; cursor:pointer; transition:all .2s; }
+.call-item:hover { border-color:var(--orange); transform:translateX(2px); }
+.call-item.active { border-color:var(--orange); background:rgba(255,107,0,0.08); }
+.call-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+.call-item-name { font-weight:600; font-size:13px; }
+.call-item-score { font-weight:800; font-size:14px; }
+.call-item-score.boa { color:var(--green); }
+.call-item-score.regular { color:var(--yellow); }
+.call-item-score.fraca { color:var(--red); }
+.call-item-meta { display:flex; gap:8px; font-size:11px; color:var(--text-muted); }
+.call-item-tags { display:flex; gap:4px; margin-top:6px; flex-wrap:wrap; align-items:center; }
+.call-tag { font-size:10px; padding:2px 8px; border-radius:6px; font-weight:600; }
+.call-tag.td { background:rgba(0,210,106,0.15); color:var(--green); }
+.call-tag.no-td { background:rgba(255,71,87,0.15); color:var(--red); }
+.call-tag.prop { background:rgba(33,150,243,0.15); color:var(--blue); }
+.call-tag.fin { background:rgba(255,193,7,0.15); color:var(--yellow); }
+
+/* CONTENT AREA */
+.content { flex:1; min-height:0; overflow-y:auto; padding:24px; }
+
+/* STAT CARDS */
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.stat-card { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:16px; }
+.stat-card-label { font-size:11px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+.stat-card-value { font-size:28px; font-weight:800; line-height:1.1; }
+.stat-card-value.orange { color:var(--orange); }
+.stat-card-value.green { color:var(--green); }
+.stat-card-value.red { color:var(--red); }
+.stat-card-value.wpp { color:var(--wpp); }
+.stat-card-value.pres { color:var(--presencial); }
+.stat-card-change { font-size:11px; color:var(--text-muted); margin-top:4px; }
+
+/* SECTION HEADERS */
+.section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.section-title { font-size:18px; font-weight:700; }
+.section-subtitle { font-size:12px; color:var(--text-muted); }
+.section-back { display:flex; align-items:center; gap:6px; background:none; border:1px solid var(--navy-border); border-radius:8px; padding:6px 14px; color:var(--text-secondary); cursor:pointer; font-family:inherit; font-size:12px; transition:all .2s; }
+.section-back:hover { border-color:var(--orange); color:var(--orange); }
+
+/* DETAIL VIEW */
+.detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.detail-card { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:20px; }
+.detail-card.full { grid-column:1/-1; }
+.detail-card-title { font-size:13px; font-weight:700; color:var(--orange); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px; }
+
+/* SCORE DISPLAY */
+.score-big { font-size:56px; font-weight:900; line-height:1; }
+.score-big.boa { color:var(--green); }
+.score-big.regular { color:var(--yellow); }
+.score-big.fraca { color:var(--red); }
+.score-label { font-size:14px; color:var(--text-secondary); margin-top:4px; }
+
+/* PERFORMANCE BARS */
+.perf-bar-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.perf-bar-label { width:120px; font-size:12px; color:var(--text-secondary); flex-shrink:0; }
+.perf-bar-track { flex:1; height:8px; background:var(--navy-border); border-radius:4px; overflow:hidden; }
+.perf-bar-fill { height:100%; border-radius:4px; transition:width .6s ease; }
+.perf-bar-value { width:32px; text-align:right; font-size:12px; font-weight:700; }
+
+/* OBJECTION ITEMS */
+.objection-item { display:flex; align-items:center; gap:12px; padding:10px; background:var(--navy); border-radius:10px; margin-bottom:8px; }
+.objection-badge { width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
+.objection-badge.handled { background:rgba(0,210,106,0.2); color:var(--green); }
+.objection-badge.missed { background:rgba(255,71,87,0.2); color:var(--red); }
+.objection-text { flex:1; font-size:13px; }
+.objection-quality { font-size:11px; font-weight:600; padding:2px 8px; border-radius:6px; }
+
+/* IMPROVEMENT ITEMS */
+.improvement-item { display:flex; gap:10px; padding:10px; background:var(--navy); border-radius:10px; margin-bottom:8px; }
+.improvement-num { width:24px; height:24px; background:var(--orange-gradient); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
+.improvement-text { font-size:13px; color:var(--text-secondary); line-height:1.4; }
+
+/* CRITICAL MOMENT */
+.moment-item { display:flex; gap:10px; padding:10px; background:var(--navy); border-radius:10px; margin-bottom:8px; }
+.moment-time { font-size:12px; font-weight:700; color:var(--orange); width:50px; flex-shrink:0; }
+.moment-dot { width:10px; height:10px; border-radius:50%; margin-top:4px; flex-shrink:0; }
+.moment-dot.positivo { background:var(--green); }
+.moment-dot.negativo { background:var(--red); }
+.moment-text { font-size:13px; color:var(--text-secondary); line-height:1.4; }
+
+/* DNA CLOSER */
+.dna-toggle { display:flex; gap:8px; margin-bottom:16px; }
+.dna-toggle-btn { padding:8px 16px; border:1px solid var(--navy-border); background:transparent; color:var(--text-secondary); border-radius:8px; cursor:pointer; font-family:inherit; font-size:12px; font-weight:600; transition:all .2s; }
+.dna-toggle-btn.active { background:var(--orange); border-color:var(--orange); color:white; }
+
+/* OBJECTION MAP */
+.objection-map-item { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:16px; margin-bottom:12px; }
+.objection-map-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.objection-map-type { font-weight:700; font-size:14px; }
+.objection-map-count { background:var(--orange-gradient); padding:2px 10px; border-radius:6px; font-size:12px; font-weight:700; }
+.objection-map-stats { display:flex; gap:12px; font-size:12px; color:var(--text-secondary); margin-bottom:10px; align-items:center; flex-wrap:wrap; }
+.objection-script { background:var(--navy); border-radius:10px; padding:12px; font-size:12px; color:var(--text-secondary); line-height:1.5; }
+.objection-script strong { color:var(--orange); }
+
+/* UPLOAD VIEW */
+.upload-zone { border:2px dashed var(--navy-border); border-radius:20px; padding:60px; text-align:center; transition:all .3s; cursor:pointer; }
+.upload-zone:hover, .upload-zone.dragover { border-color:var(--orange); background:rgba(255,107,0,0.05); }
+.upload-icon { font-size:48px; margin-bottom:12px; }
+.upload-text { font-size:16px; font-weight:600; margin-bottom:6px; }
+.upload-hint { font-size:12px; color:var(--text-muted); }
+.upload-btn { background:var(--orange-gradient); border:none; padding:10px 28px; border-radius:10px; color:white; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; margin-top:16px; transition:transform .2s; }
+.upload-btn:hover { transform:scale(1.03); }
+
+/* UPLOAD TABS */
+.upload-tabs { display:flex; gap:8px; margin-bottom:20px; }
+.upload-tab { flex:1; padding:10px; border:1px solid var(--navy-border); background:transparent; color:var(--text-secondary); border-radius:10px; cursor:pointer; font-family:inherit; font-size:13px; font-weight:600; transition:all .2s; }
+.upload-tab.active { background:var(--orange); border-color:var(--orange); color:white; }
+.upload-tab:hover:not(.active) { border-color:var(--text-muted); }
+.upload-tab-content { display:none; }
+.upload-tab-content.active { display:block; }
+.wpp-preview-area { display:flex; flex-direction:column; gap:6px; padding:16px; background:var(--navy); border-radius:12px; max-height:320px; overflow-y:auto; }
+.wpp-bubble { max-width:75%; padding:8px 12px; border-radius:12px; font-size:12px; line-height:1.4; }
+.wpp-bubble.recv { background:var(--navy-card); border:1px solid var(--navy-border); align-self:flex-start; }
+.wpp-bubble.sent { background:rgba(37,211,102,0.12); border:1px solid rgba(37,211,102,0.2); align-self:flex-end; }
+
+/* REPORT */
+.report-section { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:20px; margin-bottom:16px; }
+.report-section-title { font-size:14px; font-weight:700; color:var(--orange); margin-bottom:10px; }
+.report-text { font-size:13px; color:var(--text-secondary); line-height:1.6; }
+
+/* CAR METRICS */
+.car-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+.car-metric { background:var(--navy); border-radius:10px; padding:10px 14px; text-align:center; }
+.car-metric-icon { font-size:20px; margin-bottom:4px; }
+.car-metric-label { font-size:10px; color:var(--text-muted); font-weight:600; text-transform:uppercase; }
+.car-metric-value { font-size:13px; font-weight:700; margin-top:2px; }
+.car-metric-value.yes { color:var(--green); }
+.car-metric-value.no { color:var(--red); }
+
+/* NEPQ & HORMOZI */
+.methodology-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.methodology-item { display:flex; align-items:center; gap:10px; padding:8px; }
+.methodology-score { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; }
+.methodology-name { font-size:13px; font-weight:600; }
+
+/* WPP METRICS */
+.wpp-metrics-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.wpp-metric-box { background:var(--navy); border-radius:10px; padding:12px 8px; text-align:center; }
+.wpp-metric-icon { font-size:18px; margin-bottom:4px; }
+.wpp-metric-label { font-size:9px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.4px; margin-bottom:6px; }
+.wpp-metric-value { font-size:20px; font-weight:800; }
+.wpp-metric-sub { font-size:10px; color:var(--text-muted); margin-top:2px; }
+
+/* CHECKLIST PRESENCIAL */
+.checklist-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.checklist-item { display:flex; align-items:center; gap:10px; padding:8px 10px; background:var(--navy); border-radius:10px; }
+.checklist-check { width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
+.checklist-check.done { background:rgba(0,210,106,0.2); color:var(--green); }
+.checklist-check.miss { background:rgba(255,71,87,0.12); color:var(--red); border:1px solid rgba(255,71,87,0.2); }
+.checklist-label { font-size:12px; color:var(--text-secondary); }
+.progress-track { width:100%; height:10px; background:var(--navy-border); border-radius:5px; overflow:hidden; margin-top:4px; }
+.progress-fill { height:100%; border-radius:5px; background:var(--orange-gradient); transition:width .6s ease; }
+
+/* CANAL PERF */
+.canal-perf-row { display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--navy); border-radius:10px; margin-bottom:8px; }
+.canal-perf-icon { font-size:20px; flex-shrink:0; }
+.canal-perf-name { font-size:13px; font-weight:700; width:88px; flex-shrink:0; }
+.canal-perf-stats { flex:1; display:flex; gap:20px; font-size:12px; color:var(--text-secondary); flex-wrap:wrap; }
+
+/* ACADEMIA */
+.academia-module { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:16px; margin-bottom:16px; overflow:hidden; }
+.academia-module-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; user-select:none; transition:background .2s; }
+.academia-module-header:hover { background:var(--navy-hover); }
+.academia-module-title { display:flex; align-items:center; gap:12px; }
+.academia-module-icon { width:36px; height:36px; border-radius:10px; background:var(--orange-gradient); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.academia-module-name { font-size:15px; font-weight:700; }
+.academia-module-desc { font-size:12px; color:var(--text-muted); margin-top:2px; }
+.academia-module-arrow { font-size:12px; color:var(--text-muted); transition:transform .3s; }
+.academia-module-arrow.open { transform:rotate(180deg); }
+.academia-module-body { display:none; padding:0 20px 20px; }
+.academia-module-body.open { display:block; }
+.academia-phase { margin-bottom:16px; }
+.academia-phase-title { font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--navy-border); }
+.academia-question-card { background:var(--navy); border:1px solid var(--navy-border); border-radius:10px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:flex-start; gap:12px; }
+.academia-question-text { flex:1; font-size:13px; color:var(--text-secondary); line-height:1.5; font-style:italic; }
+.academia-copy-btn { flex-shrink:0; background:none; border:1px solid var(--navy-border); border-radius:6px; padding:4px 10px; color:var(--text-muted); cursor:pointer; font-family:inherit; font-size:11px; font-weight:600; transition:all .2s; white-space:nowrap; }
+.academia-copy-btn:hover { border-color:var(--orange); color:var(--orange); }
+.academia-copy-btn.copied { border-color:var(--green); color:var(--green); }
+.academia-tip { background:rgba(255,107,0,0.08); border:1px solid rgba(255,107,0,0.2); border-radius:10px; padding:10px 14px; margin-top:8px; font-size:12px; color:var(--text-secondary); line-height:1.5; }
+.academia-tip strong { color:var(--orange); }
+.hormozi-pillar { background:var(--navy); border-radius:12px; padding:14px; margin-bottom:12px; }
+.hormozi-pillar-title { font-size:13px; font-weight:700; color:var(--orange); margin-bottom:8px; }
+.hormozi-pillar-items { display:flex; flex-direction:column; gap:6px; }
+.hormozi-item { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--text-secondary); line-height:1.5; }
+.hormozi-item::before { content:'→'; color:var(--orange); font-weight:700; flex-shrink:0; margin-top:1px; }
+.simulador-card { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:18px; }
+.simulador-scenario { background:var(--navy); border-radius:12px; padding:14px; margin-bottom:12px; }
+.simulador-scenario-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.simulador-scenario-emoji { font-size:24px; }
+.simulador-scenario-title { font-size:14px; font-weight:700; }
+.simulador-scenario-context { font-size:12px; color:var(--text-muted); margin-bottom:10px; line-height:1.5; }
+.simulador-challenge { background:var(--navy-card); border:1px solid var(--navy-border); border-radius:8px; padding:10px 12px; font-size:13px; color:var(--text-primary); font-style:italic; margin-bottom:8px; }
+.simulador-answer-toggle { background:none; border:1px solid var(--navy-border); border-radius:8px; padding:6px 14px; color:var(--text-muted); cursor:pointer; font-family:inherit; font-size:12px; font-weight:600; transition:all .2s; }
+.simulador-answer-toggle:hover { border-color:var(--orange); color:var(--orange); }
+.simulador-answer { display:none; margin-top:10px; background:rgba(0,210,106,0.08); border:1px solid rgba(0,210,106,0.2); border-radius:8px; padding:12px; font-size:12px; color:var(--text-secondary); line-height:1.6; }
+.simulador-answer.open { display:block; }
+.simulador-new-btn { display:block; width:100%; padding:12px; background:var(--orange-gradient); border:none; border-radius:10px; color:white; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; margin-top:12px; transition:transform .2s; }
+.simulador-new-btn:hover { transform:scale(1.02); }
+.seus-dados-card { background:var(--navy); border-radius:12px; padding:16px; margin-bottom:10px; display:flex; align-items:flex-start; gap:14px; }
+.seus-dados-icon { font-size:28px; flex-shrink:0; }
+.seus-dados-label { font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+.seus-dados-value { font-size:15px; font-weight:700; margin-bottom:4px; }
+.seus-dados-action { font-size:12px; color:var(--orange); line-height:1.5; }
+.academia-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:900px) { .academia-grid { grid-template-columns:1fr; } }
+
+/* VIEWS */
+.view { display:none; }
+.view.active { display:block; }
+
+/* DEMO EXTRAS */
+.topbar-badge.demo { background:rgba(255,107,0,0.15); border-color:rgba(255,107,0,0.5); color:var(--orange); font-weight:800; }
+.topbar-badge.demo::before { content:''; display:inline-block; width:6px; height:6px; background:var(--orange); border-radius:50%; margin-right:6px; animation:pulse 1.5s infinite; }
+.executive-box { background:linear-gradient(135deg,rgba(255,107,0,0.1),rgba(255,107,0,0.04)); border:2px solid rgba(255,107,0,0.35); border-radius:16px; padding:22px 24px; margin-bottom:20px; }
+.executive-box-title { font-size:13px; font-weight:800; color:var(--orange); text-transform:uppercase; letter-spacing:1.2px; margin-bottom:14px; }
+.executive-box-item { font-size:14px; color:var(--text-secondary); line-height:2; }
+.amostra-options { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
+.amostra-option-card { background:var(--navy-card); border:2px solid var(--navy-border); border-radius:16px; padding:28px 20px; text-align:center; cursor:pointer; transition:all .25s; }
+.amostra-option-card:hover,.amostra-option-card.active { border-color:var(--orange); background:rgba(255,107,0,0.07); }
+.amostra-option-icon { font-size:36px; margin-bottom:10px; }
+.amostra-option-title { font-size:15px; font-weight:700; margin-bottom:4px; }
+.amostra-option-desc { font-size:12px; color:var(--text-muted); }
+.amostra-form-panel { display:none; background:var(--navy-card); border:1px solid var(--navy-border); border-radius:14px; padding:24px; margin-bottom:16px; }
+.amostra-form-panel.active { display:block; }
+.amostra-field-label { font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; display:block; }
+.amostra-input { width:100%; padding:10px 14px; background:var(--navy); border:1px solid var(--navy-border); border-radius:10px; color:var(--text-primary); font-family:inherit; font-size:13px; outline:none; margin-bottom:14px; }
+.amostra-input:focus { border-color:var(--orange); }
+.amostra-textarea { width:100%; padding:10px 14px; background:var(--navy); border:1px solid var(--navy-border); border-radius:10px; color:var(--text-primary); font-family:inherit; font-size:12px; outline:none; resize:vertical; min-height:120px; margin-bottom:14px; line-height:1.5; }
+.amostra-textarea:focus { border-color:var(--orange); }
+.amostra-btn { background:var(--orange-gradient); border:none; padding:13px 28px; border-radius:10px; color:white; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; width:100%; transition:transform .2s; }
+.amostra-btn:hover { transform:scale(1.02); }
+.amostra-loading { display:none; text-align:center; padding:48px 20px; }
+.amostra-loading.active { display:block; }
+.amostra-spinner { width:52px; height:52px; border:4px solid var(--navy-border); border-top-color:var(--orange); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 16px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.amostra-loading-text { font-size:15px; font-weight:600; margin-bottom:6px; }
+.amostra-loading-sub { font-size:12px; color:var(--text-muted); }
+.amostra-result { display:none; }
+.amostra-result.active { display:block; }
+.amostra-dropzone { border:2px dashed var(--navy-border); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:all .2s; margin-bottom:14px; }
+.amostra-dropzone:hover { border-color:var(--orange); background:rgba(255,107,0,0.04); }
+.amostra-dropzone-icon { font-size:28px; margin-bottom:6px; }
+.amostra-dropzone-text { font-size:13px; font-weight:600; margin-bottom:3px; }
+.amostra-dropzone-hint { font-size:11px; color:var(--text-muted); }
+.amostra-file-selected { background:rgba(0,210,106,0.1); border:1px solid rgba(0,210,106,0.3); border-radius:10px; padding:10px 14px; font-size:13px; margin-bottom:14px; display:none; }
+.amostra-file-selected.active { display:flex; align-items:center; gap:8px; }
+@media(max-width:900px) { .amostra-options { grid-template-columns:1fr; } }
+
+/* TRANSITIONS */
+.fade-in { animation:fadeIn .3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* RESPONSIVE */
+@media(max-width:900px) {
+  .sidebar { display:none; }
+  .stats-grid { grid-template-columns:repeat(2,1fr); }
+  .detail-grid { grid-template-columns:1fr; }
+  .methodology-grid { grid-template-columns:1fr; }
+  .wpp-metrics-grid { grid-template-columns:repeat(3,1fr); }
+  .checklist-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">S</div>
+      <div class="topbar-title"><span>Sales Analytics</span> Pro</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-badge demo">🎬 DEMONSTRAÇÃO AO VIVO</div>
+      <div class="topbar-badge">Auto Premium Veículos</div>
+      <div class="topbar-badge">25 atendimentos</div>
+      <button class="topbar-config" onclick="showView('config')">⚙ Config</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-nav">
+        <button class="sidebar-btn active" onclick="showView('calls')" data-view="calls">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          Calls
+        </button>
+        <button class="sidebar-btn" onclick="showView('diagnostico')" data-view="diagnostico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          Diagnostico
+        </button>
+        <button class="sidebar-btn" onclick="showView('objecoes')" data-view="objecoes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Objecoes
+        </button>
+        <button class="sidebar-btn" onclick="showView('relatorio')" data-view="relatorio">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+          Relatorio
+        </button>
+        <div class="sidebar-divider"></div>
+        <button class="sidebar-btn" onclick="showView('upload')" data-view="upload">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          Upload
+        </button>
+        <button class="sidebar-btn" onclick="showView('script')" data-view="script">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Script IA
+        </button>
+        <button class="sidebar-btn" onclick="showView('academia')" data-view="academia">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Academia
+        </button>
+        <div class="sidebar-divider"></div>
+        <button class="sidebar-btn" onclick="showView('amostra')" data-view="amostra" style="background:rgba(255,107,0,0.08);border:1px solid rgba(255,107,0,0.2);color:var(--orange);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+          🎁 Amostra Grátis
+        </button>
+      </div>
+
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section-title">Vendedores</div>
+      <div class="sidebar-filters">
+        <div class="filter-tabs" id="closerFilter">
+          <button class="filter-tab active" onclick="filterCloser('Todos')">Todos</button>
+          <button class="filter-tab" onclick="filterCloser('Carlos Mendes')">Carlos</button>
+          <button class="filter-tab" onclick="filterCloser('Amanda Torres')">Amanda</button>
+          <button class="filter-tab" onclick="filterCloser('Rafael Lima')">Rafael</button>
+        </div>
+        <input type="text" class="search-box" placeholder="Buscar call..." oninput="filterSearch(this.value)">
+      </div>
+
+      <div class="sidebar-section-title">Classificacao</div>
+      <div class="sidebar-filters">
+        <div class="filter-tabs" id="classFilter">
+          <button class="filter-tab active" onclick="filterClass('Todos')">Todos</button>
+          <button class="filter-tab" onclick="filterClass('Boa')">Boa</button>
+          <button class="filter-tab" onclick="filterClass('Regular')">Regular</button>
+          <button class="filter-tab" onclick="filterClass('Fraca')">Fraca</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section-title">Canal</div>
+      <div class="sidebar-filters">
+        <div class="canal-filter-row" id="canalFilter">
+          <button class="canal-btn active" data-canal="Todos" onclick="filterCanal('Todos')">Todos</button>
+          <button class="canal-btn" data-canal="ligacao" onclick="filterCanal('ligacao')">📞 Ligacao</button>
+          <button class="canal-btn" data-canal="whatsapp" onclick="filterCanal('whatsapp')">💬 WhatsApp</button>
+          <button class="canal-btn" data-canal="presencial" onclick="filterCanal('presencial')">🏪 Presencial</button>
+        </div>
+      </div>
+
+      <div class="calls-list" id="callsList"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content" id="mainContent">
+
+      <!-- VIEW: CALLS -->
+      <div class="view active" id="view-calls">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div id="callDetail"></div>
+      </div>
+
+      <!-- VIEW: DIAGNOSTICO -->
+      <div class="view" id="view-diagnostico">
+        <div class="section-header">
+          <div>
+            <div class="section-title">DNA do Closer</div>
+            <div class="section-subtitle">Performance por dimensao de venda automotiva</div>
+          </div>
+        </div>
+        <div class="dna-toggle" id="dnaToggle"></div>
+        <div class="detail-grid" id="dnaContent"></div>
+      </div>
+
+      <!-- VIEW: OBJECOES -->
+      <div class="view" id="view-objecoes">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Mapa de Objecoes</div>
+            <div class="section-subtitle">Ranking, clusters e scripts anti-objecao para vendas de carros</div>
+          </div>
+        </div>
+        <div id="objectionMap"></div>
+      </div>
+
+      <!-- VIEW: RELATORIO -->
+      <div class="view" id="view-relatorio">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Relatorio Consolidado</div>
+            <div class="section-subtitle">Mentoria personalizada NEPQ + Hormozi para vendas automotivas</div>
+          </div>
+        </div>
+        <div id="reportContent"></div>
+      </div>
+
+      <!-- VIEW: UPLOAD -->
+      <div class="view" id="view-upload">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Upload de Atendimentos</div>
+            <div class="section-subtitle">Selecione o canal para importar e analisar com IA</div>
+          </div>
+        </div>
+
+        <div class="upload-tabs" id="uploadTabBtns">
+          <button class="upload-tab active" data-tab="ligacao" onclick="switchUploadTab('ligacao')">📞 Ligacao</button>
+          <button class="upload-tab" data-tab="whatsapp" onclick="switchUploadTab('whatsapp')">💬 WhatsApp</button>
+          <button class="upload-tab" data-tab="presencial" onclick="switchUploadTab('presencial')">🏪 Presencial</button>
+        </div>
+
+        <!-- TAB: LIGACAO -->
+        <div class="upload-tab-content active" id="utab-ligacao">
+          <div class="upload-zone" id="uploadZone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">🎙️</div>
+            <div class="upload-text">Arraste suas calls aqui</div>
+            <div class="upload-hint">.mp4 .mp3 .m4a .wav .webm .ogg</div>
+            <input type="file" id="fileInput" multiple accept=".mp4,.mp3,.m4a,.wav,.webm,.ogg" style="display:none" onchange="handleFiles(this.files)">
+          </div>
+          <div id="uploadQueue" style="margin-top:16px"></div>
+          <button class="upload-btn" id="processBtn" style="display:none" onclick="processUploads()">Processar Calls</button>
+        </div>
+
+        <!-- TAB: WHATSAPP -->
+        <div class="upload-tab-content" id="utab-whatsapp">
+          <div class="upload-zone" id="wppZone"
+            ondragover="event.preventDefault();this.classList.add('dragover')"
+            ondragleave="this.classList.remove('dragover')"
+            ondrop="handleWppDrop(event)"
+            onclick="document.getElementById('wppFileInput').click()"
+            style="padding:40px">
+            <div class="upload-icon">💬</div>
+            <div class="upload-text">Arraste o .txt do WhatsApp aqui</div>
+            <div class="upload-hint">No WhatsApp: Menu → Mais → Exportar conversa (sem mídia) → .txt</div>
+            <input type="file" id="wppFileInput" accept=".txt" style="display:none" onchange="handleWppFile(this.files[0])">
+          </div>
+          <div id="wppPreview" style="margin-top:16px"></div>
+        </div>
+
+        <!-- TAB: PRESENCIAL -->
+        <div class="upload-tab-content" id="utab-presencial">
+          <div style="text-align:center;padding:50px 20px">
+            <div style="font-size:56px;margin-bottom:16px">🏪</div>
+            <div style="font-size:18px;font-weight:700;margin-bottom:8px">Formulario Presencial Mobile-First</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.6">Preencha durante ou apos o atendimento. Gera o JSON para analise automatica com IA.</div>
+            <div style="font-size:12px;font-family:monospace;color:var(--orange);background:var(--navy-card);border:1px solid var(--navy-border);border-radius:8px;padding:8px 12px;display:inline-block;margin-bottom:20px">python analyze_call.py arquivo.json --canal presencial</div>
+            <div><a href="form_presencial.html" target="_blank" style="display:inline-block;background:var(--orange-gradient);padding:12px 32px;border-radius:12px;color:white;font-weight:700;font-size:14px;text-decoration:none">Abrir Formulario Presencial ↗</a></div>
+          </div>
+          <div style="border-top:1px solid var(--navy-border);padding-top:20px;margin-top:4px">
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;text-align:center">Ou importe um JSON já gerado pelo formulário:</div>
+            <div class="upload-zone" onclick="document.getElementById('presFileInput').click()" style="padding:24px;cursor:pointer">
+              <div style="font-size:24px;margin-bottom:6px">📂</div>
+              <div style="font-size:13px;color:var(--text-secondary)">Clique para importar .json do formulario presencial</div>
+              <input type="file" id="presFileInput" accept=".json" style="display:none" onchange="handlePresJson(this.files[0])">
+            </div>
+            <div id="presPreview" style="margin-top:12px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: SCRIPT IA -->
+      <div class="view" id="view-script">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Script de Venda IA</div>
+            <div class="section-subtitle">Gerado com base nos dados das calls analisadas</div>
+          </div>
+        </div>
+        <div id="scriptContent"></div>
+      </div>
+
+      <!-- VIEW: ACADEMIA -->
+      <div class="view" id="view-academia">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Academia de Vendas</div>
+            <div class="section-subtitle">NEPQ + Hormozi aplicados a vendas automotivas — treine, simule e evolua</div>
+          </div>
+        </div>
+
+        <!-- MODULO 1: NEPQ -->
+        <div class="academia-module">
+          <div class="academia-module-header" onclick="toggleAccordion('nepq')">
+            <div class="academia-module-title">
+              <div class="academia-module-icon">🧠</div>
+              <div>
+                <div class="academia-module-name">Modulo 1 — NEPQ (Neuro-Emotional Persuasion Questions)</div>
+                <div class="academia-module-desc">4 fases de perguntas que ativam o cerbro emocional do comprador</div>
+              </div>
+            </div>
+            <span class="academia-module-arrow" id="arrow-nepq">▼</span>
+          </div>
+          <div class="academia-module-body" id="body-nepq">
+
+            <div class="academia-phase">
+              <div class="academia-phase-title">Fase 1 — Situacao (entenda o contexto atual)</div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Voce esta usando carro atualmente ou vai comprar o primeiro?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Voce esta usando carro atualmente ou vai comprar o primeiro?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Qual modelo voce esta considerando — ja tem algum favorito ou ainda esta pesquisando opcoes?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Qual modelo voce esta considerando — ja tem algum favorito ou ainda esta pesquisando opcoes?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Com que frequencia voce usa o carro — trabalho, familia, viagens? Me conta um pouco da sua rotina."</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Com que frequencia voce usa o carro — trabalho, familia, viagens? Me conta um pouco da sua rotina.')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Qual e a sua principal prioridade no proximo carro: economia, conforto, espaco, status ou seguranca?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Qual e a sua principal prioridade no proximo carro: economia, conforto, espaco, status ou seguranca?')">Copiar</button>
+              </div>
+              <div class="academia-tip"><strong>PRO:</strong> Nao apresente nenhum carro ate entender profundamente a situacao. Perguntas de situacao criam conexao e eliminam abordagens genericas.</div>
+            </div>
+
+            <div class="academia-phase">
+              <div class="academia-phase-title">Fase 2 — Problema (descubra as dores reais)</div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"O que mais te incomoda no seu carro atual — mecanicamente, no conforto ou nos custos?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'O que mais te incomoda no seu carro atual — mecanicamente, no conforto ou nos custos?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Voce ja sentiu inseguranca com o carro em alguma situacao — numa chuva forte, numa estrada ruim, com a familia?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Voce ja sentiu inseguranca com o carro em alguma situacao — numa chuva forte, numa estrada ruim, com a familia?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Quanto voce gasta por mes com manutencao e combustivel hoje? Isso esta dentro do que voce considera aceitavel?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Quanto voce gasta por mes com manutencao e combustivel hoje? Isso esta dentro do que voce considera aceitavel?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Se voce pudesse mudar uma coisa agora no seu dia a dia com o carro, o que seria?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Se voce pudesse mudar uma coisa agora no seu dia a dia com o carro, o que seria?')">Copiar</button>
+              </div>
+              <div class="academia-tip"><strong>PRO:</strong> Deixe o cliente falar. Quem descobre a dor sozinho fica 3x mais motivado a resolver. Use silencio estrategico apos a pergunta.</div>
+            </div>
+
+            <div class="academia-phase">
+              <div class="academia-phase-title">Fase 3 — Implicacao (amplifique o custo da inacao)</div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Se esse problema continuar por mais 12 meses, como isso vai afetar sua rotina — financeiramente, no trabalho, com sua familia?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Se esse problema continuar por mais 12 meses, como isso vai afetar sua rotina — financeiramente, no trabalho, com sua familia?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Quanto voce acha que ja perdeu, ou vai perder, mantendo um carro que nao atende suas necessidades?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Quanto voce acha que ja perdeu, ou vai perder, mantendo um carro que nao atende suas necessidades?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"O que aconteceria se voce precisasse de um carro confiavel numa emergencia e o seu te deixasse na mao?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'O que aconteceria se voce precisasse de um carro confiavel numa emergencia e o seu te deixasse na mao?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Esse problema tem impacto so em voce ou afeta sua familia tambem? Me conta mais."</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Esse problema tem impacto so em voce ou afeta sua familia tambem? Me conta mais.')">Copiar</button>
+              </div>
+              <div class="academia-tip"><strong>PRO:</strong> Implicacao e a fase mais poderosa. Quando o cliente calcula o custo da inacao sozinho, o preco do carro novo passa a ser pequeno em comparacao.</div>
+            </div>
+
+            <div class="academia-phase">
+              <div class="academia-phase-title">Fase 4 — Fechamento (conecte a solucao a vida deles)</div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Se eu conseguir te mostrar um carro que resolve exatamente esses pontos que voce me descreveu, faz sentido a gente avanar hoje?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Se eu conseguir te mostrar um carro que resolve exatamente esses pontos que voce me descreveu, faz sentido a gente avancar hoje?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"O que precisaria acontecer aqui hoje para voce sair com a certeza de que tomou a melhor decisao?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'O que precisaria acontecer aqui hoje para voce sair com a certeza de que tomou a melhor decisao?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Alem do preco, ha mais alguma coisa que te impediria de resolver isso hoje?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Alem do preco, ha mais alguma coisa que te impediria de resolver isso hoje?')">Copiar</button>
+              </div>
+              <div class="academia-question-card">
+                <div class="academia-question-text">"Se tudo fizer sentido depois do test drive, voce estaria em posicao de decidir ainda essa semana?"</div>
+                <button class="academia-copy-btn" onclick="copyQuestion(this,'Se tudo fizer sentido depois do test drive, voce estaria em posicao de decidir ainda essa semana?')">Copiar</button>
+              </div>
+              <div class="academia-tip"><strong>PRO:</strong> Nunca feche sem ter passado pelas 3 fases anteriores. O fechamento NEPQ e uma conclusao natural — o cliente ja convenceu a si mesmo.</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- MODULO 2: HORMOZI -->
+        <div class="academia-module">
+          <div class="academia-module-header" onclick="toggleAccordion('hormozi')">
+            <div class="academia-module-title">
+              <div class="academia-module-icon" style="font-size:16px">💰</div>
+              <div>
+                <div class="academia-module-name">Modulo 2 — Framework Hormozi (Valor Irresistivel)</div>
+                <div class="academia-module-desc">3 pilares para tornar qualquer oferta impossivel de recusar</div>
+              </div>
+            </div>
+            <span class="academia-module-arrow" id="arrow-hormozi">▼</span>
+          </div>
+          <div class="academia-module-body" id="body-hormozi">
+
+            <div class="hormozi-pillar">
+              <div class="hormozi-pillar-title">Pilar 1 — Stack de Valor (empilhe beneficios ate o preco parecer pequeno)</div>
+              <div class="hormozi-pillar-items">
+                <div class="hormozi-item">Nunca venda carro — venda o que o carro faz pela vida do cliente (seguranca da familia, produtividade, status, liberdade)</div>
+                <div class="hormozi-item">Liste todos os itens de serie: "Esse carro ja vem com camera de re, sensor de ponto cego, frenagem automatica, banco de couro..." (cada item tem valor percebido)</div>
+                <div class="hormozi-item">Inclua beneficios da concessionaria no stack: garantia estendida, revisoes inclusas, suporte 24h, app de rastreamento</div>
+                <div class="hormozi-item">Exemplo de stack: "Voce esta levando o carro + 3 revisoes gratis + garantia de 3 anos + avaliacao do seu usado + taxa de financiamento preferencial + peliculas inclusas"</div>
+                <div class="hormozi-item">Calcule o valor separado de cada item antes de revelar o preco total: "Se vendesse tudo separado, passaria de R$180.000. Voce paga R$142.900."</div>
+              </div>
+            </div>
+
+            <div class="hormozi-pillar">
+              <div class="hormozi-pillar-title">Pilar 2 — Custo da Inacao (calcule o preco de NAO comprar)</div>
+              <div class="hormozi-pillar-items">
+                <div class="hormozi-item">Carro velho: "Voce gasta R$800/mes em manutencao. Em 12 meses sao R$9.600 — quase a diferenca para o novo."</div>
+                <div class="hormozi-item">Depreciacao: "Seu carro atual perde R$500/mes de valor. Em 2 anos, perdeu R$12.000. O novo deprecia muito menos nos primeiros anos."</div>
+                <div class="hormozi-item">Combustivel: "O novo consome 30% menos. Na sua quilometragem, isso e R$350/mes economizados — R$4.200 por ano."</div>
+                <div class="hormozi-item">Custo emocional: "Quanto vale dormir tranquilo sabendo que o carro nao vai te deixar na mao numa emergencia com sua familia?"</div>
+                <div class="hormozi-item">ROI para produtor/empresa: "Com essa picape, voce consegue carregar X toneladas. Qual o faturamento adicional possivel por safra?"</div>
+              </div>
+            </div>
+
+            <div class="hormozi-pillar">
+              <div class="hormozi-pillar-title">Pilar 3 — Reversao de Risco (elimine o medo de errar)</div>
+              <div class="hormozi-pillar-items">
+                <div class="hormozi-item">Test drive completo: "Faca o test drive real — na sua rota, com sua familia. Se nao for o que esperava, sem pressao."</div>
+                <div class="hormozi-item">Garantia de fabrica: "3 anos ou 100.000 km de garantia — qualquer problema e nossa responsabilidade."</div>
+                <div class="hormozi-item">Avaliacao do usado: "Avaliamos seu carro atual com preco justo de mercado. Voce nao perde nada na troca."</div>
+                <div class="hormozi-item">Financiamento sem surpresa: "A gente faz a simulacao agora, voce ve a parcela exata antes de decidir qualquer coisa."</div>
+                <div class="hormozi-item">Reversao direta: "Voce so paga se ficar 100% satisfeito. Se nao for exatamente o que precisava, a gente encontra outro."</div>
+              </div>
+            </div>
+
+            <div class="academia-tip" style="margin-top:4px"><strong>REGRA DE OURO HORMOZI:</strong> O valor percebido precisa ser pelo menos 10x o preco cobrado. Se o cliente acha caro, voce nao empilhou valor suficiente — nunca baixe o preco, empilhe mais valor.</div>
+
+          </div>
+        </div>
+
+        <!-- SIMULADOR + SEUS DADOS em grid -->
+        <div class="academia-grid">
+
+          <!-- SIMULADOR -->
+          <div class="simulador-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+              <div>
+                <div class="section-title" style="font-size:16px">Simulador de Cenarios</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Pratique com situacoes reais de clientes</div>
+              </div>
+            </div>
+            <div id="simuladorContent"></div>
+            <button class="simulador-new-btn" onclick="newScenario()">🎲 Novo Cenario</button>
+          </div>
+
+          <!-- SEUS DADOS -->
+          <div>
+            <div class="academia-module" style="margin-bottom:12px">
+              <div class="academia-module-header" onclick="toggleAccordion('seus-dados')">
+                <div class="academia-module-title">
+                  <div class="academia-module-icon" style="background:linear-gradient(135deg,#1565C0,#2196F3);font-size:16px">📊</div>
+                  <div>
+                    <div class="academia-module-name">Seus Dados — Onde Treinar Agora</div>
+                    <div class="academia-module-desc">Baseado nas suas calls analisadas</div>
+                  </div>
+                </div>
+                <span class="academia-module-arrow" id="arrow-seus-dados">▼</span>
+              </div>
+              <div class="academia-module-body" id="body-seus-dados">
+                <div id="seusDadosContent"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- VIEW: AMOSTRA GRÁTIS -->
+      <div class="view" id="view-amostra">
+        <div class="section-header">
+          <div>
+            <div class="section-title">🎁 Amostra Grátis</div>
+            <div class="section-subtitle">Analise um atendimento real da sua equipe com IA — veja o resultado na hora</div>
+          </div>
+        </div>
+        <div class="amostra-options">
+          <div class="amostra-option-card" id="amostraOptLig" onclick="selectAmostraType('ligacao')">
+            <div class="amostra-option-icon">📞</div>
+            <div class="amostra-option-title">Analisar Ligação</div>
+            <div class="amostra-option-desc">Faça upload do áudio (.mp3, .m4a, .wav, .mp4) e receba análise completa com score, dimensões e melhorias</div>
+          </div>
+          <div class="amostra-option-card" id="amostraOptWpp" onclick="selectAmostraType('whatsapp')">
+            <div class="amostra-option-icon">💬</div>
+            <div class="amostra-option-title">Analisar WhatsApp</div>
+            <div class="amostra-option-desc">Faça upload do .txt exportado do WhatsApp ou cole a conversa diretamente — análise em segundos</div>
+          </div>
+        </div>
+
+        <div class="amostra-form-panel" id="amostraFormLig">
+          <div class="detail-card-title" style="margin-bottom:16px">📞 Análise de Ligação</div>
+          <label class="amostra-field-label">Arquivo de Áudio</label>
+          <div class="amostra-dropzone" onclick="document.getElementById('audioFileInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--orange)'" ondragleave="this.style.borderColor=''" ondrop="handleAmostraAudioDrop(event)">
+            <div class="amostra-dropzone-icon">🎵</div>
+            <div class="amostra-dropzone-text">Clique para selecionar ou arraste o arquivo</div>
+            <div class="amostra-dropzone-hint">.mp3 · .m4a · .wav · .mp4 — máximo 100MB</div>
+          </div>
+          <input type="file" id="audioFileInput" accept=".mp3,.m4a,.wav,.mp4,.ogg" style="display:none" onchange="handleAmostraAudioSelect(this)">
+          <div class="amostra-file-selected" id="audioFileSelected">
+            <span style="font-size:20px">🎵</span>
+            <span id="audioFileName" style="flex:1;font-size:13px"></span>
+            <span id="audioFileSize" style="font-size:11px;color:var(--text-muted)"></span>
+          </div>
+          <label class="amostra-field-label">Nome do Vendedor</label>
+          <input type="text" class="amostra-input" id="ligVendedorNome" placeholder="Ex: Carlos Mendes">
+          <button class="amostra-btn" onclick="analisarLigacao()">🔍 Analisar com IA</button>
+        </div>
+
+        <div class="amostra-form-panel" id="amostraFormWpp">
+          <div class="detail-card-title" style="margin-bottom:16px">💬 Análise de WhatsApp</div>
+          <div class="dna-toggle" style="margin-bottom:16px">
+            <button class="dna-toggle-btn active" id="wppTabArq" onclick="switchWppTab('arquivo')">📄 Upload .txt</button>
+            <button class="dna-toggle-btn" id="wppTabColar" onclick="switchWppTab('colar')">✏️ Colar conversa</button>
+          </div>
+          <div id="wppPanelArquivo">
+            <label class="amostra-field-label">Arquivo da Conversa (.txt exportado do WhatsApp)</label>
+            <div class="amostra-dropzone" onclick="document.getElementById('wppFileInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--orange)'" ondragleave="this.style.borderColor=''" ondrop="handleAmostraWppDrop(event)">
+              <div class="amostra-dropzone-icon">💬</div>
+              <div class="amostra-dropzone-text">Clique para selecionar ou arraste o arquivo</div>
+              <div class="amostra-dropzone-hint">Exporte o chat → "Exportar conversa" → sem mídia → .txt</div>
+            </div>
+            <input type="file" id="wppFileInput" accept=".txt" style="display:none" onchange="handleAmostraWppSelect(this)">
+            <div class="amostra-file-selected" id="wppFileSelected">
+              <span style="font-size:20px">💬</span>
+              <span id="wppFileName" style="flex:1;font-size:13px"></span>
+              <span id="wppFileSize" style="font-size:11px;color:var(--text-muted)"></span>
+            </div>
+          </div>
+          <div id="wppPanelColar" style="display:none">
+            <label class="amostra-field-label">Cole a conversa do WhatsApp abaixo</label>
+            <textarea class="amostra-textarea" id="wppTextarea" placeholder="[12/03/2026, 10:32] Cliente: Boa tarde, vi o anúncio do Civic...&#10;[12/03/2026, 10:34] Vendedor: Oi! Tá aqui: R$189.900..."></textarea>
+          </div>
+          <label class="amostra-field-label">Nome do Vendedor</label>
+          <input type="text" class="amostra-input" id="wppVendedorNome" placeholder="Ex: Rafael Lima">
+          <button class="amostra-btn" onclick="analisarWhatsApp()">🔍 Analisar com IA</button>
+        </div>
+
+        <div class="amostra-loading" id="amostraLoading">
+          <div class="amostra-spinner"></div>
+          <div class="amostra-loading-text">Analisando atendimento com IA...</div>
+          <div class="amostra-loading-sub">Isso leva cerca de 60 segundos ☕</div>
+          <div style="margin-top:16px;display:flex;flex-direction:column;gap:6px;max-width:320px;margin-left:auto;margin-right:auto" id="amostraSteps"></div>
+        </div>
+
+        <div class="amostra-result" id="amostraResult">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div class="section-title" style="font-size:16px">Resultado da Análise</div>
+            <button class="section-back" onclick="resetAmostra()">← Nova Análise</button>
+          </div>
+          <div id="amostraResultContent"></div>
+        </div>
+      </div>
+
+      <!-- VIEW: CONFIG -->
+      <div class="view" id="view-config">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Configuracoes</div>
+            <div class="section-subtitle">Personalize o Sales Analytics Pro para sua empresa</div>
+          </div>
+        </div>
+        <div class="detail-card full">
+          <div class="detail-card-title">Dados da Empresa</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px">Nome da Empresa</label><input class="search-box" id="cfgEmpresa" value="AutoElite Veiculos"></div>
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px">Nicho</label><input class="search-box" value="Lojas de Carros" disabled></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== DATA ====================
+const CALLS_DATA = [
+  // ===== CARLOS MENDES — 9 calls =====
+  {id:"demo-c01",canal:"ligacao",name:"Roberto Alves",closer:"Carlos Mendes",date:"2026-03-10",duration:"24:15",score:9.4,classification:"Boa",closing_probability:95,veiculo_interesse:"Jeep Compass Limited 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$35.000 + usado",urgencia_compra:"Alta — câmbio com problema grave",next_step:"FECHADO — Assinatura segunda-feira",performance:{abordagem:9.5,qualificacao:9.5,apresentacao:9.5,test_drive:9,objecoes:9.5,fechamento:9,pos_venda:9},objections:[{type:"Esta caro",handled:true,quality:"Excelente",moment:"16:20"},{type:"Quero vender meu carro atual primeiro",handled:true,quality:"Excelente",moment:"19:40"}],top_improvements:["Poderia ter fechado na visita sem precisar de retorno","Documentar avaliação do usado com proposta formal na hora","Stack de valor ainda mais detalhado com calculo de economia mensal"],critical_moments:[{time:"04:00",type:"positivo",desc:"Qualificou uso familiar + km/mês + problema com câmbio atual — urgência real"},{time:"16:20",type:"positivo",desc:"Reverteu objecão com stack: 3 revisoes + garantia 3 anos + IPVA + pelicula"},{time:"22:00",type:"positivo",desc:"Ofereceu avaliar usado como entrada — cliente saiu pronto para fechar"}],nepq_analysis:{situacao:10,problema:9,implicacao:9,fechamento:9},hormozi_analysis:{stack_valor:10,custo_inacao:9,reversao_risco:9},resumo:"Atendimento impecavel. Carlos qualificou profundamente, identificou urgência real com câmbio com problema, fez test drive dirigido a dor do cliente e reverteu objecão de preco com stack de valor completo."},
+
+  {id:"demo-c02",canal:"ligacao",name:"Flavia Mendonca",closer:"Carlos Mendes",date:"2026-03-08",duration:"21:30",score:8.9,classification:"Boa",closing_probability:90,veiculo_interesse:"Toyota Corolla Cross 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$25.000",urgencia_compra:"Alta — filhos adolescentes, segurança em primeiro lugar",next_step:"FECHADO — Retirada quinta-feira",performance:{abordagem:9,qualificacao:9,apresentacao:9,test_drive:8.5,objecoes:9,fechamento:8.5,pos_venda:9},objections:[{type:"Preciso falar com minha esposa",handled:true,quality:"Excelente",moment:"14:30"},{type:"Vi mais barato em outro lugar",handled:true,quality:"Boa",moment:"17:50"}],top_improvements:["Calcular depreciacao do usado para reforcar urgência","Incluir seguro no stack de valor","Fechar na mesma ligacao — cliente estava pronta"],critical_moments:[{time:"05:00",type:"positivo",desc:"Explorou medo de segurança — filhos dirigem o carro aos fins de semana"},{time:"14:30",type:"positivo",desc:"Trouxe a esposa para a ligacao em conferência proativamente — eliminou objecão antes de virar bloqueio"},{time:"18:00",type:"positivo",desc:"Reverteu preco com custo total de propriedade vs carro atual"}],nepq_analysis:{situacao:9,problema:9,implicacao:9,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:9,reversao_risco:8},resumo:"Carlos identificou o gatilho emocional correto — segurança dos filhos — e construiu toda a apresentacao em torno disso. Trouxe a esposa proativamente, eliminando a objecão antes de virar bloqueio."},
+
+  {id:"demo-c03",canal:"ligacao",name:"Marcos Bertolucci",closer:"Carlos Mendes",date:"2026-03-06",duration:"27:40",score:9.1,classification:"Boa",closing_probability:92,veiculo_interesse:"Toyota Hilux SRV 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$60.000 + Hilux 2019",urgencia_compra:"Alta — safra começa em abril",next_step:"FECHADO — Financiamento aprovado, retirada sexta",performance:{abordagem:9.5,qualificacao:9,apresentacao:9,test_drive:9.5,objecoes:9,fechamento:8.5,pos_venda:9},objections:[{type:"Esta caro",handled:true,quality:"Excelente",moment:"18:00"},{type:"Vou ver em outras lojas",handled:true,quality:"Boa",moment:"22:30"}],top_improvements:["Trazer planilha de ROI impressa no atendimento","Incluir seguro agricola no stack","Fechar taxa rural especial antes da visita seguinte"],critical_moments:[{time:"06:00",type:"positivo",desc:"Identificou produtor rural — safra de soja em abril, calculou ROI da picape ao vivo"},{time:"18:00",type:"positivo",desc:"Reverteu 'esta caro' mostrando que 1 safra sem parada cobre o upgrade"},{time:"24:00",type:"positivo",desc:"Test drive off-road — cliente emocionado com tracao 4x4 no barro"}],nepq_analysis:{situacao:10,problema:9,implicacao:10,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:10,reversao_risco:9},resumo:"Atendimento exemplar para produtor rural. Carlos calculou o ROI da safra ao vivo, transformou o preco alto em investimento com retorno mensuravel e fez test drive off-road. Cliente fechou Hilux SRV sem hesitar."},
+
+  {id:"demo-c04",canal:"ligacao",name:"Juliana Pires",closer:"Carlos Mendes",date:"2026-03-04",duration:"19:05",score:8.7,classification:"Boa",closing_probability:88,veiculo_interesse:"Fiat Pulse Audace 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$12.000",urgencia_compra:"Alta — motor furado, carro na oficina",next_step:"FECHADO — Entregue com pelicula inclusa",performance:{abordagem:8.5,qualificacao:9,apresentacao:8.5,test_drive:8.5,objecoes:8.5,fechamento:9,pos_venda:8.5},objections:[{type:"Nao sei se financiamento vai aprovar",handled:true,quality:"Excelente",moment:"10:00"},{type:"Esta caro",handled:true,quality:"Boa",moment:"14:30"}],top_improvements:["Registrar avaliacao do carro na oficina como leverage","Stack com seguro no 1 ano fortaleceria mais","Excelente fechamento — replicar esse modelo para a equipe"],critical_moments:[{time:"03:00",type:"positivo",desc:"Identificou urgência real — motor furado, carro na oficina, sem transporte"},{time:"10:00",type:"positivo",desc:"Fez pre-analise de financiamento ao vivo — cliente aprovado em 8 minutos"},{time:"16:00",type:"positivo",desc:"Fechou com pelicula, tapetes e 1 revisao no stack — cliente saiu euforico"}],nepq_analysis:{situacao:9,problema:9,implicacao:8,fechamento:9},hormozi_analysis:{stack_valor:9,custo_inacao:8,reversao_risco:9},resumo:"Carlos aproveitou a urgência do motor furado para criar FOMO real. Fez pre-analise ao vivo, eliminou a principal barreira e fechou com stack incluindo pelicula e 1 revisao. Fechamento impecavel."},
+
+  {id:"demo-c05",canal:"whatsapp",name:"Diego Santana",closer:"Carlos Mendes",date:"2026-03-09",duration:"—",score:8.5,classification:"Boa",closing_probability:87,veiculo_interesse:"Volkswagen T-Cross Highline 2025",test_drive:false,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$20.000",urgencia_compra:"Alta — quer trocar no mes",whatsapp_metrics:{tempo_primeira_resposta:3,tempo_medio_resposta:5,midia_enviada:true,followups:4,fora_expediente:false},next_step:"FECHADO — Proposta digital assinada",performance:{abordagem:9,qualificacao:8.5,apresentacao:8.5,test_drive:4,objecoes:8.5,fechamento:8.5,pos_venda:9},objections:[{type:"Esta caro",handled:true,quality:"Boa",moment:"msg 9"},{type:"Vou pesquisar mais",handled:true,quality:"Boa",moment:"msg 14"}],top_improvements:["Convidar para test drive presencial antes de fechar","Video tour do interior seria ainda mais persuasivo","Excelente uso de midia — modelo para toda a equipe"],critical_moments:[{time:"msg 2",type:"positivo",desc:"Respondeu em 3 minutos — cliente ficou impressionado e comentou isso"},{time:"msg 6",type:"positivo",desc:"Enviou video do T-Cross no estoque + ficha tecnica em PDF + simulacao de financiamento"},{time:"msg 15",type:"positivo",desc:"Follow-up com oferta de test drive personalizado converteu em fechamento digital"}],nepq_analysis:{situacao:9,problema:8,implicacao:8,fechamento:8},hormozi_analysis:{stack_valor:9,custo_inacao:8,reversao_risco:8},resumo:"Atendimento WhatsApp de referência. Carlos respondeu em 3 minutos, enviou video + ficha tecnica + simulacao e fez 4 follow-ups. Cliente fechou T-Cross sem precisar ir a loja. Benchmark de atendimento digital."},
+
+  {id:"demo-c06",canal:"whatsapp",name:"Renata Campos",closer:"Carlos Mendes",date:"2026-03-07",duration:"—",score:7.8,classification:"Boa",closing_probability:68,veiculo_interesse:"Chevrolet Tracker Premier 2025",test_drive:false,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$18.000",urgencia_compra:"Media — 2 semanas",whatsapp_metrics:{tempo_primeira_resposta:4,tempo_medio_resposta:6,midia_enviada:true,followups:3,fora_expediente:false},next_step:"Test drive agendado para sabado — proposta pendente",performance:{abordagem:8.5,qualificacao:8,apresentacao:8,test_drive:3,objecoes:8,fechamento:7.5,pos_venda:8},objections:[{type:"Preciso falar com minha esposa",handled:true,quality:"Boa",moment:"msg 11"},{type:"Vou esperar mais um pouco",handled:true,quality:"Regular",moment:"msg 18"}],top_improvements:["Fechar com mais assertividade quando cliente esta quase pronta","Trazer a esposa para o test drive juntas","Follow-up com urgência de disponibilidade de estoque"],critical_moments:[{time:"msg 3",type:"positivo",desc:"Enviou fotos reais do Tracker no estoque + lista de itens de serie"},{time:"msg 11",type:"positivo",desc:"Incluiu esposa na conversa com link do catalogo e cores disponiveis"},{time:"msg 19",type:"negativo",desc:"Perdeu oportunidade de fechar — recuou quando cliente hesitou"}],nepq_analysis:{situacao:8,problema:8,implicacao:8,fechamento:7},hormozi_analysis:{stack_valor:8,custo_inacao:8,reversao_risco:7},resumo:"Carlos conduziu bem o WhatsApp, respondeu em 4 minutos e enviou midias. Perdeu oportunidade de fechar na conversa quando cliente estava quase pronta. Agendou test drive como proximo passo solido."},
+
+  {id:"demo-c07",canal:"whatsapp",name:"Thiago Drummond",closer:"Carlos Mendes",date:"2026-03-05",duration:"—",score:9.2,classification:"Boa",closing_probability:93,veiculo_interesse:"Honda Civic Touring 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$45.000",urgencia_compra:"Alta — promocao de taxa vence no mes",whatsapp_metrics:{tempo_primeira_resposta:2,tempo_medio_resposta:4,midia_enviada:true,followups:5,fora_expediente:false},next_step:"FECHADO — Entregue com taxa 0,79% a.m.",performance:{abordagem:9.5,qualificacao:9,apresentacao:9.5,test_drive:9,objecoes:9,fechamento:9,pos_venda:9.5},objections:[{type:"Esta caro",handled:true,quality:"Excelente",moment:"msg 7"},{type:"Vi mais barato em outro lugar",handled:true,quality:"Excelente",moment:"msg 16"}],top_improvements:["Atendimento quase perfeito — documentar como case de referência","Verificar se pos-venda foi registrado no CRM","2 minutos de resposta e o benchmark absoluto da equipe"],critical_moments:[{time:"msg 1",type:"positivo",desc:"Respondeu em 2 minutos com video exclusivo do Civic disponivel no estoque"},{time:"msg 7",type:"positivo",desc:"Reverteu 'esta caro' com stack: taxa 0,79%, seguro 1 ano, 3 revisoes e garantia 5 anos"},{time:"msg 18",type:"positivo",desc:"Converteu conversa digital em test drive + fechamento presencial no mesmo dia"}],nepq_analysis:{situacao:9,problema:9,implicacao:9,fechamento:9},hormozi_analysis:{stack_valor:10,custo_inacao:9,reversao_risco:9},resumo:"Melhor atendimento WhatsApp do mes. Carlos respondeu em 2 minutos com video, montou stack irresistivel, reverteu duas objecoes com dados concretos e converteu em test drive + fechamento presencial no mesmo dia."},
+
+  {id:"demo-c08",canal:"presencial",name:"Carla Ferreira",closer:"Carlos Mendes",date:"2026-03-11",duration:"38:00",score:8.6,classification:"Boa",closing_probability:89,veiculo_interesse:"Hyundai HB20 Platinum 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$10.000",urgencia_compra:"Alta — primeiro carro, trabalho novo",formulario_preenchido:true,checklist_presencial:{recepcao:true,qualificacao:true,apresentacao:true,test_drive:true,proposta:true,negociacao:true,fechamento:true,proximo_passo:true},next_step:"FECHADO — Documentacao assinada na hora",performance:{abordagem:9,qualificacao:8.5,apresentacao:8.5,test_drive:9,objecoes:8.5,fechamento:8.5,pos_venda:8},objections:[{type:"Nao sei se financiamento vai aprovar",handled:true,quality:"Excelente",moment:"18:00"},{type:"Esta caro",handled:true,quality:"Boa",moment:"24:30"}],top_improvements:["Negociacao poderia ter sido mais assertiva","Incluir app de rastreamento no stack de valor","Excelente recepcao — manter como padrao obrigatorio"],critical_moments:[{time:"06:00",type:"positivo",desc:"Recepcao com cafe e tour pela loja — cliente se sentiu especial"},{time:"18:00",type:"positivo",desc:"Fez pre-analise de financiamento ao vivo — aprovado em 8 minutos, objecao eliminada"},{time:"30:00",type:"positivo",desc:"Durante o test drive, cliente ligou para a mae de euforia — sinal maximo de compra"}],nepq_analysis:{situacao:9,problema:8,implicacao:8,fechamento:8},hormozi_analysis:{stack_valor:8,custo_inacao:8,reversao_risco:9},resumo:"Carlos conduziu atendimento presencial completo: recepcao VIP, qualificacao, financiamento aprovado na hora e test drive emocional. Cliente ligou para a mae durante o test drive — sinal maximo de compra."},
+
+  {id:"demo-c09",canal:"presencial",name:"Eduardo Lacerda",closer:"Carlos Mendes",date:"2026-03-03",duration:"42:00",score:8.3,classification:"Boa",closing_probability:74,veiculo_interesse:"Toyota SW4 Diamond 7 lugares 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$80.000 + SW4 2021",urgencia_compra:"Media — empresa quer renovar frota",formulario_preenchido:true,checklist_presencial:{recepcao:true,qualificacao:true,apresentacao:true,test_drive:true,proposta:true,negociacao:true,fechamento:false,proximo_passo:true},next_step:"Reuniao com diretor financeiro na quinta — proposta pronta",performance:{abordagem:8.5,qualificacao:9,apresentacao:8.5,test_drive:8.5,objecoes:8,fechamento:7,pos_venda:8},objections:[{type:"Preciso falar com meu socio",handled:true,quality:"Boa",moment:"28:00"},{type:"Esta caro",handled:true,quality:"Boa",moment:"34:00"}],top_improvements:["Tentar mini-fechamento com entrada antes de envolver o socio","Calcular custo de aluguel de van vs compra do SW4","Levar case de outra empresa que comprou para validacao social"],critical_moments:[{time:"08:00",type:"positivo",desc:"Identificou necessidade de frota — 3 executivos viajam juntos toda semana"},{time:"28:00",type:"positivo",desc:"Agendou reuniao com socio proativamente e preparou proposta formal"},{time:"38:00",type:"negativo",desc:"Perdeu chance de fechar parcialmente com entrada — socio pode barrar no financeiro"}],nepq_analysis:{situacao:9,problema:8,implicacao:8,fechamento:7},hormozi_analysis:{stack_valor:9,custo_inacao:8,reversao_risco:8},resumo:"Atendimento de alto nivel para venda corporativa. Carlos mapeou a necessidade de frota, conduziu test drive com executivos e montou proposta completa. Perdeu chance de fechar antes de envolver socio."},
+
+  // ===== AMANDA TORRES — 8 calls (score medio 6.2) =====
+  {id:"demo-a01",canal:"ligacao",name:"Patricia Albuquerque",closer:"Amanda Torres",date:"2026-03-10",duration:"17:20",score:6.8,classification:"Boa",closing_probability:52,veiculo_interesse:"Nissan Kicks Exclusive 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:false,entrada_disponivel:"R$14.000",urgencia_compra:"Media — 1 mes",next_step:"Proposta enviada — aguardando retorno sobre financiamento",performance:{abordagem:7.5,qualificacao:7,apresentacao:7,test_drive:7,objecoes:6,fechamento:6,pos_venda:6.5},objections:[{type:"Nao sei se financiamento vai aprovar",handled:false,quality:"Regular",moment:"11:00"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"15:30"}],top_improvements:["Fazer pre-analise de financiamento ao vivo quando cliente hesitar","Nunca aceitar 'vou pensar' sem proximo passo definido e data agendada","Criar urgência com estoque limitado do Kicks Exclusive"],critical_moments:[{time:"04:00",type:"positivo",desc:"Boa qualificacao de uso — trabalho a 20km, filha na escola, precisa de espaco"},{time:"11:00",type:"negativo",desc:"Cliente levantou duvida sobre financiamento — Amanda nao aproveitou para resolver na hora"},{time:"15:30",type:"negativo",desc:"Aceitou 'vou pensar e te ligo' sem criar urgência ou proximo passo firme"}],nepq_analysis:{situacao:7,problema:6,implicacao:5,fechamento:6},hormozi_analysis:{stack_valor:6,custo_inacao:5,reversao_risco:6},resumo:"Amanda qualificou parcialmente e fez test drive, mas travou no fechamento. Quando cliente sinalizou inseguranca com financiamento, nao aproveitou para resolver na hora. Saiu sem proximo passo firme."},
+
+  {id:"demo-a02",canal:"ligacao",name:"Leonardo Souza",closer:"Amanda Torres",date:"2026-03-08",duration:"20:05",score:7.1,classification:"Boa",closing_probability:75,veiculo_interesse:"Hyundai Creta Ultimate 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$30.000",urgencia_compra:"Alta — carro atual foi roubado",next_step:"FECHADO — Financiamento aprovado, retirada quarta",performance:{abordagem:7.5,qualificacao:7.5,apresentacao:7.5,test_drive:7.5,objecoes:7,fechamento:6.5,pos_venda:7},objections:[{type:"Vi mais barato em outro lugar",handled:true,quality:"Regular",moment:"14:00"},{type:"Esta caro",handled:true,quality:"Regular",moment:"17:00"}],top_improvements:["Ser mais assertiva no fechamento — cliente estava pronto antes de Amanda agir","Usar urgência do carro roubado mais durante toda a apresentacao","Stack de valor mais completo com itens de serie do Creta Ultimate"],critical_moments:[{time:"03:00",type:"positivo",desc:"Urgência real — carro roubado, cliente usando app de transporte ha 2 semanas"},{time:"14:00",type:"positivo",desc:"Reverteu preco com custo do seguro incluso e garantia 5 anos"},{time:"18:00",type:"negativo",desc:"Cliente pediu para fechar antes de Amanda — ela deveria ter conduzido o fechamento"}],nepq_analysis:{situacao:7,problema:7,implicacao:6,fechamento:6},hormozi_analysis:{stack_valor:7,custo_inacao:6,reversao_risco:7},resumo:"Amanda fechou mas com ajuda do cliente — ele pediu para fechar antes dela. A urgência do carro roubado facilitou muito. Precisa de assertividade no fechamento — o processo esta certo, falta o empurrao final."},
+
+  {id:"demo-a03",canal:"ligacao",name:"Sandra Oliveira",closer:"Amanda Torres",date:"2026-03-06",duration:"14:30",score:5.4,classification:"Regular",closing_probability:20,veiculo_interesse:"Chevrolet Onix Plus Premier 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Baixa",next_step:"Perdido — sem retorno do cliente",performance:{abordagem:6,qualificacao:5,apresentacao:6,test_drive:3,objecoes:5,fechamento:4.5,pos_venda:5},objections:[{type:"Vou pesquisar mais",handled:false,quality:"Fraca",moment:"09:00"},{type:"Vou ver em outras lojas",handled:false,quality:"Fraca",moment:"13:00"}],top_improvements:["Qualificar problema com carro atual antes de apresentar qualquer veiculo","Reverter 'vou pesquisar' com 'o que voce precisa comparar? Posso mostrar agora'","Nunca deixar cliente sair sem test drive agendado ou proximo passo firme"],critical_moments:[{time:"03:00",type:"negativo",desc:"Pulou qualificacao de problema e foi direto a apresentacao do Onix"},{time:"09:00",type:"negativo",desc:"Aceitou 'vou pesquisar mais' com 'tudo bem, qualquer coisa me chame'"},{time:"13:00",type:"negativo",desc:"Cliente saiu sem test drive, sem proposta e sem data de retorno"}],nepq_analysis:{situacao:5,problema:5,implicacao:4,fechamento:4},hormozi_analysis:{stack_valor:5,custo_inacao:4,reversao_risco:5},resumo:"Amanda pulou a qualificacao de problema e foi direto ao carro. Quando cliente levantou objecoes, aceitou sem questionar. Perda evitavel."},
+
+  {id:"demo-a04",canal:"whatsapp",name:"Bruno Cavalcante",closer:"Amanda Torres",date:"2026-03-09",duration:"—",score:6.5,classification:"Regular",closing_probability:45,veiculo_interesse:"Volkswagen T-Cross Comfortline 2025",test_drive:false,proposta_enviada:true,financiamento_qualificado:false,entrada_disponivel:"R$8.000",urgencia_compra:"Media — 3 semanas",whatsapp_metrics:{tempo_primeira_resposta:18,tempo_medio_resposta:28,midia_enviada:true,followups:2,fora_expediente:false},next_step:"Proposta enviada — cliente vendo com conjuge",performance:{abordagem:7,qualificacao:6.5,apresentacao:7,test_drive:3,objecoes:6,fechamento:6,pos_venda:6.5},objections:[{type:"Preciso falar com minha esposa",handled:false,quality:"Fraca",moment:"msg 12"},{type:"Esta caro",handled:true,quality:"Regular",moment:"msg 7"}],top_improvements:["Responder em menos de 5 minutos — 18 minutos deu tempo ao concorrente","Quando cliente citar conjuge, pedir contato dela para incluir na conversa","Qualificar financiamento antes de enviar proposta formal"],critical_moments:[{time:"msg 1",type:"negativo",desc:"18 minutos para primeira resposta — cliente ja tinha consultado concorrente nesse tempo"},{time:"msg 7",type:"positivo",desc:"Enviou fotos reais do T-Cross no estoque — bom uso de midia"},{time:"msg 12",type:"negativo",desc:"Nao incluiu conjuge na conversa quando objecao surgiu — perdeu chance de eliminar bloqueio"}],nepq_analysis:{situacao:7,problema:6,implicacao:5,fechamento:6},hormozi_analysis:{stack_valor:7,custo_inacao:5,reversao_risco:6},resumo:"Amanda respondeu devagar (18 min), enviou fotos mas nao incluiu conjuge quando objecao surgiu. Proposta enviada sem qualificar financiamento — risco de queda na hora de fechar."},
+
+  {id:"demo-a05",canal:"whatsapp",name:"Fernanda Castro",closer:"Amanda Torres",date:"2026-03-07",duration:"—",score:7.0,classification:"Boa",closing_probability:72,veiculo_interesse:"Hyundai HB20 Evolution 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$7.000",urgencia_compra:"Alta — trabalho novo na segunda-feira",whatsapp_metrics:{tempo_primeira_resposta:22,tempo_medio_resposta:31,midia_enviada:true,followups:2,fora_expediente:true},next_step:"FECHADO — Retirada sabado",performance:{abordagem:7.5,qualificacao:7,apresentacao:7.5,test_drive:7,objecoes:6.5,fechamento:6.5,pos_venda:7},objections:[{type:"Vou esperar mais um pouco",handled:true,quality:"Boa",moment:"msg 9"},{type:"Nao sei se financiamento vai aprovar",handled:true,quality:"Regular",moment:"msg 14"}],top_improvements:["Configurar resposta automatica fora do expediente — obrigatorio","Tempo de 22-31 minutos precisa cair para menos de 5 minutos","Follow-up mais agressivo para clientes com urgência real identificada"],critical_moments:[{time:"msg 9",type:"positivo",desc:"Usou urgência do trabalho novo corretamente para reverter 'vou esperar'"},{time:"msg 14",type:"positivo",desc:"Encaminhou para pre-aprovacao de financiamento online"},{time:"fora_expediente",type:"negativo",desc:"Respondeu fora do horario sem automacao — cliente poderia ter sido perdido"}],nepq_analysis:{situacao:7,problema:7,implicacao:7,fechamento:6},hormozi_analysis:{stack_valor:7,custo_inacao:7,reversao_risco:7},resumo:"Amanda fechou usando a urgência do trabalho novo. Mas respondeu com 22-31 minutos de atraso e sem automacao fora do expediente. Com resposta mais rapida, poderia ter fechado um dia antes sem desconto."},
+
+  {id:"demo-a06",canal:"whatsapp",name:"Rodrigo Alencar",closer:"Amanda Torres",date:"2026-03-05",duration:"—",score:4.9,classification:"Fraca",closing_probability:15,veiculo_interesse:"Chevrolet Tracker Midnight 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",whatsapp_metrics:{tempo_primeira_resposta:35,tempo_medio_resposta:42,midia_enviada:false,followups:0,fora_expediente:false},next_step:"Perdido — sem resposta ha 4 dias",performance:{abordagem:5.5,qualificacao:5,apresentacao:5.5,test_drive:2,objecoes:4.5,fechamento:4,pos_venda:4.5},objections:[{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"msg 6"},{type:"Vou ver em outras lojas",handled:false,quality:"Fraca",moment:"msg 9"}],top_improvements:["35 minutos de resposta e inaceitavel — perda automatica para quem respondeu antes","Nunca responder 'ok' para 'vou ver em outras lojas'","Enviar fotos e video mesmo sem solicitacao — carro e visual"],critical_moments:[{time:"msg 1",type:"negativo",desc:"35 minutos para resposta inicial — cliente provavelmente ja estava em outra conversa"},{time:"msg 6",type:"negativo",desc:"Aceitou 'vou pensar' com 'tudo bem, pode ir pensando'"},{time:"msg 9",type:"negativo",desc:"'Vou ver em outras lojas' — Amanda respondeu 'ok, qualquer coisa pode voltar'"}],nepq_analysis:{situacao:5,problema:5,implicacao:4,fechamento:4},hormozi_analysis:{stack_valor:4,custo_inacao:3,reversao_risco:4},resumo:"Amanda demorou 35 minutos, nao enviou nenhuma midia e aceitou todas as objecoes sem reverter. Padrao abaixo do esperado — provavelmente estava ocupada, mas cliente nao espera."},
+
+  {id:"demo-a07",canal:"presencial",name:"Luis Henrique Barros",closer:"Amanda Torres",date:"2026-03-11",duration:"31:00",score:6.2,classification:"Regular",closing_probability:48,veiculo_interesse:"Jeep Compass Sport 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:false,entrada_disponivel:"R$22.000",urgencia_compra:"Media — 2 semanas",formulario_preenchido:true,checklist_presencial:{recepcao:true,qualificacao:true,apresentacao:true,test_drive:true,proposta:true,negociacao:false,fechamento:false,proximo_passo:true},next_step:"Proposta com financiamento pendente — retorno quinta",performance:{abordagem:7,qualificacao:6.5,apresentacao:7,test_drive:6.5,objecoes:5.5,fechamento:5,pos_venda:6},objections:[{type:"Esta caro",handled:false,quality:"Fraca",moment:"22:00"},{type:"Preciso falar com minha esposa",handled:true,quality:"Regular",moment:"27:00"}],top_improvements:["Construir stack de valor ANTES de revelar o preco — nunca ao contrario","Quando cliente esta pronto, perguntar pelo fechamento diretamente","Qualificar financiamento durante a qualificacao, nao no final"],critical_moments:[{time:"08:00",type:"positivo",desc:"Boa apresentacao dos itens de seguranca e conectividade do Compass"},{time:"22:00",type:"negativo",desc:"Revelou o preco antes de construir o valor — cliente ficou preso no numero"},{time:"28:00",type:"negativo",desc:"Momento de fechar — Amanda hesitou e mudou de assunto, perdeu o momentum"}],nepq_analysis:{situacao:7,problema:6,implicacao:5,fechamento:5},hormozi_analysis:{stack_valor:6,custo_inacao:5,reversao_risco:6},resumo:"Amanda fez boa apresentacao e test drive, mas revelou o preco antes de construir o valor. Travou no momento de fechar com cliente receptivo. Padrao claro: excelente na parte tecnica, fraca no fechamento."},
+
+  {id:"demo-a08",canal:"presencial",name:"Isabela Martins",closer:"Amanda Torres",date:"2026-03-04",duration:"25:00",score:5.7,classification:"Regular",closing_probability:65,veiculo_interesse:"Renault Kwid Outsider 2025",test_drive:true,proposta_enviada:true,financiamento_qualificado:true,entrada_disponivel:"R$5.000",urgencia_compra:"Alta — mora longe, onibus cansativo",formulario_preenchido:true,checklist_presencial:{recepcao:true,qualificacao:true,apresentacao:true,test_drive:true,proposta:true,negociacao:false,fechamento:true,proximo_passo:true},next_step:"FECHADO — Financiamento aprovado, retirada sexta",performance:{abordagem:6.5,qualificacao:6,apresentacao:6,test_drive:6.5,objecoes:5,fechamento:5.5,pos_venda:5.5},objections:[{type:"Esta caro",handled:false,quality:"Fraca",moment:"16:00"},{type:"Nao sei se financiamento vai aprovar",handled:true,quality:"Regular",moment:"20:00"}],top_improvements:["Nunca baixar entrada sem autorizacao — usar stack de valor antes","A dor de 2h de onibus diario e poderosa — usar durante toda a apresentacao","O fechamento aconteceu por acidente, nao por conducao — trabalhar assertividade"],critical_moments:[{time:"06:00",type:"positivo",desc:"Identificou dor real — 2 horas de onibus por dia, exaustao e atraso no trabalho"},{time:"16:00",type:"negativo",desc:"'Esta caro' — Amanda baixou a entrada sem autorizacao ao inves de empilhar valor"},{time:"22:00",type:"positivo",desc:"Fechou depois que cliente viu a parcela aprovada no app — fechamento conduzido pelo cliente"}],nepq_analysis:{situacao:6,problema:6,implicacao:5,fechamento:5},hormozi_analysis:{stack_valor:5,custo_inacao:6,reversao_risco:5},resumo:"Amanda fechou mas cedeu na entrada sem autorizacao quando cliente objetou o preco. O fechamento foi conduzido pelo cliente. Boa identificacao de dor, fraca em reverter objecoes e conduzir o fechamento."},
+
+  // ===== RAFAEL LIMA — 8 calls (score medio 3.4) =====
+  {id:"demo-r01",canal:"ligacao",name:"Henrique Moura",closer:"Rafael Lima",date:"2026-03-10",duration:"09:20",score:3.8,classification:"Fraca",closing_probability:8,veiculo_interesse:"Honda Civic EXL 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",next_step:"Perdido — ligacao encerrada sem proximo passo",performance:{abordagem:5,qualificacao:3,apresentacao:4,test_drive:2,objecoes:3.5,fechamento:3,pos_venda:3},objections:[{type:"Esta caro",handled:false,quality:"Fraca",moment:"05:00"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"08:30"}],top_improvements:["NUNCA abrir com preco — qualificar primeiro, sempre, sem excecao","Nao validar objecao de preco — reverter com valor empilhado","Criar proximo passo sempre — nunca deixar o cliente 'ligar de volta'"],critical_moments:[{time:"01:00",type:"negativo",desc:"Abriu a ligacao direto com o preco — 'O Civic ta R$189.900'"},{time:"05:00",type:"negativo",desc:"Cliente disse 'esta caro' — Rafael respondeu 'pois e, importado ne' — VALIDOU a propria objecao"},{time:"08:30",type:"negativo",desc:"Aceitou 'vou pensar' com 'ta bom, qualquer coisa voce me liga de volta'"}],nepq_analysis:{situacao:3,problema:2,implicacao:2,fechamento:3},hormozi_analysis:{stack_valor:3,custo_inacao:2,reversao_risco:3},resumo:"Rafael abriu a ligacao com o preco sem qualificar nada. Quando cliente objetou, validou a propria objecao ('pois e, importado ne') e aceitou 'vou pensar' sem questionar. Uma das ligacoes mais fracas do mes."},
+
+  {id:"demo-r02",canal:"ligacao",name:"Vanessa Lima",closer:"Rafael Lima",date:"2026-03-08",duration:"07:15",score:2.9,classification:"Fraca",closing_probability:5,veiculo_interesse:"Jeep Compass Longitude 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",next_step:"Perdido — cliente desligou",performance:{abordagem:4,qualificacao:2,apresentacao:3,test_drive:1,objecoes:3,fechamento:2,pos_venda:2},objections:[{type:"Vou ver em outras lojas",handled:false,quality:"Fraca",moment:"04:30"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"06:45"}],top_improvements:["Qualificacao completa e obrigatoria antes de qualquer numero","Jamais oferecer desconto sem autorizacao do gerente","Reverter 'vou ver em outras lojas' com 'o que voce vai comparar?'"],critical_moments:[{time:"01:00",type:"negativo",desc:"Nao perguntou nem o uso do veiculo — foi direto ao preco e especificacoes tecnicas"},{time:"04:30",type:"negativo",desc:"'Vou ver em outras lojas' — Rafael: 'tudo bem, se quiser a gente conversa'"},{time:"06:00",type:"negativo",desc:"Ofereceu desconto de R$3.000 sem autorizacao para tentar segurar — nao funcionou"}],nepq_analysis:{situacao:2,problema:2,implicacao:1,fechamento:2},hormozi_analysis:{stack_valor:2,custo_inacao:1,reversao_risco:2},resumo:"Rafael passou 7 minutos falando de especificacoes e preco sem qualificar o cliente. Ofereceu desconto nao autorizado e perdeu assim mesmo. Score mais baixo das ligacoes do mes."},
+
+  {id:"demo-r03",canal:"ligacao",name:"Cristiano Neves",closer:"Rafael Lima",date:"2026-03-06",duration:"11:40",score:4.1,classification:"Fraca",closing_probability:12,veiculo_interesse:"Hyundai HB20 Sport 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",next_step:"Perdido — sem follow-up realizado",performance:{abordagem:5,qualificacao:3.5,apresentacao:4.5,test_drive:2,objecoes:3.5,fechamento:3.5,pos_venda:3},objections:[{type:"Vou pesquisar mais",handled:false,quality:"Fraca",moment:"07:00"},{type:"Esta caro",handled:false,quality:"Fraca",moment:"10:00"}],top_improvements:["Nunca listar itens de serie sem saber o que e relevante para o cliente","Quando cliente diz 'vou pesquisar', perguntar 'o que voce ainda precisa entender?'","Descontos sem autorizacao sao proibidos — 2a ocorrencia no mes"],critical_moments:[{time:"02:00",type:"negativo",desc:"Apresentou todos os itens de serie do HB20 sem perguntar o que importava para o cliente"},{time:"07:00",type:"negativo",desc:"'Vou pesquisar mais' — Rafael nao perguntou o que faltava, aceitou silenciosamente"},{time:"10:00",type:"negativo",desc:"Deu desconto de R$2.500 sem autorizacao e cliente ainda nao fechou — 2a ocorrencia"}],nepq_analysis:{situacao:4,problema:3,implicacao:2,fechamento:3},hormozi_analysis:{stack_valor:3,custo_inacao:2,reversao_risco:3},resumo:"Rafael listou especificacoes do HB20 sem saber o que era importante para o cliente. Quando objecoes surgiram, ofereceu desconto nao autorizado pela 2a vez no mes. Zero follow-up apos a ligacao."},
+
+  {id:"demo-r04",canal:"whatsapp",name:"Ana Paula Ramos",closer:"Rafael Lima",date:"2026-03-09",duration:"—",score:3.2,classification:"Fraca",closing_probability:6,veiculo_interesse:"Toyota Corolla Cross GR-Sport 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",whatsapp_metrics:{tempo_primeira_resposta:127,tempo_medio_resposta:218,midia_enviada:false,followups:0,fora_expediente:false},next_step:"Perdido — cliente nao respondeu mais",performance:{abordagem:4,qualificacao:3,apresentacao:3.5,test_drive:2,objecoes:3,fechamento:2.5,pos_venda:2},objections:[{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"msg 4"},{type:"Vou ver em outras lojas",handled:false,quality:"Fraca",moment:"msg 6"}],top_improvements:["2h07min para responder WhatsApp e abandono do cliente — meta: 5 minutos","Zero midia enviada em atendimento de carro e inexplicavel — o produto e visual","Follow-up deve ser feito em 4h, 24h e 48h — nunca zero"],critical_moments:[{time:"msg 1",type:"negativo",desc:"Demorou 2h07min para responder a primeira mensagem — concorrente ja tinha avancado"},{time:"msg 4",type:"negativo",desc:"'Vou pensar' — Rafael respondeu 'ok, fico a disposicao' e nunca fez follow-up"},{time:"msg 6",type:"negativo",desc:"Nenhuma foto, nenhum video, nenhum catalogo enviado em toda a conversa"}],nepq_analysis:{situacao:3,problema:3,implicacao:2,fechamento:3},hormozi_analysis:{stack_valor:2,custo_inacao:2,reversao_risco:3},resumo:"Rafael demorou 2 horas para responder no WhatsApp. Nao enviou uma unica foto ou video. Aceitou todas as objecoes sem reverter e nao fez nenhum follow-up. Abandono completo do cliente."},
+
+  {id:"demo-r05",canal:"whatsapp",name:"Guilherme Pinto",closer:"Rafael Lima",date:"2026-03-07",duration:"—",score:3.5,classification:"Fraca",closing_probability:9,veiculo_interesse:"Chevrolet Tracker 1.0 LTZ 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",whatsapp_metrics:{tempo_primeira_resposta:85,tempo_medio_resposta:195,midia_enviada:false,followups:0,fora_expediente:true},next_step:"Perdido — 5 dias sem resposta",performance:{abordagem:4.5,qualificacao:3,apresentacao:3.5,test_drive:2,objecoes:3,fechamento:3,pos_venda:2.5},objections:[{type:"Esta caro",handled:false,quality:"Fraca",moment:"msg 5"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"msg 7"}],top_improvements:["Configurar automacao de resposta fora do expediente — obrigatorio urgente","Nunca responder 'e o melhor preco que tenho' sem empacotar valor","1h25min de resposta = cliente perdido para quem respondeu primeiro"],critical_moments:[{time:"msg 1",type:"negativo",desc:"1h25min de demora — cliente estava quente e esfriou completamente"},{time:"msg 5",type:"negativo",desc:"'Esta caro' — Rafael enviou apenas 'e o melhor preco que tenho' sem nenhum stack"},{time:"fora_expediente",type:"negativo",desc:"Cliente mandou mensagem as 21h, Rafael respondeu as 9h — sem automacao configurada"}],nepq_analysis:{situacao:3,problema:3,implicacao:2,fechamento:3},hormozi_analysis:{stack_valor:3,custo_inacao:2,reversao_risco:2},resumo:"Rafael demorou 1h25min para responder, nao configurou automacao fora do expediente, nao enviou midia e respondeu objecao de preco com 'e o melhor preco que tenho'. Padrao identico ao caso Corolla."},
+
+  {id:"demo-r06",canal:"whatsapp",name:"Marcos Araujo",closer:"Rafael Lima",date:"2026-03-05",duration:"—",score:2.7,classification:"Fraca",closing_probability:4,veiculo_interesse:"Fiat Toro Ranch 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",whatsapp_metrics:{tempo_primeira_resposta:214,tempo_medio_resposta:248,midia_enviada:false,followups:0,fora_expediente:true},next_step:"Perdido — cliente deixou de responder",performance:{abordagem:3,qualificacao:2,apresentacao:3,test_drive:1,objecoes:2.5,fechamento:2.5,pos_venda:2},objections:[{type:"Vou ver em outras lojas",handled:false,quality:"Fraca",moment:"msg 3"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"msg 5"}],top_improvements:["3h34min para responder destroi qualquer chance — automacao e emergencia","Responder 'sem problema' para 'vou ver em outras lojas' e rendicao comercial","Mensagem as 23h47 sem contexto e spam — treinamento de etiqueta digital urgente"],critical_moments:[{time:"msg 1",type:"negativo",desc:"3h34min para primeira resposta — recorde negativo do mes, cliente ja tinha fechado"},{time:"msg 3",type:"negativo",desc:"'Vou ver em outras lojas' — Rafael: 'sem problema, qualquer coisa e so falar'"},{time:"msg 5",type:"negativo",desc:"Ultima mensagem de Rafael as 23h47 sem contexto — cliente nunca mais respondeu"}],nepq_analysis:{situacao:2,problema:2,implicacao:2,fechamento:2},hormozi_analysis:{stack_valor:2,custo_inacao:1,reversao_risco:2},resumo:"Pior atendimento WhatsApp do mes. Rafael demorou 3h34min (recorde negativo), nao enviou nenhum conteudo, aceitou todas as objecoes com 'sem problema' e mandou mensagem as 23h47 sem contexto. Abandono total."},
+
+  {id:"demo-r07",canal:"presencial",name:"Tatiana Souza",closer:"Rafael Lima",date:"2026-03-08",duration:"16:00",score:4.3,classification:"Fraca",closing_probability:12,veiculo_interesse:"Nissan Kicks Advance 2025",test_drive:false,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"Nao identificada",urgencia_compra:"Nao identificada",formulario_preenchido:false,checklist_presencial:{recepcao:false,qualificacao:false,apresentacao:true,test_drive:false,proposta:false,negociacao:false,fechamento:false,proximo_passo:false},next_step:"Perdido — cliente foi para concorrente",performance:{abordagem:4.5,qualificacao:3,apresentacao:5,test_drive:2,objecoes:4,fechamento:3.5,pos_venda:3.5},objections:[{type:"Vou ver em outras lojas",handled:false,quality:"Fraca",moment:"12:00"},{type:"Vou pensar e te ligo",handled:false,quality:"Fraca",moment:"14:30"}],top_improvements:["Recepcao e obrigatoria — nunca deixar cliente esperando sozinho no showroom","Inventar desculpa para nao fazer test drive e pior do que nao ter o carro","Formulario presencial e obrigatorio em TODOS os atendimentos — sem excecao"],critical_moments:[{time:"02:00",type:"negativo",desc:"Cliente esperou 4 minutos sozinho no showroom sem ser abordado"},{time:"08:00",type:"negativo",desc:"Ofereceu test drive mas disse 'o carro de demonstracao ta precisando de revisao' — desculpa inventada"},{time:"14:30",type:"negativo",desc:"Cliente saiu sem formulario, sem proposta, sem test drive, sem proximo passo"}],nepq_analysis:{situacao:4,problema:3,implicacao:2,fechamento:3},hormozi_analysis:{stack_valor:4,custo_inacao:2,reversao_risco:3},resumo:"Rafael deixou cliente esperando sem recepcao, inventou desculpa para nao fazer test drive e deixou cliente ir sem formulario, proposta ou proximo passo. Cliente foi direto para o concorrente."},
+
+  {id:"demo-r08",canal:"presencial",name:"Gabriel Monteiro",closer:"Rafael Lima",date:"2026-03-11",duration:"22:00",score:2.6,classification:"Fraca",closing_probability:3,veiculo_interesse:"Fiat Pulse Drive 2025",test_drive:true,proposta_enviada:false,financiamento_qualificado:false,entrada_disponivel:"R$15.000 a vista — cliente queria fechar na hora",urgencia_compra:"IMEDIATA — cliente disse que ia comprar",formulario_preenchido:false,checklist_presencial:{recepcao:true,qualificacao:false,apresentacao:true,test_drive:true,proposta:false,negociacao:false,fechamento:false,proximo_passo:false},next_step:"PERDIDO — cliente foi para outra loja e fechou la 2 horas depois",performance:{abordagem:5,qualificacao:2.5,apresentacao:4,test_drive:5,objecoes:1,fechamento:1,pos_venda:1},objections:[{type:"Nenhuma objecao — cliente disse que ia comprar",handled:false,quality:"Fraca",moment:"18:00"}],top_improvements:["QUANDO CLIENTE DIZER QUE VAI COMPRAR, FECHE NA HORA — nunca diga 'vou mandar a proposta'","Proposta deve ser feita presencialmente, na hora, com o gerente se necessario","Este e o caso mais grave do mes — cliente com dinheiro na mao foi embora por inacao"],critical_moments:[{time:"15:00",type:"positivo",desc:"Cliente fez test drive e disse 'Gostei muito! Esse aqui e o meu!' — sinal maximo de compra"},{time:"18:00",type:"negativo",desc:"MOMENTO CRITICO: Cliente disse 'Adorei, vou levar!' — Rafael disse 'otimo, deixa eu fazer a proposta e te mando no WhatsApp' — e NUNCA MANDOU"},{time:"20:00",type:"negativo",desc:"Cliente foi para loja ao lado, comprou o mesmo Pulse por R$2.000 a mais — estava tao motivado que pagou mais caro"}],nepq_analysis:{situacao:3,problema:2,implicacao:2,fechamento:1},hormozi_analysis:{stack_valor:2,custo_inacao:1,reversao_risco:1},resumo:"O caso mais chocante do mes. O cliente disse 'adorei, vou levar' e Rafael respondeu 'vou fazer a proposta e mando no WhatsApp' — e NUNCA MANDOU. O cliente foi para a loja ao lado e comprou o mesmo Pulse por R$2.000 a mais. Rafael perdeu um cliente com R$15.000 a vista."}
+];
+
+// ==================== STATE ====================// ==================== STATE ====================
+let currentCloser = 'Todos';
+let currentClass = 'Todos';
+let currentCanal = 'Todos';
+let searchQuery = '';
+let selectedCall = null;
+
+// ==================== HELPERS ====================
+function getScoreColor(score) {
+  if(score >= 7) return 'var(--green)';
+  if(score >= 5) return 'var(--yellow)';
+  return 'var(--red)';
+}
+function getClassCSS(c) { return c === 'Boa' ? 'boa' : c === 'Regular' ? 'regular' : 'fraca'; }
+function getCanal(c) { return c.canal || 'ligacao'; }
+function getCanalBadge(canal) {
+  const map = {
+    ligacao: '<span class="canal-badge ligacao">📞 Ligacao</span>',
+    whatsapp: '<span class="canal-badge whatsapp">💬 WhatsApp</span>',
+    presencial: '<span class="canal-badge presencial">🏪 Presencial</span>'
+  };
+  return map[canal] || map.ligacao;
+}
+function getTempoColor(min) {
+  if(min < 5) return 'var(--green)';
+  if(min < 15) return 'var(--yellow)';
+  return 'var(--red)';
+}
+function getFiltered() {
+  return CALLS_DATA.filter(c => {
+    if(currentCloser !== 'Todos' && c.closer !== currentCloser) return false;
+    if(currentClass !== 'Todos' && c.classification !== currentClass) return false;
+    if(currentCanal !== 'Todos' && getCanal(c) !== currentCanal) return false;
+    if(searchQuery && !c.name.toLowerCase().includes(searchQuery.toLowerCase()) && !c.veiculo_interesse.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    return true;
+  });
+}
+function avg(arr) { return arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1) : '0.0'; }
+
+// ==================== FILTERS ====================
+function filterCloser(name) {
+  currentCloser = name;
+  document.querySelectorAll('#closerFilter .filter-tab').forEach(b => b.classList.toggle('active', b.textContent.trim() === (name === 'Todos' ? 'Todos' : name.split(' ')[0])));
+  renderCallsList(); renderStats();
+}
+function filterClass(cls) {
+  currentClass = cls;
+  document.querySelectorAll('#classFilter .filter-tab').forEach(b => b.classList.toggle('active', b.textContent.trim() === cls));
+  renderCallsList(); renderStats();
+}
+function filterCanal(canal) {
+  currentCanal = canal;
+  document.querySelectorAll('#canalFilter .canal-btn').forEach(b => b.classList.toggle('active', b.dataset.canal === canal));
+  renderCallsList(); renderStats();
+}
+function filterSearch(val) { searchQuery = val; renderCallsList(); }
+
+// ==================== VIEWS ====================
+function showView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  if(view === 'diagnostico') renderDNA();
+  if(view === 'objecoes') renderObjectionMap();
+  if(view === 'relatorio') renderReport();
+  if(view === 'script') renderScript();
+  if(view === 'academia') renderAcademia();
+  if(view === 'amostra') initAmostra();
+}
+
+// ==================== RENDER CALLS LIST ====================
+function renderCallsList() {
+  const filtered = getFiltered();
+  const list = document.getElementById('callsList');
+  list.innerHTML = filtered.map(c => `
+    <div class="call-item ${selectedCall && selectedCall.id === c.id ? 'active' : ''}" onclick="selectCall('${c.id}')">
+      <div class="call-item-header">
+        <span class="call-item-name">${c.name}</span>
+        <span class="call-item-score ${getClassCSS(c.classification)}">${c.score}</span>
+      </div>
+      <div class="call-item-meta">
+        <span>${c.closer.split(' ')[0]}</span>
+        <span>•</span>
+        <span>${c.date}</span>
+        <span>•</span>
+        <span>${c.duration}</span>
+      </div>
+      <div class="call-item-tags">
+        ${getCanalBadge(getCanal(c))}
+        <span class="call-tag ${c.test_drive ? 'td' : 'no-td'}">${c.test_drive ? '✓ Test Drive' : '✗ Sem TD'}</span>
+        ${c.proposta_enviada ? '<span class="call-tag prop">Proposta</span>' : ''}
+        ${c.financiamento_qualificado ? '<span class="call-tag fin">Financ.</span>' : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ==================== RENDER STATS ====================
+function renderStats() {
+  const filtered = getFiltered();
+  const scores = filtered.map(c => c.score);
+  const avgScore = avg(scores);
+
+  if(currentCanal === 'whatsapp') {
+    const wpp = filtered.filter(c => c.whatsapp_metrics);
+    const avgTempo = wpp.length ? Math.round(wpp.reduce((a,c)=>a+c.whatsapp_metrics.tempo_medio_resposta,0)/wpp.length) : 0;
+    const midiaRate = wpp.length ? Math.round(wpp.filter(c=>c.whatsapp_metrics.midia_enviada).length/wpp.length*100) : 0;
+    const avgFollowup = wpp.length ? (wpp.reduce((a,c)=>a+c.whatsapp_metrics.followups,0)/wpp.length).toFixed(1) : 0;
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-card-label">Score Medio</div><div class="stat-card-value wpp">${avgScore}</div><div class="stat-card-change">${filtered.length} atendimentos WhatsApp</div></div>
+      <div class="stat-card"><div class="stat-card-label">Tempo Medio Resposta</div><div class="stat-card-value ${avgTempo<5?'green':avgTempo<15?'orange':'red'}">${avgTempo}min</div><div class="stat-card-change">${avgTempo<5?'Excelente':avgTempo<15?'Aceitavel':'Critico'}</div></div>
+      <div class="stat-card"><div class="stat-card-label">Midia Enviada</div><div class="stat-card-value ${midiaRate>=50?'green':'red'}">${midiaRate}%</div><div class="stat-card-change">${wpp.filter(c=>c.whatsapp_metrics.midia_enviada).length}/${wpp.length} conversas</div></div>
+      <div class="stat-card"><div class="stat-card-label">Follow-ups Medio</div><div class="stat-card-value wpp">${avgFollowup}</div><div class="stat-card-change">por atendimento</div></div>
+    `;
+  } else if(currentCanal === 'presencial') {
+    const tdRate = filtered.length ? Math.round(filtered.filter(c=>c.test_drive).length/filtered.length*100) : 0;
+    const formRate = filtered.length ? Math.round(filtered.filter(c=>c.formulario_preenchido).length/filtered.length*100) : 0;
+    const avgProb = filtered.length ? Math.round(filtered.reduce((a,c)=>a+c.closing_probability,0)/filtered.length) : 0;
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-card-label">Score Medio</div><div class="stat-card-value pres">${avgScore}</div><div class="stat-card-change">${filtered.length} visitas presenciais</div></div>
+      <div class="stat-card"><div class="stat-card-label">Taxa Test Drive</div><div class="stat-card-value ${tdRate>=60?'green':'red'}">${tdRate}%</div><div class="stat-card-change">${filtered.filter(c=>c.test_drive).length}/${filtered.length} visitas</div></div>
+      <div class="stat-card"><div class="stat-card-label">Formularios</div><div class="stat-card-value ${formRate>=80?'green':'orange'}">${formRate}%</div><div class="stat-card-change">${filtered.filter(c=>c.formulario_preenchido).length}/${filtered.length} preenchidos</div></div>
+      <div class="stat-card"><div class="stat-card-label">Prob. Fechamento</div><div class="stat-card-value pres">${avgProb}%</div><div class="stat-card-change">media das visitas</div></div>
+    `;
+  } else {
+    const tdRate = filtered.length ? Math.round(filtered.filter(c=>c.test_drive).length/filtered.length*100) : 0;
+    const propRate = filtered.length ? Math.round(filtered.filter(c=>c.proposta_enviada).length/filtered.length*100) : 0;
+    const avgProb = filtered.length ? Math.round(filtered.reduce((a,c)=>a+c.closing_probability,0)/filtered.length) : 0;
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-card-label">Score Medio</div><div class="stat-card-value orange">${avgScore}</div><div class="stat-card-change">${filtered.length} calls analisadas</div></div>
+      <div class="stat-card"><div class="stat-card-label">Taxa Test Drive</div><div class="stat-card-value ${tdRate>=60?'green':'red'}">${tdRate}%</div><div class="stat-card-change">${filtered.filter(c=>c.test_drive).length}/${filtered.length} calls</div></div>
+      <div class="stat-card"><div class="stat-card-label">Propostas Enviadas</div><div class="stat-card-value ${propRate>=50?'green':'red'}">${propRate}%</div><div class="stat-card-change">${filtered.filter(c=>c.proposta_enviada).length}/${filtered.length} calls</div></div>
+      <div class="stat-card"><div class="stat-card-label">Prob. Fechamento</div><div class="stat-card-value orange">${avgProb}%</div><div class="stat-card-change">media do pipeline</div></div>
+    `;
+  }
+}
+
+// ==================== SELECT CALL ====================
+function selectCall(id) {
+  selectedCall = CALLS_DATA.find(c => c.id === id);
+  renderCallsList();
+  renderCallDetail();
+  showView('calls');
+}
+
+function renderCallDetail() {
+  if(!selectedCall) {
+    document.getElementById('callDetail').innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-muted)"><div style="font-size:48px;margin-bottom:12px">🚗</div><div style="font-size:16px;font-weight:600">Selecione uma call na sidebar</div><div style="font-size:13px;margin-top:6px">Analise detalhada de cada atendimento</div></div>';
+    return;
+  }
+  const c = selectedCall;
+  const p = c.performance;
+  const canal = getCanal(c);
+  const dims = ['abordagem','qualificacao','apresentacao','test_drive','objecoes','fechamento','pos_venda'];
+  const dimLabels = {abordagem:'Abordagem & Rapport',qualificacao:'Qualificacao',apresentacao:'Apresentacao do Veiculo',test_drive:'Test Drive',objecoes:'Tratamento de Objecoes',fechamento:'Fechamento',pos_venda:'Pos-venda'};
+
+  // WPP extra section
+  let wppSection = '';
+  if(canal === 'whatsapp' && c.whatsapp_metrics) {
+    const wm = c.whatsapp_metrics;
+    wppSection = `
+      <div class="detail-card full fade-in" style="border-color:rgba(37,211,102,0.3)">
+        <div class="detail-card-title" style="color:var(--wpp)">💬 Metricas WhatsApp</div>
+        <div class="wpp-metrics-grid">
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">⚡</div>
+            <div class="wpp-metric-label">1a Resposta</div>
+            <div class="wpp-metric-value" style="color:${getTempoColor(wm.tempo_primeira_resposta)}">${wm.tempo_primeira_resposta}min</div>
+            <div class="wpp-metric-sub">${wm.tempo_primeira_resposta<5?'Excelente':wm.tempo_primeira_resposta<15?'Aceitavel':'Critico'}</div>
+          </div>
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">⏱️</div>
+            <div class="wpp-metric-label">Tempo Medio</div>
+            <div class="wpp-metric-value" style="color:${getTempoColor(wm.tempo_medio_resposta)}">${wm.tempo_medio_resposta}min</div>
+            <div class="wpp-metric-sub">${wm.tempo_medio_resposta<5?'Excelente':wm.tempo_medio_resposta<15?'Aceitavel':'Critico'}</div>
+          </div>
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">🖼️</div>
+            <div class="wpp-metric-label">Midia Enviada</div>
+            <div class="wpp-metric-value" style="color:${wm.midia_enviada?'var(--green)':'var(--red)'}">${wm.midia_enviada?'Sim':'Nao'}</div>
+            <div class="wpp-metric-sub">${wm.midia_enviada?'Fotos/videos':'Apenas texto'}</div>
+          </div>
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">🔄</div>
+            <div class="wpp-metric-label">Follow-ups</div>
+            <div class="wpp-metric-value" style="color:${wm.followups>=2?'var(--green)':'var(--yellow)'}">${wm.followups}</div>
+            <div class="wpp-metric-sub">${wm.followups>=3?'Consistente':wm.followups>=1?'Basico':'Nenhum'}</div>
+          </div>
+          <div class="wpp-metric-box">
+            <div class="wpp-metric-icon">🌙</div>
+            <div class="wpp-metric-label">Fora Expediente</div>
+            <div class="wpp-metric-value" style="color:${wm.fora_expediente?'var(--yellow)':'var(--green)'}">${wm.fora_expediente?'Sim':'Nao'}</div>
+            <div class="wpp-metric-sub">${wm.fora_expediente?'Ativar automacao':'Dentro do horario'}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // Presencial extra section
+  let presSection = '';
+  if(canal === 'presencial' && c.checklist_presencial) {
+    const ck = c.checklist_presencial;
+    const checkItems = [
+      {key:'recepcao', label:'Recepcao do Cliente'},
+      {key:'qualificacao', label:'Qualificacao Completa'},
+      {key:'apresentacao', label:'Apresentacao do Veiculo'},
+      {key:'test_drive', label:'Test Drive Realizado'},
+      {key:'proposta', label:'Proposta Formal'},
+      {key:'negociacao', label:'Negociacao Ativa'},
+      {key:'fechamento', label:'Fechamento Tentado'},
+      {key:'proximo_passo', label:'Proximo Passo Claro'}
+    ];
+    const done = checkItems.filter(i=>ck[i.key]).length;
+    const pct = Math.round(done/checkItems.length*100);
+    const pctColor = pct>=75?'var(--green)':pct>=50?'var(--yellow)':'var(--red)';
+    presSection = `
+      <div class="detail-card full fade-in" style="border-color:rgba(255,152,0,0.3)">
+        <div class="detail-card-title" style="color:var(--presencial)">🏪 Checklist Presencial</div>
+        <div class="checklist-grid">
+          ${checkItems.map(item=>`
+            <div class="checklist-item">
+              <div class="checklist-check ${ck[item.key]?'done':'miss'}">${ck[item.key]?'✓':'✗'}</div>
+              <span class="checklist-label">${item.label}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:12px;color:var(--text-muted)">Progresso do Atendimento</span>
+            <span style="font-size:14px;font-weight:800;color:${pctColor}">${done}/${checkItems.length} etapas (${pct}%)</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${pct>=75?'var(--orange-gradient)':pct>=50?'linear-gradient(135deg,#e6a817,#ffc107)':'linear-gradient(135deg,#cc2233,#ff4757)'}"></div></div>
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('callDetail').innerHTML = `
+    <div class="fade-in">
+      <div class="section-header" style="margin-bottom:16px">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+            <div class="section-title">${c.name} — ${c.veiculo_interesse}</div>
+            ${getCanalBadge(canal)}
+          </div>
+          <div class="section-subtitle">${c.closer} • ${c.date} • ${c.duration} • Prob. fechamento: ${c.closing_probability}%</div>
+        </div>
+      </div>
+
+      <div class="car-metrics">
+        <div class="car-metric"><div class="car-metric-icon">🚗</div><div class="car-metric-label">Test Drive</div><div class="car-metric-value ${c.test_drive?'yes':'no'}">${c.test_drive?'Realizado':'Nao feito'}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">📋</div><div class="car-metric-label">Proposta</div><div class="car-metric-value ${c.proposta_enviada?'yes':'no'}">${c.proposta_enviada?'Enviada':'Nao enviada'}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">💰</div><div class="car-metric-label">Financiamento</div><div class="car-metric-value ${c.financiamento_qualificado?'yes':'no'}">${c.financiamento_qualificado?'Qualificado':'Nao qualif.'}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">💵</div><div class="car-metric-label">Entrada</div><div class="car-metric-value" style="color:var(--text-primary)">${c.entrada_disponivel}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">⏰</div><div class="car-metric-label">Urgencia</div><div class="car-metric-value" style="color:var(--text-primary);font-size:11px">${c.urgencia_compra}</div></div>
+        <div class="car-metric"><div class="car-metric-icon">🎯</div><div class="car-metric-label">Proximo Passo</div><div class="car-metric-value" style="color:var(--orange);font-size:11px">${c.next_step}</div></div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-card" style="text-align:center">
+          <div class="detail-card-title">Score Geral</div>
+          <div class="score-big ${getClassCSS(c.classification)}">${c.score}</div>
+          <div class="score-label">${c.classification}</div>
+          <div style="margin-top:12px;font-size:13px;color:var(--text-secondary);line-height:1.5">${c.resumo}</div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-card-title">Performance por Dimensao</div>
+          ${dims.map(d => `
+            <div class="perf-bar-row">
+              <span class="perf-bar-label">${dimLabels[d]}</span>
+              <div class="perf-bar-track"><div class="perf-bar-fill" style="width:${p[d]*10}%;background:${getScoreColor(p[d])}"></div></div>
+              <span class="perf-bar-value" style="color:${getScoreColor(p[d])}">${p[d]}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-card-title">Objecoes</div>
+          ${c.objections.map(o => `
+            <div class="objection-item">
+              <div class="objection-badge ${o.handled?'handled':'missed'}">${o.handled?'✓':'✗'}</div>
+              <div class="objection-text">"${o.type}"<br><span style="font-size:11px;color:var(--text-muted)">em ${o.moment}</span></div>
+              <span class="objection-quality" style="background:${o.quality==='Excelente'||o.quality==='Boa'?'rgba(0,210,106,0.15)':o.quality==='Regular'?'rgba(255,193,7,0.15)':'rgba(255,71,87,0.15)'};color:${o.quality==='Excelente'||o.quality==='Boa'?'var(--green)':o.quality==='Regular'?'var(--yellow)':'var(--red)'}">${o.quality}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-card-title">Top 3 Melhorias</div>
+          ${c.top_improvements.map((imp,i) => `
+            <div class="improvement-item">
+              <div class="improvement-num">${i+1}</div>
+              <div class="improvement-text">${imp}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="detail-card full">
+          <div class="detail-card-title">Momentos Criticos</div>
+          ${c.critical_moments.map(m => `
+            <div class="moment-item">
+              <span class="moment-time">${m.time}</span>
+              <span class="moment-dot ${m.type}"></span>
+              <span class="moment-text">${m.desc}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-card-title">Analise NEPQ</div>
+          <div class="methodology-grid">
+            ${Object.entries(c.nepq_analysis).map(([k,v]) => `
+              <div class="methodology-item">
+                <div class="methodology-score" style="background:${getScoreColor(v)};color:var(--navy)">${v}</div>
+                <div><div class="methodology-name">${k.charAt(0).toUpperCase()+k.slice(1)}</div></div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-card-title">Analise Hormozi</div>
+          <div class="methodology-grid">
+            ${Object.entries(c.hormozi_analysis).map(([k,v]) => {
+              const labels = {stack_valor:'Stack de Valor',custo_inacao:'Custo da Inacao',reversao_risco:'Reversao de Risco'};
+              return `
+              <div class="methodology-item">
+                <div class="methodology-score" style="background:${getScoreColor(v)};color:var(--navy)">${v}</div>
+                <div><div class="methodology-name">${labels[k]||k}</div></div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+
+      ${wppSection}
+      ${presSection}
+    </div>
+  `;
+}
+
+// ==================== DNA DO CLOSER ====================
+function renderDNA() {
+  const closers = [...new Set(CALLS_DATA.map(c=>c.closer))];
+  const toggleEl = document.getElementById('dnaToggle');
+  if(!toggleEl.innerHTML) {
+    toggleEl.innerHTML = closers.map((c,i) => `<button class="dna-toggle-btn ${i===0?'active':''}" onclick="renderDNAFor('${c}',this)">${c.split(' ')[0]}</button>`).join('');
+  }
+  renderDNAFor(closers[0]);
+}
+function renderDNAFor(closerName, btn) {
+  if(btn) { document.querySelectorAll('.dna-toggle-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+  const calls = CALLS_DATA.filter(c=>c.closer===closerName);
+  const dims = ['abordagem','qualificacao','apresentacao','test_drive','objecoes','fechamento','pos_venda'];
+  const dimLabels = {abordagem:'Abordagem',qualificacao:'Qualificacao',apresentacao:'Apresentacao',test_drive:'Test Drive',objecoes:'Objecoes',fechamento:'Fechamento',pos_venda:'Pos-venda'};
+  const avgs = {};
+  dims.forEach(d => { avgs[d] = calls.length ? (calls.reduce((a,c)=>a+c.performance[d],0)/calls.length).toFixed(1) : 0; });
+  const totalAvg = (Object.values(avgs).reduce((a,v)=>a+parseFloat(v),0)/dims.length).toFixed(1);
+  const weakest = dims.reduce((min,d)=>parseFloat(avgs[d])<parseFloat(avgs[min])?d:min, dims[0]);
+  const strongest = dims.reduce((max,d)=>parseFloat(avgs[d])>parseFloat(avgs[max])?d:max, dims[0]);
+  const tdRate = calls.length ? Math.round(calls.filter(c=>c.test_drive).length/calls.length*100) : 0;
+  const propRate = calls.length ? Math.round(calls.filter(c=>c.proposta_enviada).length/calls.length*100) : 0;
+
+  document.getElementById('dnaContent').innerHTML = `
+    <div class="detail-card" style="text-align:center">
+      <div class="detail-card-title">${closerName}</div>
+      <div class="score-big" style="color:${getScoreColor(parseFloat(totalAvg))}">${totalAvg}</div>
+      <div class="score-label">Score Medio • ${calls.length} calls</div>
+      <div style="display:flex;gap:16px;justify-content:center;margin-top:16px">
+        <div><span style="font-size:24px;font-weight:800;color:var(--green)">${tdRate}%</span><br><span style="font-size:11px;color:var(--text-muted)">Test Drive</span></div>
+        <div><span style="font-size:24px;font-weight:800;color:var(--blue)">${propRate}%</span><br><span style="font-size:11px;color:var(--text-muted)">Propostas</span></div>
+      </div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-title">Performance por Dimensao</div>
+      ${dims.map(d => `
+        <div class="perf-bar-row">
+          <span class="perf-bar-label">${dimLabels[d]}</span>
+          <div class="perf-bar-track"><div class="perf-bar-fill" style="width:${avgs[d]*10}%;background:${getScoreColor(parseFloat(avgs[d]))}"></div></div>
+          <span class="perf-bar-value" style="color:${getScoreColor(parseFloat(avgs[d]))}">${avgs[d]}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="detail-card full">
+      <div class="detail-card-title">O Que Treinar</div>
+      <div class="improvement-item">
+        <div class="improvement-num" style="background:var(--red)">!</div>
+        <div class="improvement-text"><strong>Ponto fraco:</strong> ${dimLabels[weakest]} (${avgs[weakest]}) — Focar treinamento nesta dimensao</div>
+      </div>
+      <div class="improvement-item">
+        <div class="improvement-num" style="background:var(--green)">★</div>
+        <div class="improvement-text"><strong>Ponto forte:</strong> ${dimLabels[strongest]} (${avgs[strongest]}) — Manter e usar como referencia</div>
+      </div>
+      <div style="margin-top:12px;padding:12px;background:var(--navy);border-radius:10px">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Recomendacao</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.5">
+          ${parseFloat(avgs.fechamento) < 6 ? `<strong style="color:var(--orange)">${closerName.split(' ')[0]}</strong> precisa trabalhar assertividade no fechamento. Treinar: pedir compromisso com clareza, usar escassez real, e nao recuar quando o cliente esta pronto.` :
+          parseFloat(avgs.qualificacao) < 6 ? `<strong style="color:var(--orange)">${closerName.split(' ')[0]}</strong> precisa melhorar a qualificacao. Treinar: perguntas NEPQ de situacao e problema antes de apresentar qualquer veiculo.` :
+          parseFloat(avgs.test_drive) < 5 ? `<strong style="color:var(--orange)">${closerName.split(' ')[0]}</strong> precisa SEMPRE oferecer test drive. E a arma emocional mais forte na venda de carros.` :
+          `<strong style="color:var(--orange)">${closerName.split(' ')[0]}</strong> tem performance consistente. Focar em micro-otimizacoes de ${dimLabels[weakest].toLowerCase()} para subir o nivel.`}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ==================== OBJECTION MAP ====================
+function renderObjectionMap() {
+  const objMap = {};
+  const canalBadgeMap = {
+    ligacao: '<span class="canal-badge ligacao">📞 Ligacao</span>',
+    whatsapp: '<span class="canal-badge whatsapp">💬 WhatsApp</span>',
+    presencial: '<span class="canal-badge presencial">🏪 Presencial</span>'
+  };
+
+  CALLS_DATA.forEach(c => {
+    const canal = getCanal(c);
+    c.objections.forEach(o => {
+      if(!objMap[o.type]) objMap[o.type] = {count:0,handled:0,calls:[],canals:{}};
+      objMap[o.type].count++;
+      if(o.handled) objMap[o.type].handled++;
+      objMap[o.type].calls.push({closer:c.closer,quality:o.quality,name:c.name});
+      objMap[o.type].canals[canal] = (objMap[o.type].canals[canal]||0) + 1;
+    });
+  });
+  const sorted = Object.entries(objMap).sort((a,b)=>b[1].count-a[1].count);
+
+  const scripts = {
+    "Esta caro": "NEPQ: 'Entendo sua preocupacao com o valor. Me diz: alem do preco, o que mais e importante pra voce nessa compra?'\nHORMOZI: 'Vamos fazer uma conta: seu carro atual gasta R$X/mes em manutencao. Em 12 meses sao R$Y. Esse valor ja paga boa parte da diferenca.'",
+    "Vou pesquisar mais": "NEPQ: 'Otimo que voce quer pesquisar! O que exatamente voce ainda precisa comparar? Posso te ajudar a ver isso agora.'\nHORMOZI: 'A maioria dos clientes que pesquisa volta porque nossas condicoes ja sao as melhores. Que tal a gente fazer essa comparacao juntos agora?'",
+    "Vou pensar e te ligo": "NEPQ: 'Claro, e uma decisao importante. Me ajuda a entender: o que especificamente voce precisa pensar? Talvez eu consiga esclarecer agora.'\nHORMOZI: 'Quando alguem diz que vai pensar, geralmente tem uma duvida que nao disse. Qual e a sua?'",
+    "Vi mais barato em outro lugar": "NEPQ: 'Me conta mais sobre essa oferta. Era o mesmo modelo, ano, km? Muitas vezes o preco nao conta a historia completa.'\nHORMOZI: 'Compare o custo total: garantia, revisoes, seguro, taxa de financiamento. Aqui voce leva tudo isso incluso.'",
+    "Preciso falar com minha esposa": "NEPQ: 'Excelente envolver ela na decisao! O que voce acha que ela vai querer saber? Posso preparar essas informacoes.'\nHORMOZI: 'Vamos agendar um horario que funcione para os dois? Posso reservar um test drive especial.'",
+    "Preciso falar com meu socio": "NEPQ: 'Faz total sentido. Qual e a principal preocupacao que voce acha que ele vai ter? Posso antecipar.'\nHORMOZI: 'Que tal agendarmos uma reuniao rapida com os dois? Posso preparar uma proposta detalhada.'",
+    "Nao sei se financiamento vai aprovar": "NEPQ: 'Essa e uma preocupacao valida. Vamos fazer uma pre-analise agora mesmo? Leva 5 minutos e voce ja sai daqui sabendo.'\nHORMOZI: 'Temos parcerias com 8 bancos. Semana passada aprovamos clientes em situacoes parecidas. Vamos simular?'",
+    "Vou esperar mais um pouco": "NEPQ: 'Entendo. O que precisa acontecer para voce se sentir pronto? Talvez a gente resolva isso hoje.'\nHORMOZI: 'A cada mes que passa, seu carro atual deprecia R$X e custa R$Y em manutencao. Esperar esta te custando dinheiro.'",
+    "Quero vender meu carro atual primeiro": "NEPQ: 'Faz sentido querer resolver isso antes. Voce ja pensou em usar como parte da troca? Avaliamos na hora.'\nHORMOZI: 'Temos programa de troca facilitada. Avaliamos seu carro aqui e damos um valor justo como entrada. Zero trabalho pra voce.'",
+    "Vou ver em outras lojas": "NEPQ: 'Legal, pesquisar e importante. O que voce vai comparar especificamente? Posso te dar essas informacoes agora.'\nHORMOZI: 'Garanto que nossas condicoes sao as melhores. Se encontrar melhor, me liga que eu cubro. Mas antes de ir, faz o test drive.'",
+    "Nao gostei da cor": "NEPQ: 'Qual cor voce tinha em mente? Vamos ver a disponibilidade ou podemos encomendar.'\nHORMOZI: 'Temos esse modelo em X cores. Se a sua preferida nao esta aqui, consigo trazer em Y dias com condicao especial de reserva.'",
+    "Vou ver em outras lojas": "NEPQ: 'Legal, pesquisar e importante. O que voce vai comparar? Posso dar essas informacoes agora.'\nHORMOZI: 'Garanto que nossas condicoes sao as melhores. Se encontrar melhor me liga que eu cubro. Mas antes de ir, faz o test drive.'"
+  };
+
+  document.getElementById('objectionMap').innerHTML = sorted.map(([type, data]) => {
+    const rate = Math.round(data.handled/data.count*100);
+    const topCanal = Object.entries(data.canals).sort((a,b)=>b[1]-a[1])[0];
+    const topCanalBadge = topCanal ? canalBadgeMap[topCanal[0]] : '';
+    return `
+    <div class="objection-map-item fade-in">
+      <div class="objection-map-header">
+        <div class="objection-map-type">"${type}"</div>
+        <div class="objection-map-count">${data.count}x</div>
+      </div>
+      <div class="objection-map-stats">
+        <span>Reversao: <strong style="color:${rate>=50?'var(--green)':'var(--red)'}"> ${rate}%</strong></span>
+        <span>•</span>
+        <span>${data.calls.map(c=>c.closer.split(' ')[0]).filter((v,i,a)=>a.indexOf(v)===i).join(', ')}</span>
+        <span>•</span>
+        <span>Canal +freq: ${topCanalBadge}</span>
+      </div>
+      <div class="objection-script">
+        <strong>Script Anti-Objecao:</strong><br>
+        ${(scripts[type]||'Script em desenvolvimento para esta objecao.').replace(/\n/g,'<br>')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ==================== CANAL PERFORMANCE ====================
+function renderCanalPerf() {
+  const canais = [
+    {key:'ligacao', icon:'📞', label:'Ligacao', color:'var(--blue)'},
+    {key:'whatsapp', icon:'💬', label:'WhatsApp', color:'var(--wpp)'},
+    {key:'presencial', icon:'🏪', label:'Presencial', color:'var(--presencial)'}
+  ];
+  return canais.map(info => {
+    const calls = CALLS_DATA.filter(c=>getCanal(c)===info.key);
+    if(!calls.length) return '';
+    const avgScore = avg(calls.map(c=>c.score));
+    const tdRate = Math.round(calls.filter(c=>c.test_drive).length/calls.length*100);
+    const propRate = Math.round(calls.filter(c=>c.proposta_enviada).length/calls.length*100);
+    const avgProb = Math.round(calls.reduce((a,c)=>a+c.closing_probability,0)/calls.length);
+    return `
+      <div class="canal-perf-row">
+        <span class="canal-perf-icon">${info.icon}</span>
+        <span class="canal-perf-name" style="color:${info.color}">${info.label}</span>
+        <div class="canal-perf-stats">
+          <span><strong>${calls.length}</strong> calls</span>
+          <span>Score: <strong style="color:${getScoreColor(parseFloat(avgScore))}">${avgScore}</strong></span>
+          <span>Test Drive: <strong>${tdRate}%</strong></span>
+          <span>Propostas: <strong>${propRate}%</strong></span>
+          <span>Prob. Fechamento: <strong>${avgProb}%</strong></span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ==================== RELATORIO ====================
+function renderReport() {
+  const closers = [...new Set(CALLS_DATA.map(c=>c.closer))];
+  const totalCalls = CALLS_DATA.length;
+  const avgScore = avg(CALLS_DATA.map(c=>c.score));
+  const tdRate = Math.round(CALLS_DATA.filter(c=>c.test_drive).length/totalCalls*100);
+  const propRate = Math.round(CALLS_DATA.filter(c=>c.proposta_enviada).length/totalCalls*100);
+
+  let closerReports = closers.map(closer => {
+    const calls = CALLS_DATA.filter(c=>c.closer===closer);
+    const cAvg = avg(calls.map(c=>c.score));
+    const cTD = Math.round(calls.filter(c=>c.test_drive).length/calls.length*100);
+    const dims = ['abordagem','qualificacao','apresentacao','test_drive','objecoes','fechamento','pos_venda'];
+    const weakest = dims.reduce((min,d) => {
+      const a = calls.reduce((s,c)=>s+c.performance[d],0)/calls.length;
+      const b = calls.reduce((s,c)=>s+c.performance[min],0)/calls.length;
+      return a < b ? d : min;
+    }, dims[0]);
+    const dimLabels = {abordagem:'Abordagem',qualificacao:'Qualificacao',apresentacao:'Apresentacao',test_drive:'Test Drive',objecoes:'Objecoes',fechamento:'Fechamento',pos_venda:'Pos-venda'};
+    return `
+      <div class="report-section">
+        <div class="report-section-title">${closer} — Score ${cAvg} • ${calls.length} calls • TD ${cTD}%</div>
+        <div class="report-text">
+          ${parseFloat(cAvg) >= 8 ? `Performance excelente. Manter padrao e compartilhar boas praticas com a equipe. Foco em micro-otimizacoes de ${dimLabels[weakest].toLowerCase()}.` :
+          parseFloat(cAvg) >= 6 ? `Performance boa com espaco para crescimento. Ponto principal de melhoria: ${dimLabels[weakest].toLowerCase()}. Recomendacao: roleplay semanal focado nesta dimensao.` :
+          `Performance abaixo do esperado. Necessita treinamento intensivo em ${dimLabels[weakest].toLowerCase()}. Recomendacao: acompanhamento diario + roleplay + escuta de calls de referencia.`}
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('reportContent').innerHTML = `
+    <div class="executive-box">
+      <div class="executive-box-title">📋 Resumo Executivo — Março 2026</div>
+      <div class="executive-box-item">📊 A equipe perdeu 11 vendas no último mês</div>
+      <div class="executive-box-item">💰 Prejuízo estimado: R$33.000 em margem perdida</div>
+      <div class="executive-box-item">🔴 Rafael Lima é responsável por 73% das perdas</div>
+      <div class="executive-box-item">🟡 Amanda Torres precisa de treinamento em fechamento</div>
+      <div class="executive-box-item">🟢 Carlos Mendes deve ser modelo de referência para a equipe</div>
+      <div class="executive-box-item">⚡ Se Rafael atingir o nível de Amanda, a loja venderia 4 carros a mais por mês (R$12.000)</div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Visao Geral da Equipe</div>
+      <div class="report-text">
+        <strong>${totalCalls} calls analisadas</strong> com score medio de <strong style="color:var(--orange)">${avgScore}</strong>.<br>
+        Taxa de test drive: <strong style="color:${tdRate>=60?'var(--green)':'var(--red)'}"> ${tdRate}%</strong> | Propostas enviadas: <strong style="color:${propRate>=50?'var(--green)':'var(--red)'}"> ${propRate}%</strong>
+      </div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">📊 Performance por Canal</div>
+      <div class="report-text" style="margin-bottom:10px">Comparativo de eficiencia entre os 3 canais de atendimento da equipe.</div>
+      ${renderCanalPerf()}
+    </div>
+    ${closerReports}
+    <div class="report-section">
+      <div class="report-section-title">Plano de Acao NEPQ — Vendas Automotivas</div>
+      <div class="report-text">
+        <strong>1. Situacao (Obrigatorio em toda call):</strong> "Voce esta procurando para uso pessoal ou profissional?", "Qual o principal uso do carro?", "Quantos km roda por mes?"<br><br>
+        <strong>2. Problema:</strong> "O que esta te incomodando no carro atual?", "Ja teve problema de manutencao nos ultimos meses?"<br><br>
+        <strong>3. Implicacao (Onde a maioria falha):</strong> "Quanto isso custa por mes?", "Ja perdeu alguma oportunidade por causa disso?"<br><br>
+        <strong>4. Fechamento:</strong> "Se eu encaixar no seu orcamento hoje, teria algum motivo para nao fechar?"
+      </div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Plano de Acao Hormozi — Vendas Automotivas</div>
+      <div class="report-text">
+        <strong>Stack de Valor:</strong> Garantia + revisoes gratis + seguro + menor taxa + test drive exclusivo. Apresentar ANTES do preco.<br><br>
+        <strong>Custo da Inacao:</strong> "Seu carro gasta R$800/mes em manutencao. Em 6 meses sao R$4.800 — quase a entrada do novo."<br><br>
+        <strong>Reversao de Risco:</strong> "7 dias de satisfacao garantida. Se nao gostar, devolvemos sem perguntas."
+      </div>
+    </div>
+  `;
+}
+
+// ==================== SCRIPT IA ====================
+function renderScript() {
+  document.getElementById('scriptContent').innerHTML = `
+    <div class="report-section">
+      <div class="report-section-title">Script Gerado por IA — Baseado em ${CALLS_DATA.length} Calls Analisadas</div>
+      <div class="report-text">
+        <strong style="color:var(--orange)">FASE 1: ABORDAGEM (0-2 min)</strong><br>
+        "Bem-vindo! Meu nome e [NOME], sou consultor aqui na [EMPRESA]. Antes de te mostrar qualquer carro, quero entender o que e importante pra voce. Posso fazer algumas perguntas rapidas?"<br><br>
+        <strong style="color:var(--orange)">FASE 2: QUALIFICACAO NEPQ (2-8 min)</strong><br>
+        <strong>Situacao:</strong><br>
+        → "Voce esta buscando pra uso do dia a dia ou tem uma necessidade especifica?"<br>
+        → "Quantos km voce roda por mes mais ou menos?"<br>
+        → "Quem mais vai usar o carro?"<br><br>
+        <strong>Problema:</strong><br>
+        → "O que esta te incomodando no seu carro atual?"<br>
+        → "Ja te deixou na mao alguma vez?"<br><br>
+        <strong>Implicacao:</strong><br>
+        → "Quanto voce gasta por mes em manutencao e combustivel?"<br>
+        → "Isso ja te fez perder algum compromisso importante?"<br><br>
+        <strong style="color:var(--orange)">FASE 3: APRESENTACAO + TEST DRIVE (8-15 min)</strong><br>
+        "Baseado no que voce me contou, esse [MODELO] resolve exatamente o problema de [DOR]. Vamos fazer um test drive pra voce sentir?"<br><br>
+        <strong style="color:var(--orange)">FASE 4: STACK DE VALOR HORMOZI (15-18 min)</strong><br>
+        "Alem do carro, voce leva: garantia de [X] anos, [Y] revisoes gratis, seguro no primeiro ano, e a menor taxa de financiamento da regiao."<br><br>
+        <strong style="color:var(--orange)">FASE 5: CUSTO DA INACAO (18-20 min)</strong><br>
+        "Vamos fazer uma conta: seu carro atual custa R$[X]/mes em manutencao. Em 6 meses sao R$[Y]. Esse valor paga [Z]% da entrada do novo."<br><br>
+        <strong style="color:var(--orange)">FASE 6: FECHAMENTO (20-22 min)</strong><br>
+        "Com tudo isso que conversamos, se eu conseguir encaixar dentro do seu orcamento hoje, teria algum motivo para nao fechar?"<br><br>
+        <strong style="color:var(--orange)">REVERSAO DE RISCO:</strong><br>
+        "E olha: se em 7 dias voce nao estiver 100% satisfeito, devolvemos sem perguntas. Risco zero pra voce."
+      </div>
+    </div>
+  `;
+}
+
+// ==================== UPLOAD TABS ====================
+function switchUploadTab(tab) {
+  document.querySelectorAll('#uploadTabBtns .upload-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.upload-tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('utab-' + tab).classList.add('active');
+}
+
+// ==================== WHATSAPP UPLOAD ====================
+function handleWppDrop(e) {
+  e.preventDefault();
+  document.getElementById('wppZone').classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  if(f) handleWppFile(f);
+}
+function handleWppFile(file) {
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => renderWppPreview(e.target.result, file.name);
+  reader.readAsText(file, 'UTF-8');
+}
+function renderWppPreview(text, filename) {
+  const lines = text.split('\n').filter(l => l.trim());
+  const msgs = [];
+  const senders = new Set();
+  const patterns = [
+    /^\[?(\d{1,2}\/\d{1,2}\/\d{2,4})[^\]]*\]?\s*[-–]\s*([^:]+):\s*(.+)$/,
+    /^(\d{1,2}\/\d{1,2}\/\d{2,4}),?\s+\d{1,2}:\d{2}(?::\d{2})?(?:\s?[APap][Mm])?\s*[-–]\s*([^:]+):\s*(.+)$/
+  ];
+  lines.forEach(line => {
+    for(const pat of patterns) {
+      const m = line.match(pat);
+      if(m) { const s = m[2].trim(); senders.add(s); msgs.push({sender:s, text:m[3]}); break; }
+    }
+  });
+  const sArr = [...senders];
+  const vendedor = sArr.length > 1 ? sArr[1] : sArr[0];
+  const preview = document.getElementById('wppPreview');
+  if(!msgs.length) {
+    preview.innerHTML = '<div style="padding:16px;color:var(--text-muted);text-align:center;background:var(--navy-card);border:1px solid var(--navy-border);border-radius:12px">Formato nao reconhecido. Exporte o chat do WhatsApp (sem midia) em .txt.</div>';
+    return;
+  }
+  preview.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:13px;color:var(--text-secondary)"><strong>${msgs.length}</strong> mensagens • <strong>${senders.size}</strong> participantes</span>
+      <span class="canal-badge whatsapp">💬 WhatsApp</span>
+    </div>
+    <div class="wpp-preview-area">
+      ${msgs.slice(0,25).map(m=>`
+        <div style="display:flex;flex-direction:column;align-items:${m.sender===vendedor?'flex-end':'flex-start'}">
+          <div style="font-size:9px;color:var(--text-muted);margin-bottom:2px">${m.sender}</div>
+          <div class="wpp-bubble ${m.sender===vendedor?'sent':'recv'}">${m.text.slice(0,140)}</div>
+        </div>
+      `).join('')}
+      ${msgs.length>25?`<div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px">... e mais ${msgs.length-25} mensagens</div>`:''}
+    </div>
+    <div style="margin-top:12px;padding:12px;background:var(--navy);border-radius:10px">
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Comando para analisar:</div>
+      <div style="font-family:monospace;font-size:12px;color:var(--orange);padding:8px;background:var(--navy-card);border-radius:8px;word-break:break-all">python analyze_call.py ${filename} --canal whatsapp --closer "Nome Vendedor"</div>
+    </div>
+    <button class="upload-btn" onclick="alert('Pipeline: TXT → parse_whatsapp.py → Claude API → Dashboard\n\nConfigurar endpoint do backend para processar.')" style="margin-top:10px">Analisar com IA</button>
+  `;
+}
+
+// ==================== PRESENCIAL JSON ====================
+function handlePresJson(file) {
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      document.getElementById('presPreview').innerHTML = `
+        <div style="background:var(--navy-card);border:1px solid rgba(255,152,0,0.3);border-radius:12px;padding:16px" class="fade-in">
+          <div style="font-size:12px;font-weight:700;color:var(--presencial);margin-bottom:10px">🏪 Formulario importado com sucesso</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;color:var(--text-secondary);margin-bottom:12px">
+            <div><span style="color:var(--text-muted)">Vendedor:</span> <strong>${d.vendedor||'—'}</strong></div>
+            <div><span style="color:var(--text-muted)">Cliente:</span> <strong>${d.cliente||'—'}</strong></div>
+            <div><span style="color:var(--text-muted)">Data:</span> ${d.data||'—'}</div>
+            <div><span style="color:var(--text-muted)">Veiculo:</span> ${d.veiculo_interesse||'—'}</div>
+            <div><span style="color:var(--text-muted)">Resultado:</span> ${d.resultado||'—'}</div>
+            <div><span style="color:var(--text-muted)">Canal:</span> ${d.canal||'presencial'}</div>
+          </div>
+          <div style="font-family:monospace;font-size:11px;color:var(--orange);padding:8px;background:var(--navy);border-radius:8px;word-break:break-all;margin-bottom:8px">python analyze_call.py ${file.name} --canal presencial</div>
+          <button class="upload-btn" onclick="alert('Pipeline: JSON → Claude API → Dashboard\n\nConfigurar endpoint do backend para processar.')" style="width:100%;margin-top:0">Analisar Formulario</button>
+        </div>`;
+    } catch(err) {
+      document.getElementById('presPreview').innerHTML = '<div style="color:var(--red);padding:8px;font-size:13px">Arquivo JSON invalido.</div>';
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ==================== UPLOAD ====================
+let uploadQueue = [];
+function handleDragOver(e) { e.preventDefault(); document.getElementById('uploadZone').classList.add('dragover'); }
+function handleDragLeave(e) { document.getElementById('uploadZone').classList.remove('dragover'); }
+function handleDrop(e) { e.preventDefault(); document.getElementById('uploadZone').classList.remove('dragover'); handleFiles(e.dataTransfer.files); }
+function handleFiles(files) {
+  Array.from(files).forEach(f => { uploadQueue.push(f); });
+  renderUploadQueue();
+}
+function renderUploadQueue() {
+  const el = document.getElementById('uploadQueue');
+  el.innerHTML = uploadQueue.map((f,i) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--navy-card);border:1px solid var(--navy-border);border-radius:10px;margin-bottom:8px">
+      <span style="font-size:20px">🎵</span>
+      <span style="flex:1;font-size:13px">${f.name}</span>
+      <span style="font-size:11px;color:var(--text-muted)">${(f.size/1024/1024).toFixed(1)}MB</span>
+      <button onclick="uploadQueue.splice(${i},1);renderUploadQueue()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:16px">✕</button>
+    </div>
+  `).join('');
+  document.getElementById('processBtn').style.display = uploadQueue.length ? 'inline-block' : 'none';
+}
+function processUploads() { alert('Pipeline de processamento: Audio → Whisper → Claude API → Dashboard\n\nConfigurar endpoint do backend para processar.'); }
+
+// ==================== ACADEMIA ====================
+const SCENARIOS = [
+  {
+    emoji:'👨‍👩‍👧',title:'Familia em busca de SUV',
+    context:'Casal com 2 filhos, carro atual e um sedan 2015 com 120.000km. Preocupados com seguranca e espaco.',
+    challenge:'"Gostamos muito do Tracker, mas R$142.000 esta pesado para a gente agora."',
+    answer:'Resposta ideal (Hormozi + NEPQ):\n\n• Stack de valor: "Alem do carro, voce leva: 3 revisoes gratis, garantia de 3 anos, 7 airbags, frenagem autonoma e sensor de ponto cego — itens que protegem sua familia todos os dias."\n\n• Custo da inacao: "Seu sedan atual consome R$900/mes em manutencao. Sao R$10.800 no ano. Em 2 anos, voce quase paga a diferenca."\n\n• Reversao de risco: "Faz o test drive com a familia. Se a criancada nao adorar o espaco, a gente olha outras opcoes — sem pressao."'
+  },
+  {
+    emoji:'💼',title:'Empresario interessado em frota',
+    context:'Dono de empresa de servicos, quer trocar 3 carros da frota. Muito racional, focado em custo-beneficio.',
+    challenge:'"Preciso pensar melhor. Vou levantar proposta com mais 2 concessionarias antes de decidir."',
+    answer:'Resposta ideal (NEPQ — Implicacao + Fechamento):\n\n• Implicacao: "Entendo. Enquanto isso, quanto sua frota atual esta custando em manutencao corretiva por mes? Esse numero muda se um carro parar numa semana critica?"\n\n• Custo de atraso: "Nossa condicao de frota e valida ate sexta. Se voce fechar hoje, garanto a taxa preferencial de 0,99% ao mes para os 3 — posso colocar em contrato agora."\n\n• Reversao: "Se depois de ver as outras propostas nos tivermos o melhor custo-beneficio, o que te impediria de fechar com a gente?"'
+  },
+  {
+    emoji:'🎓',title:'Jovem comprando o primeiro carro',
+    context:'25 anos, primeiro carro, CLT, entrada de R$8.000. Muito pesquisa online, comparou varios modelos.',
+    challenge:'"Vi o mesmo HB20 R$4.000 mais barato numa outra loja online."',
+    answer:'Resposta ideal (Hormozi — Stack + Reversao de Risco):\n\n• Pergunte primeiro: "Essa loja e autorizada? Tem garantia de fabrica? Aceita seu usado como entrada? Qual o historico do veiculo?"\n\n• Stack: "Aqui voce compra com revisao dos 10.000km gratis, garantia Toyota/Hyundai direto, nota fiscal, documentacao em dia e suporte pos-venda se surgir qualquer duvida."\n\n• Diferencial: "Aqueles R$4.000 a menos podem virar R$15.000 de dor de cabeca no primeiro problema. Voce prefere pagar menos agora ou ter certeza que vai dar certo?"'
+  },
+  {
+    emoji:'👴',title:'Aposentado em busca de conforto',
+    context:'68 anos, carro atual e um Corolla 2010. Quer algo moderno, confortavel, mas nao sabe se aprende a usar a tecnologia.',
+    challenge:'"Esses carros novos tem muita tecnologia, nao sei se vou conseguir usar tudo isso."',
+    answer:'Resposta ideal (NEPQ — Problema + Implicacao):\n\n• Problema: "Entendo completamente. O que e mais importante para o senhor no dia a dia — estacionamento, dirigir a noite, estabilidade em chuva?"\n\n• Implicacao suave: "Sabe que boa parte da tecnologia nova e justamente para facilitar — a camera de re ja evitou varios arranhoes e acidentes com idosos. O senhor se sentiria mais seguro com isso?"\n\n• Test drive como prova: "A melhor forma e experimentar. Posso mostrar cada recurso um a um durante o test drive — e muito mais simples do que parece. Que tal agora?"'
+  },
+  {
+    emoji:'🚜',title:'Produtor rural prospectando picape',
+    context:'Fazendeiro do interior, precisa de picape robusta para fazenda. Virou de longe, tem o dia todo.',
+    challenge:'"Essa Hilux esta cara demais. Olhei a Saveiro por metade do preco."',
+    answer:'Resposta ideal (Hormozi — Custo da Inacao + ROI):\n\n• ROI direto: "Quanto o senhor carrega por viagem na Saveiro versus na Hilux? Se carregar 40% a mais por viagem, em quantas viagens o senhor recupera a diferenca de preco?"\n\n• Custo da inacao: "Hilux 2025 tem garantia de 3 anos. Uma parada na roça na epoca da safra quanto custa — em mao de obra, atraso, perda de produto?"\n\n• Depreciacao: "Daqui a 5 anos, Hilux vale 70% do preco hoje. Saveiro, 45%. A diferenca de valor residual praticamente paga o preco a mais hoje."'
+  },
+  {
+    emoji:'👔',title:'Executivo interessado em premium',
+    context:'Diretor financeiro, 42 anos, quer BMW ou Mercedes. Ja tem carro da empresa, esse e pessoal.',
+    challenge:'"Ja tenho carro da empresa. Nao sei se vale o investimento em algo proprio agora."',
+    answer:'Resposta ideal (NEPQ — Situacao + Problema):\n\n• Situacao: "O carro da empresa fica disponivel nos finais de semana? Nas ferias? Quando sai com a familia?"\n\n• Problema: "Entao tem momentos em que voce esta sem carro ou depende de logistica? Isso ja foi incomodo alguma vez?"\n\n• Status e identidade: "Esse carro vai ser sua escolha — nao a da empresa. O que seria mais significativo para voce: economia ou ter algo que represente o que voce construiu?"\n\n• Fechamento: "Se fizer sentido nos numeros e emocional, algo te impediria de decidir hoje?"'
+  },
+  {
+    emoji:'👶',title:'Casal esperando bebe',
+    context:'Primeiro filho a caminho, carro atual e um hatch pequeno 2018. Urgencia real — bebe nasce em 2 meses.',
+    challenge:'"Queremos esperar o bebe nascer para ver como vai ser a rotina e depois decidir."',
+    answer:'Resposta ideal (NEPQ — Implicacao + Urgencia real):\n\n• Implicacao: "Entendo a cautela. Mas imagina: bebe nasce, rotina muda 100%, cansaco, noites sem dormir — esse seria o momento de pesquisar carro e lidar com burocracia?"\n\n• Urgencia sem pressao: "Voces tem exatamente esse momento agora para testar com calma, comparar, fazer o test drive de verdade. Depois do bebe, esse tempo some."\n\n• Pratico: "Posso separar o carro hoje com entrada minima. Voces buscam quando quiserem — inclusive com o bebe ja nascido, se preferirem."'
+  },
+  {
+    emoji:'📱',title:'Motorista de app economizando',
+    context:'Uber/99, percorre 5.000km/mes. Carro atual e um Uno 2017, comeca a dar problemas. Muito focado em custo.',
+    challenge:'"Preco da parcela ta alto. Nao sei se consigo pagar com o que ganho no app."',
+    answer:'Resposta ideal (Hormozi — Custo da Inacao + ROI concreto):\n\n• Calculo direto: "Quanto voce paga hoje em manutencao do Uno por mes? E em combustivel rodando 5.000km?"\n\n• ROI: "O Cronos Flex consome 20% menos. Na sua quilometragem, isso e R$380/mes economizados. Quase metade da parcela. E sem contar as manutencoes que vao parar."\n\n• Renda adicional: "Com um carro mais confiavel, quantas horas extras voce consegue trabalhar sem medo de pane? Quanto isso representa por mes?"\n\n• Fechamento: "Se a conta fechar em R$200 de ganho liquido por mes, faz sentido fechar hoje?"'
+  },
+  {
+    emoji:'💰',title:'Cliente com heranca para investir',
+    context:'Recebeu heranca, nunca comprou carro novo, vem de indicacao. Tem dinheiro a vista mas e desconfiado.',
+    challenge:'"Nao sei se vale comprar carro novo agora. Talvez fosse melhor investir esse dinheiro."',
+    answer:'Resposta ideal (NEPQ — Situacao + Problema):\n\n• Explore valores: "Que tipo de investimento o senhor esta considerando? Renda fixa, imovel?"\n\n• Compare concretamente: "Um CDB a 12% ao ano rende R$12.000 em R$100.000. Quanto o senhor gasta hoje sem carro proprio — uber, taxi, transtorno, dependencia de terceiros?"\n\n• Qualidade de vida: "Ha quanto tempo o senhor quer ter um carro proprio e conveniente? Esse recurso agora e a oportunidade de resolver isso sem impacto no orcamento mensal."\n\n• Reversao: "Se o carro resolver uma necessidade real, ele tambem e um ativo — e um que o senhor usa todo dia."'
+  },
+  {
+    emoji:'😤',title:'Cliente insatisfeito trocando de marca',
+    context:'Teve problemas com a marca atual (revisao cara, atendimento ruim). Quer trocar mas esta ressentido.',
+    challenge:'"Minha experiencia com a ultima concessionaria foi pessima. Estou com pe atras com o mercado."',
+    answer:'Resposta ideal (Validacao + Reversao de Risco):\n\n• Validacao genuina: "Voce tem razao em ser criterioso. Experiencia ruim de pos-venda e uma das maiores frustracoes — e voce nao deveria passar por isso de novo."\n\n• Diferencie: "Posso te mostrar como nosso pos-venda funciona na pratica: agenda pelo app, carro reserva disponivel, comunicacao transparente. Inclusive, te coloco em contato com clientes nossos se quiser uma referencia real."\n\n• Compromisso tangivel: "O que precisaria acontecer aqui para voce sair convencido de que essa experiencia sera completamente diferente?"'
+  }
+];
+
+let currentScenarioIndex = 0;
+
+function toggleAccordion(id) {
+  const body = document.getElementById('body-' + id);
+  const arrow = document.getElementById('arrow-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+}
+
+function copyQuestion(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copiado';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    btn.textContent = '✓';
+    setTimeout(() => { btn.textContent = 'Copiar'; }, 1500);
+  });
+}
+
+function newScenario() {
+  currentScenarioIndex = Math.floor(Math.random() * SCENARIOS.length);
+  renderSimulador();
+}
+
+function toggleSimuladorAnswer(btn) {
+  const ans = btn.nextElementSibling;
+  const isOpen = ans.classList.contains('open');
+  ans.classList.toggle('open', !isOpen);
+  btn.textContent = isOpen ? '💡 Ver resposta sugerida' : '🔼 Ocultar resposta';
+}
+
+function renderSimulador() {
+  const s = SCENARIOS[currentScenarioIndex];
+  document.getElementById('simuladorContent').innerHTML = `
+    <div class="simulador-scenario">
+      <div class="simulador-scenario-header">
+        <span class="simulador-scenario-emoji">${s.emoji}</span>
+        <span class="simulador-scenario-title">${s.title}</span>
+      </div>
+      <div class="simulador-scenario-context">${s.context}</div>
+      <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">O cliente diz:</div>
+      <div class="simulador-challenge">"${s.challenge}"</div>
+      <button class="simulador-answer-toggle" onclick="toggleSimuladorAnswer(this)">💡 Ver resposta sugerida</button>
+      <div class="simulador-answer">${s.answer.replace(/\n/g,'<br>')}</div>
+    </div>
+  `;
+}
+
+function renderSeusDados() {
+  // Calcula fase NEPQ mais fraca
+  const dims = ['situacao','problema','implicacao','fechamento'];
+  const dimLabels = {situacao:'Perguntas de Situacao',problema:'Perguntas de Problema',implicacao:'Perguntas de Implicacao',fechamento:'Fechamento NEPQ'};
+  const dimAvg = {};
+  dims.forEach(d => {
+    const vals = CALLS_DATA.filter(c=>c.nepq_analysis).map(c=>c.nepq_analysis[d]);
+    dimAvg[d] = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
+  });
+  const weakestNepq = dims.reduce((a,b)=>dimAvg[a]<dimAvg[b]?a:b);
+
+  // Objecao mais perdida
+  const objCount = {};
+  CALLS_DATA.forEach(c => {
+    c.objections.forEach(o => {
+      if(!o.handled) {
+        objCount[o.type] = (objCount[o.type]||0) + 1;
+      }
+    });
+  });
+  const topMissedObj = Object.keys(objCount).sort((a,b)=>objCount[b]-objCount[a])[0] || '—';
+
+  // Score medio
+  const avgScore = (CALLS_DATA.reduce((a,c)=>a+c.score,0)/CALLS_DATA.length).toFixed(1);
+
+  document.getElementById('seusDadosContent').innerHTML = `
+    <div class="seus-dados-card">
+      <span class="seus-dados-icon">🧠</span>
+      <div>
+        <div class="seus-dados-label">Fase NEPQ mais fraca</div>
+        <div class="seus-dados-value" style="color:var(--red)">${dimLabels[weakestNepq]} — media ${dimAvg[weakestNepq].toFixed(1)}</div>
+        <div class="seus-dados-action">Revise as perguntas do Modulo 1 Fase "${dimLabels[weakestNepq]}" e treine com o simulador acima.</div>
+      </div>
+    </div>
+    <div class="seus-dados-card">
+      <span class="seus-dados-icon">🛡️</span>
+      <div>
+        <div class="seus-dados-label">Objecao mais perdida</div>
+        <div class="seus-dados-value" style="color:var(--yellow)">"${topMissedObj}" — ${objCount[topMissedObj]||0} vezes sem reverter</div>
+        <div class="seus-dados-action">Estude o Mapa de Objecoes para o script anti-objecao especifico para esse caso.</div>
+      </div>
+    </div>
+    <div class="seus-dados-card">
+      <span class="seus-dados-icon">📈</span>
+      <div>
+        <div class="seus-dados-label">Score medio da equipe</div>
+        <div class="seus-dados-value" style="color:${avgScore>=7?'var(--green)':avgScore>=5?'var(--yellow)':'var(--red)'}">${avgScore} / 10</div>
+        <div class="seus-dados-action">${avgScore>=7?'Equipe em bom nivel. Foco em consistencia e fechamento.':avgScore>=5?'Potencial para crescer. Priorize qualificacao e test drive.':'Treinamento urgente. Comece pelo Modulo 1 NEPQ.'}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAcademia() {
+  renderSimulador();
+  renderSeusDados();
+}
+
+// ==================== AMOSTRA GRATIS ====================
+const API_URL = "https://SEU-BACKEND.railway.app/analyze";
+let amostraSelectedFile = null;
+let amostraWppFile = null;
+let amostraCurrentType = null;
+let amostraWppTab = 'arquivo';
+
+function initAmostra() {
+  // Reset to initial state when navigating to view
+}
+
+function selectAmostraType(type) {
+  amostraCurrentType = type;
+  document.getElementById('amostraOptLig').classList.toggle('active', type === 'ligacao');
+  document.getElementById('amostraOptWpp').classList.toggle('active', type === 'whatsapp');
+  document.getElementById('amostraFormLig').classList.toggle('active', type === 'ligacao');
+  document.getElementById('amostraFormWpp').classList.toggle('active', type === 'whatsapp');
+  document.getElementById('amostraLoading').classList.remove('active');
+  document.getElementById('amostraResult').classList.remove('active');
+}
+
+function switchWppTab(tab) {
+  amostraWppTab = tab;
+  document.getElementById('wppTabArq').classList.toggle('active', tab === 'arquivo');
+  document.getElementById('wppTabColar').classList.toggle('active', tab === 'colar');
+  document.getElementById('wppPanelArquivo').style.display = tab === 'arquivo' ? 'block' : 'none';
+  document.getElementById('wppPanelColar').style.display = tab === 'colar' ? 'block' : 'none';
+}
+
+function handleAmostraAudioDrop(e) {
+  e.preventDefault();
+  const f = e.dataTransfer.files[0];
+  if(f) setAudioFile(f);
+}
+function handleAmostraAudioSelect(input) {
+  if(input.files[0]) setAudioFile(input.files[0]);
+}
+function setAudioFile(f) {
+  amostraSelectedFile = f;
+  document.getElementById('audioFileName').textContent = f.name;
+  document.getElementById('audioFileSize').textContent = (f.size/1024/1024).toFixed(1) + ' MB';
+  document.getElementById('audioFileSelected').classList.add('active');
+}
+
+function handleAmostraWppDrop(e) {
+  e.preventDefault();
+  const f = e.dataTransfer.files[0];
+  if(f) setWppFile(f);
+}
+function handleAmostraWppSelect(input) {
+  if(input.files[0]) setWppFile(input.files[0]);
+}
+function setWppFile(f) {
+  amostraWppFile = f;
+  document.getElementById('wppFileName').textContent = f.name;
+  document.getElementById('wppFileSize').textContent = (f.size/1024).toFixed(0) + ' KB';
+  document.getElementById('wppFileSelected').classList.add('active');
+}
+
+async function analisarLigacao() {
+  const vendedor = document.getElementById('ligVendedorNome').value.trim();
+  if(!amostraSelectedFile) { alert('Selecione um arquivo de audio primeiro.'); return; }
+  if(!vendedor) { alert('Informe o nome do vendedor.'); return; }
+  showAmostraLoading();
+  try {
+    const formData = new FormData();
+    formData.append('audio', amostraSelectedFile);
+    formData.append('vendedor', vendedor);
+    formData.append('canal', 'ligacao');
+    const res = await fetch(API_URL, { method:'POST', body:formData });
+    if(!res.ok) throw new Error('Erro na API: ' + res.status);
+    const data = await res.json();
+    showAmostraResult(data, vendedor, 'ligacao');
+  } catch(err) {
+    hideAmostraLoading();
+    showAmostraError(err.message);
+  }
+}
+
+async function analisarWhatsApp() {
+  const vendedor = document.getElementById('wppVendedorNome').value.trim();
+  if(!vendedor) { alert('Informe o nome do vendedor.'); return; }
+  let texto = '';
+  if(amostraWppTab === 'arquivo') {
+    if(!amostraWppFile) { alert('Selecione um arquivo .txt do WhatsApp.'); return; }
+    texto = await amostraWppFile.text();
+  } else {
+    texto = document.getElementById('wppTextarea').value.trim();
+    if(!texto) { alert('Cole a conversa do WhatsApp.'); return; }
+  }
+  showAmostraLoading();
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({conversa:texto, vendedor, canal:'whatsapp'})
+    });
+    if(!res.ok) throw new Error('Erro na API: ' + res.status);
+    const data = await res.json();
+    showAmostraResult(data, vendedor, 'whatsapp');
+  } catch(err) {
+    hideAmostraLoading();
+    showAmostraError(err.message);
+  }
+}
+
+function showAmostraLoading() {
+  document.getElementById('amostraFormLig').classList.remove('active');
+  document.getElementById('amostraFormWpp').classList.remove('active');
+  document.getElementById('amostraResult').classList.remove('active');
+  const loading = document.getElementById('amostraLoading');
+  loading.classList.add('active');
+  const steps = [
+    '🎙️ Transcrevendo audio...',
+    '🧠 Identificando dimensoes de venda...',
+    '📊 Calculando score NEPQ + Hormozi...',
+    '✅ Gerando recomendacoes personalizadas...'
+  ];
+  const stepsEl = document.getElementById('amostraSteps');
+  stepsEl.innerHTML = '';
+  steps.forEach((s, i) => {
+    setTimeout(() => {
+      const div = document.createElement('div');
+      div.style.cssText = 'font-size:12px;color:var(--text-muted);padding:6px 10px;background:var(--navy-card);border-radius:8px;text-align:left;animation:fadeIn .3s ease;';
+      div.textContent = s;
+      stepsEl.appendChild(div);
+    }, i * 12000);
+  });
+}
+
+function hideAmostraLoading() {
+  document.getElementById('amostraLoading').classList.remove('active');
+}
+
+function showAmostraError(msg) {
+  document.getElementById('amostraFormLig').classList.toggle('active', amostraCurrentType === 'ligacao');
+  document.getElementById('amostraFormWpp').classList.toggle('active', amostraCurrentType === 'whatsapp');
+  alert('Erro ao analisar: ' + msg + '\n\nVerifique se a URL da API esta configurada em API_URL.');
+}
+
+function showAmostraResult(data, vendedor, canal) {
+  hideAmostraLoading();
+  const content = document.getElementById('amostraResultContent');
+  const score = data.score || 0;
+  const cls = score >= 7 ? 'boa' : score >= 5 ? 'regular' : 'fraca';
+  const dims = data.dimensoes || data.performance || {};
+  const dimLabels = {abordagem:'Abordagem',qualificacao:'Qualificacao',apresentacao:'Apresentacao',test_drive:'Test Drive',objecoes:'Objecoes',fechamento:'Fechamento',pos_venda:'Pos-venda'};
+  const objections = data.objecoes || data.objections || [];
+  const improvements = data.melhorias || data.top_improvements || [];
+  const moments = data.momentos_criticos || data.critical_moments || [];
+  content.innerHTML = `
+    <div class="fade-in">
+      <div class="detail-grid">
+        <div class="detail-card" style="text-align:center">
+          <div class="detail-card-title">Score — ${vendedor}</div>
+          <div class="score-big ${cls}">${score}</div>
+          <div class="score-label">${score>=7?'Boa':score>=5?'Regular':'Fraca'}</div>
+          <div style="margin-top:8px">${getCanalBadge(canal)}</div>
+          <div style="margin-top:12px;font-size:13px;color:var(--text-secondary);line-height:1.5">${data.resumo||''}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-title">Performance por Dimensao</div>
+          ${Object.entries(dims).map(([d,v])=>`
+            <div class="perf-bar-row">
+              <span class="perf-bar-label">${dimLabels[d]||d}</span>
+              <div class="perf-bar-track"><div class="perf-bar-fill" style="width:${v*10}%;background:${getScoreColor(v)}"></div></div>
+              <span class="perf-bar-value" style="color:${getScoreColor(v)}">${v}</span>
+            </div>`).join('')}
+        </div>
+        ${objections.length?`
+        <div class="detail-card">
+          <div class="detail-card-title">Objecoes</div>
+          ${objections.map(o=>`
+            <div class="objection-item">
+              <div class="objection-badge ${o.handled?'handled':'missed'}">${o.handled?'✓':'✗'}</div>
+              <div class="objection-text">"${o.type||o}"</div>
+              <span class="objection-quality" style="background:${o.quality==='Excelente'||o.quality==='Boa'?'rgba(0,210,106,0.15)':o.quality==='Regular'?'rgba(255,193,7,0.15)':'rgba(255,71,87,0.15)'};color:${o.quality==='Excelente'||o.quality==='Boa'?'var(--green)':o.quality==='Regular'?'var(--yellow)':'var(--red)'}">${o.quality||''}</span>
+            </div>`).join('')}
+        </div>`:''}
+        ${improvements.length?`
+        <div class="detail-card">
+          <div class="detail-card-title">Top 3 Melhorias</div>
+          ${improvements.slice(0,3).map((imp,i)=>`
+            <div class="improvement-item">
+              <div class="improvement-num">${i+1}</div>
+              <div class="improvement-text">${imp}</div>
+            </div>`).join('')}
+        </div>`:''}
+        ${moments.length?`
+        <div class="detail-card full">
+          <div class="detail-card-title">Momentos Criticos</div>
+          ${moments.map(m=>`
+            <div class="moment-item">
+              <span class="moment-time">${m.time||''}</span>
+              <span class="moment-dot ${m.type||''}"></span>
+              <span class="moment-text">${m.desc||''}</span>
+            </div>`).join('')}
+        </div>`:''}
+      </div>
+      <div style="margin-top:20px;padding:18px 20px;background:rgba(255,107,0,0.08);border:1px solid rgba(255,107,0,0.2);border-radius:14px;text-align:center">
+        <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px">Quer analisar toda a sua equipe?</div>
+        <div style="font-size:13px;color:var(--text-muted)">O Sales Analytics Pro analisa ligacoes, WhatsApp e atendimentos presenciais automaticamente — ranking de vendedores, plano de treinamento e insights em tempo real.</div>
+      </div>
+    </div>`;
+  document.getElementById('amostraResult').classList.add('active');
+}
+
+function resetAmostra() {
+  document.getElementById('amostraResult').classList.remove('active');
+  document.getElementById('amostraLoading').classList.remove('active');
+  if(amostraCurrentType) {
+    document.getElementById('amostraFormLig').classList.toggle('active', amostraCurrentType === 'ligacao');
+    document.getElementById('amostraFormWpp').classList.toggle('active', amostraCurrentType === 'whatsapp');
+  }
+}
+
+// ==================== INIT ====================
+renderCallsList();
+renderStats();
+renderCallDetail();
+</script>
+</body>
+</html>
