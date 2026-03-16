@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Analytics Pro — Demo</title>
+<meta name="description" content="Dashboard de análise de vendas com IA para concessionárias">
+<meta property="og:title" content="Sales Analytics Pro">
+<meta property="og:description" content="Inteligência Artificial para análise de atendimento em concessionárias">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --orange: #FF6B00;
+  --orange-gradient: linear-gradient(135deg, #E55A00, #FF7A1A, #FF9A45);
+  --navy: #0D1B2A;
+  --navy-mid: #112236;
+  --navy-card: #152840;
+  --navy-border: rgba(255,255,255,0.08);
+  --text-primary: #F0F4F8;
+  --text-secondary: #94A3B8;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Outfit', sans-serif;
+  background: var(--navy);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* ── Background grid ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255,107,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,107,0,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Glow ── */
+body::after {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  height: 60vh;
+  background: radial-gradient(ellipse, rgba(255,107,0,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Layout ── */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+}
+
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,107,0,0.12);
+  border: 1px solid rgba(255,107,0,0.3);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--orange);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--orange);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* ── Logo / Title ── */
+.logo {
+  font-size: clamp(32px, 8vw, 56px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+
+.logo span {
+  background: var(--orange-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: clamp(15px, 3.5vw, 20px);
+  font-weight: 400;
+  color: var(--text-secondary);
+  max-width: 480px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+
+/* ── Metrics strip ── */
+.metrics {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.metric-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--navy-border);
+  border-radius: 12px;
+  padding: 14px 20px;
+  min-width: 110px;
+}
+
+.metric-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--orange);
+}
+
+.metric-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ── Buttons ── */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: 40px;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px 28px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:active { transform: scale(0.97); }
+
+.btn-demo {
+  background: var(--orange-gradient);
+  color: white;
+  box-shadow: 0 8px 32px rgba(255,107,0,0.35);
+}
+
+.btn-demo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(255,107,0,0.45);
+}
+
+.btn-amostra {
+  background: rgba(255,107,0,0.08);
+  border: 2px solid rgba(255,107,0,0.35) !important;
+  color: var(--orange);
+}
+
+.btn-amostra:hover {
+  background: rgba(255,107,0,0.14);
+  transform: translateY(-2px);
+}
+
+.btn-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.btn-main-text { font-size: 16px; font-weight: 700; }
+.btn-sub-text { font-size: 11px; font-weight: 400; opacity: 0.75; }
+
+/* ── Trust strip ── */
+.trust {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ── Footer ── */
+footer {
+  position: relative;
+  z-index: 1;
+  padding: 20px 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--navy-border);
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .buttons {
+    flex-direction: row;
+    max-width: 560px;
+  }
+  .btn-primary { flex: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="badge">
+    <span class="badge-dot"></span>
+    Demonstração ao vivo
+  </div>
+
+  <h1 class="logo">Sales Analytics <span>Pro</span></h1>
+  <p class="subtitle">Inteligência Artificial para Concessionárias e Revendedoras — analise cada atendimento e descubra quanto dinheiro sua equipe está deixando na mesa.</p>
+
+  <div class="metrics">
+    <div class="metric-item">
+      <div class="metric-value">7 dim.</div>
+      <div class="metric-label">de performance</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-value">NEPQ</div>
+      <div class="metric-label">+ Hormozi</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-value">60s</div>
+      <div class="metric-label">por análise</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-value">3 canais</div>
+      <div class="metric-label">ligação · WhatsApp · presencial</div>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <a href="demo.html" class="btn-primary btn-demo">
+      <span style="font-size:22px">🖥️</span>
+      <span class="btn-label">
+        <span class="btn-main-text">Ver Demonstração</span>
+        <span class="btn-sub-text">25 atendimentos reais analisados</span>
+      </span>
+    </a>
+    <a href="demo.html#amostra" class="btn-primary btn-amostra">
+      <span style="font-size:22px">🎁</span>
+      <span class="btn-label">
+        <span class="btn-main-text">Amostra Grátis</span>
+        <span class="btn-sub-text">Analise seu próprio atendimento</span>
+      </span>
+    </a>
+  </div>
+
+  <div class="trust">
+    <div class="trust-item">✅ Sem cadastro</div>
+    <div class="trust-item">✅ Resultado em 60s</div>
+    <div class="trust-item">✅ Áudio ou WhatsApp</div>
+    <div class="trust-item">✅ IA com NEPQ + Hormozi</div>
+  </div>
+</div>
+
+<footer>
+  © 2026 Sales Analytics Pro · Todos os direitos reservados
+</footer>
+
+</body>
+</html>

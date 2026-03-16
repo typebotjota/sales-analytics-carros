@@ -1,0 +1,8 @@
+{
+  "name": "Sales Analytics Pro - Demo",
+  "short_name": "SAP Demo",
+  "start_url": "/demo.html",
+  "display": "standalone",
+  "background_color": "#0D1B2A",
+  "theme_color": "#FF6B00"
+}

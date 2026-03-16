@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sales Analytics Pro — Demo | Auto Premium Veículos</title>
+<title>Sales Analytics Pro — Demo</title>
+<meta name="description" content="Dashboard de análise de vendas com IA para concessionárias">
+<meta property="og:title" content="Sales Analytics Pro">
+<meta property="og:description" content="Inteligência Artificial para análise de atendimento em concessionárias">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -324,6 +329,13 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 .amostra-loading-sub { font-size:12px; color:var(--text-muted); }
 .amostra-result { display:none; }
 .amostra-result.active { display:block; }
+.amostra-offline { display:none; }
+.amostra-offline.active { display:block; }
+.offline-box { background:rgba(255,107,0,0.06); border:2px solid rgba(255,107,0,0.25); border-radius:16px; padding:28px 24px; text-align:center; margin-bottom:20px; }
+.offline-icon { font-size:40px; margin-bottom:12px; }
+.offline-title { font-size:16px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
+.offline-desc { font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:20px; }
+.offline-saved { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:10px; padding:12px 16px; font-size:13px; color:#4ade80; text-align:center; margin-top:12px; display:none; }
 .amostra-dropzone { border:2px dashed var(--navy-border); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:all .2s; margin-bottom:14px; }
 .amostra-dropzone:hover { border-color:var(--orange); background:rgba(255,107,0,0.04); }
 .amostra-dropzone-icon { font-size:28px; margin-bottom:6px; }
@@ -840,6 +852,23 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
           </div>
           <div id="amostraResultContent"></div>
         </div>
+
+        <div class="amostra-offline" id="amostraOffline">
+          <div class="offline-box">
+            <div class="offline-icon">📬</div>
+            <div class="offline-title">Análise será enviada por WhatsApp em até 2 horas</div>
+            <div class="offline-desc">Nossa IA está em manutenção no momento. Deixe seus dados abaixo e enviaremos a análise completa pelo WhatsApp assim que possível — sem custo.</div>
+          </div>
+          <label class="amostra-field-label">Seu nome</label>
+          <input type="text" class="amostra-input" id="offlineNome" placeholder="Ex: João Silva">
+          <label class="amostra-field-label">Seu WhatsApp</label>
+          <input type="tel" class="amostra-input" id="offlineWpp" placeholder="Ex: (11) 99999-0000">
+          <label class="amostra-field-label">Arquivo enviado</label>
+          <input type="text" class="amostra-input" id="offlineArquivo" placeholder="Nome do arquivo" readonly>
+          <button class="amostra-btn" onclick="saveOfflineRequest()" style="margin-top:4px">📩 Confirmar Solicitação</button>
+          <div class="offline-saved" id="offlineSaved">✅ Solicitação salva! Entraremos em contato em até 2 horas.</div>
+          <button class="section-back" onclick="resetAmostra()" style="margin-top:16px;display:block">← Tentar novamente</button>
+        </div>
       </div>
 
       <!-- VIEW: CONFIG -->
@@ -988,7 +1017,17 @@ function showView(view) {
   if(view === 'script') renderScript();
   if(view === 'academia') renderAcademia();
   if(view === 'amostra') initAmostra();
+  history.replaceState(null, '', view === 'calls' ? window.location.pathname : '#' + view);
 }
+
+// Roteamento por hash (ex: demo.html#amostra vindo da landing page)
+(function() {
+  const hash = window.location.hash.replace('#', '');
+  const validViews = ['calls','diagnostico','objecoes','relatorio','upload','script','academia','amostra','config'];
+  if(hash && validViews.includes(hash)) {
+    document.addEventListener('DOMContentLoaded', () => showView(hash));
+  }
+})();
 
 // ==================== RENDER CALLS LIST ====================
 function renderCallsList() {
@@ -1944,9 +1983,51 @@ function hideAmostraLoading() {
 }
 
 function showAmostraError(msg) {
+  // Detecta erros de rede/API offline → fallback offline
+  const isNetworkError = msg.includes('fetch') || msg.includes('Failed') || msg.includes('NetworkError') || msg.includes('502') || msg.includes('503') || msg.includes('504');
+  if(isNetworkError) {
+    showAmostraOffline();
+    return;
+  }
   document.getElementById('amostraFormLig').classList.toggle('active', amostraCurrentType === 'ligacao');
   document.getElementById('amostraFormWpp').classList.toggle('active', amostraCurrentType === 'whatsapp');
-  alert('Erro ao analisar: ' + msg + '\n\nVerifique se a URL da API esta configurada em API_URL.');
+  alert('Erro ao analisar: ' + msg);
+}
+
+function showAmostraOffline() {
+  hideAmostraLoading();
+  document.getElementById('amostraFormLig').classList.remove('active');
+  document.getElementById('amostraFormWpp').classList.remove('active');
+  document.getElementById('amostraResult').classList.remove('active');
+  // Preenche o campo arquivo com o nome do arquivo enviado
+  const arqInput = document.getElementById('offlineArquivo');
+  if(amostraCurrentType === 'ligacao' && amostraSelectedFile) {
+    arqInput.value = amostraSelectedFile.name;
+  } else if(amostraCurrentType === 'whatsapp' && amostraWppFile) {
+    arqInput.value = amostraWppFile.name;
+  } else {
+    arqInput.value = 'Texto colado';
+  }
+  document.getElementById('amostraOffline').classList.add('active');
+}
+
+function saveOfflineRequest() {
+  const nome = document.getElementById('offlineNome').value.trim();
+  const wpp = document.getElementById('offlineWpp').value.trim();
+  const arquivo = document.getElementById('offlineArquivo').value;
+  if(!nome || !wpp) { alert('Preencha seu nome e WhatsApp.'); return; }
+  const request = {
+    timestamp: new Date().toISOString(),
+    nome,
+    whatsapp: wpp,
+    arquivo,
+    canal: amostraCurrentType
+  };
+  const pending = JSON.parse(localStorage.getItem('sap_offline_requests') || '[]');
+  pending.push(request);
+  localStorage.setItem('sap_offline_requests', JSON.stringify(pending));
+  document.getElementById('offlineSaved').style.display = 'block';
+  document.querySelector('#amostraOffline .amostra-btn').disabled = true;
 }
 
 function showAmostraResult(data, vendedor, canal) {
