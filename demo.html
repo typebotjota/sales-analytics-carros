@@ -374,14 +374,42 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
 .fade-in { animation:fadeIn .3s ease; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
+/* HAMBURGER BUTTON */
+.hamburger-btn { display:none; background:none; border:none; color:var(--text-primary); cursor:pointer; padding:6px 8px; font-size:22px; line-height:1; border-radius:8px; transition:background .2s; }
+.hamburger-btn:hover { background:var(--navy-hover); }
+
+/* SIDEBAR OVERLAY */
+.sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:199; -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); }
+.sidebar-overlay.active { display:block; }
+
 /* RESPONSIVE */
 @media(max-width:900px) {
-  .sidebar { display:none; }
-  .stats-grid { grid-template-columns:repeat(2,1fr); }
+  .hamburger-btn { display:flex; align-items:center; }
+  .topbar-badge { display:none; }
+  .topbar-config { display:none; }
+  .topbar-present-btn { font-size:11px; padding:6px 10px; }
+
+  .sidebar {
+    display:flex !important;
+    position:fixed;
+    top:54px; left:0; bottom:0;
+    width:290px;
+    z-index:200;
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:4px 0 32px rgba(0,0,0,0.5);
+  }
+  .sidebar.open { transform:translateX(0); }
+
+  .content { padding:16px; padding-bottom:20px; }
+  .stats-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
   .detail-grid { grid-template-columns:1fr; }
   .methodology-grid { grid-template-columns:1fr; }
   .wpp-metrics-grid { grid-template-columns:repeat(3,1fr); }
   .checklist-grid { grid-template-columns:1fr; }
+  .amostra-options { grid-template-columns:1fr; }
+  .academia-grid { grid-template-columns:1fr; }
+  .car-metrics { grid-template-columns:repeat(3,1fr); }
 }
 </style>
 </head>
@@ -390,6 +418,7 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
   <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-left">
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
       <div class="topbar-logo">S</div>
       <div class="topbar-title"><span>Sales Analytics</span> Pro</div>
     </div>
@@ -402,10 +431,13 @@ html, body { height:100%; overflow:hidden; font-family:'Outfit',sans-serif; back
     </div>
   </div>
 
+  <!-- SIDEBAR OVERLAY (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
   <!-- MAIN -->
   <div class="main-layout">
     <!-- SIDEBAR -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
       <div class="sidebar-nav">
         <button class="sidebar-btn active" onclick="showView('calls')" data-view="calls">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
@@ -1044,6 +1076,7 @@ function showView(view) {
   if(view === 'academia') renderAcademia();
   if(view === 'amostra') initAmostra();
   history.replaceState(null, '', view === 'calls' ? window.location.pathname : '#' + view);
+  if (window.innerWidth <= 900) closeSidebar();
 }
 
 // Roteamento por hash (ex: demo.html#amostra vindo da landing page)
@@ -1128,6 +1161,7 @@ function selectCall(id) {
   renderCallsList();
   renderCallDetail();
   showView('calls');
+  if (window.innerWidth <= 900) closeSidebar();
 }
 
 function renderCallDetail() {
@@ -2130,6 +2164,25 @@ function resetAmostra() {
     document.getElementById('amostraFormLig').classList.toggle('active', amostraCurrentType === 'ligacao');
     document.getElementById('amostraFormWpp').classList.toggle('active', amostraCurrentType === 'whatsapp');
   }
+}
+
+// ==================== MOBILE SIDEBAR ====================
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const btn = document.getElementById('hamburgerBtn');
+  const isOpen = sidebar.classList.contains('open');
+  sidebar.classList.toggle('open', !isOpen);
+  overlay.classList.toggle('active', !isOpen);
+  btn.textContent = isOpen ? '☰' : '✕';
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const btn = document.getElementById('hamburgerBtn');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+  btn.textContent = '☰';
 }
 
 // ==================== INIT ====================
